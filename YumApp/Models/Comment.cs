@@ -9,17 +9,19 @@ namespace YumApp.Models
 {
     public class Comment
     {
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }        
         [Required]
         [MinLength(1, ErrorMessage = "Minimum lenght is 1 character.")]
         [MaxLength(500, ErrorMessage = "Maximum lenght is 500 characters.")]
-        public string Content { get; set; }
-        public AppUser Commentator { get; set; }
+        public string Content { get; set; }        
 
         //Navigation properties
         public int PostId { get; set; }
         public Post Post { get; set; }
+
+        public int CommentatorId { get; set; }
+        [ForeignKey("CommentatorId")]
+        public AppUser Commentator { get; set; }
     }
 }

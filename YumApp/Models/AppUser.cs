@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,11 +13,12 @@ namespace YumApp.Models
     {
         public AppUser()
         {
-            Followers = new List<Followers>();
-            Followings = new List<Following>();
+            Followers = new List<User_Follows>();
+            Follow = new List<User_Follows>();
             Posts = new List<Post>();
+            Comments = new List<Comment>();
         }
-
+        
         [Required(ErrorMessage ="First name is required.")]
         [DisplayName("First Name")]
         [MinLength(2, ErrorMessage = "Minimum lenght is 2 characters.")]
@@ -34,8 +36,15 @@ namespace YumApp.Models
         public string About { get; set; }
 
         //Navigation properties
-        public List<Followers> Followers { get; set; }
-        public List<Following> Followings { get; set; }
+        [InverseProperty("Follower")]
+        public List<User_Follows> Followers { get; set; }
+        [InverseProperty("Follows")]
+        public List<User_Follows> Follow { get; set; }
+
         public List<Post> Posts { get; set; }
+
+        public List<Comment> Comments { get; set; }
+
+        public UserFeed UserFeed { get; set; }
     }
 }
