@@ -8,6 +8,7 @@ namespace YumApp.Models
     public enum GenderEnum
     {
         male,
-        female
+        female,
+        nonbinary
     }
 }

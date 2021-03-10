@@ -35,5 +35,7 @@ namespace YumApp.Models
 
         public List<Post_Ingredient> Post_Ingredients { get; set; }
 
+        public List<UserFeed> UserFeeds { get; set; }
+
     }
 }

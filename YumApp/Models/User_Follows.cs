@@ -9,8 +9,8 @@ namespace YumApp.Models
 {
     public class User_Follows
     {        
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public int Id { get; set; }
         public DateTime StartDate { get; set; } = DateTime.Now.ToLocalTime();
 
         //Navigation properties

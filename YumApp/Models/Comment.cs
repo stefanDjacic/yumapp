@@ -18,6 +18,7 @@ namespace YumApp.Models
 
         //Navigation properties
         public int PostId { get; set; }
+        public int AppUserId { get; set; }
         public Post Post { get; set; }
 
         public int CommentatorId { get; set; }

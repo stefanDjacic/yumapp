@@ -17,6 +17,7 @@ namespace YumApp.Models
             Follow = new List<User_Follows>();
             Posts = new List<Post>();
             Comments = new List<Comment>();
+            UserFeeds = new List<UserFeed>();
         }
         
         [Required(ErrorMessage ="First name is required.")]
@@ -45,6 +46,6 @@ namespace YumApp.Models
 
         public List<Comment> Comments { get; set; }
 
-        public UserFeed UserFeed { get; set; }
+        public List<UserFeed> UserFeeds { get; set; }
     }
 }
