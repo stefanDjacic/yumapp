@@ -1,17 +1,27 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace YumApp.Models
+namespace EntityLibrary
 {
-    public class YumAppDbContext : IdentityDbContext<AppUser>
+    public class YumAppDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
     {
         public YumAppDbContext(DbContextOptions<YumAppDbContext> options) : base(options)
         {
         }
+
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Post_Ingredient> Post_Ingredients { get; set; }
+        public DbSet<User_Follows> User_Follows { get; set; }
+        public DbSet<User_Feed> User_Feeds { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,22 +44,23 @@ namespace YumApp.Models
             {
                 uf.HasOne(uf => uf.Follower)
                 .WithMany(au => au.Followers)
-                .HasForeignKey(uf => uf.FollowerId)
-                .IsRequired();
+                .HasForeignKey(uf => uf.FollowerId)                
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
                 uf.HasOne(uf => uf.Follows)
                 .WithMany(au => au.Follow)
                 .HasForeignKey(uf => uf.FollowsId)
-                .IsRequired();
-
+                .IsRequired();                
+                
                 uf.HasKey(uf => new { uf.FollowerId, uf.FollowsId });
             });
 
-            modelBuilder.Entity<Post_Ingredient>(pi => 
+            modelBuilder.Entity<Post_Ingredient>(pi =>
             {
                 pi.HasOne(pi => pi.Post)
                 .WithMany(p => p.Post_Ingredients)
-                .HasForeignKey(pi => pi.PostId)
+                .HasForeignKey(pi => new { pi.PostId, pi.AppUserId })
                 .IsRequired();
 
                 pi.HasOne(pi => pi.Ingredient)
@@ -57,24 +68,34 @@ namespace YumApp.Models
                 .HasForeignKey(pi => pi.IngredientId)
                 .IsRequired();
 
-                pi.HasKey(pi => new { pi.PostId, pi.IngredientId });
+                pi.HasKey(pi => new { pi.PostId, pi.AppUserId, pi.IngredientId });
             });
 
 
-            modelBuilder.Entity<UserFeed>(uf => 
+            modelBuilder.Entity<User_Feed>(uf =>
             {
                 uf.HasOne(uf => uf.AppUser)
-                .WithMany(au => au.UserFeeds)
+                .WithMany(au => au.User_Feeds)
                 .HasForeignKey(uf => uf.AppUserId)
                 .IsRequired();
 
                 uf.HasOne(uf => uf.Post)
-                .WithMany(p => p.UserFeeds)
-                .HasForeignKey(uf => uf.PostId)
+                .WithMany(p => p.User_Feeds)
+                .HasForeignKey(uf => new { uf.PostId, uf.PostAppUserId })
                 .IsRequired();
 
-                uf.HasKey(uf => new { uf.AppUserId, uf.PostId });
+                uf.HasKey(uf => new { uf.AppUserId, uf.PostId, uf.PostAppUserId });
             });
+
+            modelBuilder.Entity<AppUser>(au =>
+            {
+                au.Property(au => au.Gender)
+                .HasConversion<int>();
+
+                au.Property(p =>p.Email).IsRequired();
+                au.Property(p => p.PasswordHash).IsRequired();
+                au.Property(p => p.UserName).IsRequired();
+            });              
         }
     }
 }
