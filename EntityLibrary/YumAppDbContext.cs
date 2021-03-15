@@ -37,6 +37,12 @@ namespace EntityLibrary
                 .HasForeignKey(c => new { c.PostId, c.AppUserId })
                 .IsRequired();
 
+                c.HasOne(c => c.Commentator)
+                .WithMany(au => au.Comments)
+                .HasForeignKey(c => c.CommentatorId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
                 c.HasKey(c => new { c.Id, c.PostId, c.AppUserId });
             });
 
@@ -77,6 +83,7 @@ namespace EntityLibrary
                 uf.HasOne(uf => uf.AppUser)
                 .WithMany(au => au.User_Feeds)
                 .HasForeignKey(uf => uf.AppUserId)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
                 uf.HasOne(uf => uf.Post)

@@ -22,10 +22,9 @@ namespace EntityLibrary
             User_Feeds = new HashSet<User_Feed>();
         }
 
-        [Required(ErrorMessage = "First name is required.")]
-        [DisplayName("First Name")]
-        [MinLength(2, ErrorMessage = "Minimum lenght is 2 characters.")]
-        [MaxLength(100, ErrorMessage = "Maximum lenght is 100 characters")]
+        [Required]
+        [MinLength(2)]
+        [MaxLength(100)]
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Last name is required.")]
         [DisplayName("Last Name")]
