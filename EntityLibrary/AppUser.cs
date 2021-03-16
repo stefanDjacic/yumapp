@@ -26,21 +26,29 @@ namespace EntityLibrary
         [MinLength(2)]
         [MaxLength(100)]
         public string FirstName { get; set; }
-        [Required(ErrorMessage = "Last name is required.")]
-        [DisplayName("Last Name")]
-        [MinLength(2, ErrorMessage = "Minimum lenght is 2 characters.")]
-        [MaxLength(100, ErrorMessage = "Maximum lenght is 100 characters")]
-        public string LastName { get; set; }
+
         [Required]
-        [DisplayName("Date of birth")]
+        [DisplayName]
+        [MinLength(2)]
+        [MaxLength(100)]
+        public string LastName { get; set; }
+
+        [Required]
         [Column(TypeName = "date")]
         public DateTime DateOfBirth { get; set; }
+
         [Column(TypeName = "date")]
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        
+        [MaxLength(100)]
+        public string Country { get; set; }
+
         [Required]
         public GenderEnum Gender { get; set; }
-        [MaxLength(200, ErrorMessage = "Maximum length is 200 characters.")]
+
+        [MaxLength(200)]
         public string About { get; set; }
+
         [Required]
         public string PhotoPath { get; set; } = @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";
 

@@ -11,23 +11,23 @@ namespace YumApp.Models
 {
     public class RegisterModel
     {
-        [Required(ErrorMessage = "First name is required.")]
+        [Required(ErrorMessage = "First name is required")]
         [DisplayName("First Name")]
-        [MinLength(2, ErrorMessage = "Minimum lenght is 2 characters.")]
+        [MinLength(2, ErrorMessage = "Minimum lenght is 2 characters")]
         [MaxLength(100, ErrorMessage = "Maximum lenght is 100 characters")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Last name is required.")]
+        [Required(ErrorMessage = "Last name is required")]
         [DisplayName("Last Name")]
-        [MinLength(2, ErrorMessage = "Minimum lenght is 2 characters.")]
+        [MinLength(2, ErrorMessage = "Minimum lenght is 2 characters")]
         [MaxLength(100, ErrorMessage = "Maximum lenght is 100 characters")]
         public string LastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
         [DataType(DataType.EmailAddress)]        
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Date of birth is required")]
         [DisplayName("Date of birth")]
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
@@ -35,17 +35,15 @@ namespace YumApp.Models
         [Required]
         public GenderEnum Gender { get; set; }
 
-        [Required]
-        public string Country { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
         [MinLength(8, ErrorMessage = "Minimum lenght is 8 characters")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Password confirmation is required")]
         [MinLength(8, ErrorMessage = "Minimum lenght is 8 characters")]
         [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Confirmation password does not match with password")]
         public string ConfirmPassword { get; set; }
     }
 }

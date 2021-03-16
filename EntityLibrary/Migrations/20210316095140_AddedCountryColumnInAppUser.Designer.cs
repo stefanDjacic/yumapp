@@ -4,14 +4,16 @@ using EntityLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EntityLibrary.Migrations
 {
     [DbContext(typeof(YumAppDbContext))]
-    partial class YumAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210316095140_AddedCountryColumnInAppUser")]
+    partial class AddedCountryColumnInAppUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
