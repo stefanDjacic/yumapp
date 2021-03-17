@@ -80,3 +80,4 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\ref\YumApp.dll
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.pdb
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.genruntimeconfig.cache
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Shared\Components\Navbar\NavbarSignedInViewComponent1.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Shared\Components\Footer\FooterNotSignedInViewComponent.cshtml.g.cs
