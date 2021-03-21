@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityLibrary.Migrations
 {
     [DbContext(typeof(YumAppDbContext))]
-    [Migration("20210315102549_InitialMigration")]
+    [Migration("20210321220942_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,10 @@ namespace EntityLibrary.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("date");

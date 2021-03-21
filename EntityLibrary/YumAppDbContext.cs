@@ -102,7 +102,7 @@ namespace EntityLibrary
                 au.Property(p =>p.Email).IsRequired();
                 au.Property(p => p.PasswordHash).IsRequired();
                 au.Property(p => p.UserName).IsRequired();
-            });              
+            });                        
         }
     }
 }

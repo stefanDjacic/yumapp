@@ -32,6 +32,7 @@ namespace EntityLibrary.Migrations
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "date", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "date", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     About = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     PhotoPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
