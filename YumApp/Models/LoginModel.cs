@@ -14,6 +14,7 @@ namespace YumApp.Models
         public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
+        [MinLength(8, ErrorMessage = "Minimum lenght is 8 characters.")]
         public string Password { get; set; }
         [DisplayName("Remember me")]
         public bool RememberMe { get; set; }

@@ -41,7 +41,7 @@ namespace YumApp.Models
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
-        [DataType(DataType.EmailAddress)]        
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Date of birth is required.")]

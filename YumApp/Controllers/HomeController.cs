@@ -63,7 +63,6 @@ namespace YumApp.Controllers
             }
             catch
             {
-
                 return View(model);
             }
         }
@@ -72,6 +71,36 @@ namespace YumApp.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Home", "Profile");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    return View(model);
+                }
+            }
+            catch
+            {
+                return View(model);
+            }
         }
 
         public IActionResult Privacy()

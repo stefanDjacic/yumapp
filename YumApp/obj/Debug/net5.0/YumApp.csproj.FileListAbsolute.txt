@@ -82,3 +82,4 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\ref\YumApp.dll
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.pdb
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.genruntimeconfig.cache
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Home\_LoginPartial.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Home\Login.cshtml.g.cs
