@@ -68,6 +68,12 @@ namespace YumApp.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

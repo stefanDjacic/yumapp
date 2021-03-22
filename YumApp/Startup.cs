@@ -30,7 +30,7 @@ namespace YumApp
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequiredLength = 8;
-                    }).AddEntityFrameworkStores<YumAppDbContext>();
+                    }).AddEntityFrameworkStores<YumAppDbContext>();                    
 
             services.AddDbContext<YumAppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

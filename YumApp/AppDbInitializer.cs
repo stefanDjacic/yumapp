@@ -17,7 +17,7 @@ namespace YumApp
             {
                 var context = serviceScope.ServiceProvider.GetService<YumAppDbContext>();
                 var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole<int>>>();
-                var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
+                var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();                
 
                 if (!context.Roles.Any())
                 {
@@ -34,6 +34,7 @@ namespace YumApp
                 {
                     var adminUser = new AppUser()
                     {
+                        UserName = "admin@gmail.com",
                         FirstName = "admin",
                         LastName = "admin",
                         Email = "admin@gmail.com",
@@ -41,13 +42,24 @@ namespace YumApp
                         Gender = GenderEnum.Male,                        
                     };
 
-                    await userManager.CreateAsync(adminUser, "admin123");
+                    /*var greske1 =*/ await userManager.CreateAsync(adminUser, "admin123");
 
-                    await userManager.AddToRoleAsync(adminUser, "admin");
+                   /*var greske2 =*/ await userManager.AddToRoleAsync(adminUser, "admin");
+
+                    //AddErrors(greske1);
+                    //AddErrors(greske2);
 
                     await context.SaveChangesAsync();
                 }
             }
         }
+
+        //private static void AddErrors(IdentityResult result)
+        //{
+        //    foreach (var error in result.Errors)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine(error);
+        //    }
+        //}
     }
 }

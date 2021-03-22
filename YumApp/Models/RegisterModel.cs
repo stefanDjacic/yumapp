@@ -13,7 +13,7 @@ namespace YumApp.Models
     {
         public static AppUser ToModel(this RegisterModel model)
         {
-            AppUser output = new AppUser
+            var output = new AppUser
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
