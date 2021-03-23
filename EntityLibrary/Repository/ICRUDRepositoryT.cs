@@ -9,9 +9,9 @@ namespace EntityLibrary.Repository
     public interface ICRUDRepository<T>
     {
         IQueryable<T> GetAll();
-        T GetSingle(int id);
-        T Add(T entry);
-        T Update(T entry);
-        void Remove(T entry);
+        Task<T> GetSingle(int id);
+        Task<T> Add(T instance);
+        Task<T> Update(T instance);
+        Task Remove(T instance);
     }
 }

@@ -29,6 +29,7 @@ namespace YumApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(RegisterModel model)
         {
             try
@@ -44,7 +45,7 @@ namespace YumApp.Controllers
 
                         await _signInManager.SignInAsync(newUser, false);
 
-                        return RedirectToAction("Home", "Profile");
+                        return RedirectToAction("Feed", "User");
                     }
                     else
                     {
@@ -74,6 +75,7 @@ namespace YumApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             try
@@ -84,7 +86,7 @@ namespace YumApp.Controllers
 
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Home", "Profile");
+                        return RedirectToAction("Feed", "User");
                     }
                     else
                     {
