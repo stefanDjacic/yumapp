@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using EntityLibrary.Repository;
 
 namespace YumApp
 {
@@ -25,6 +26,8 @@ namespace YumApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient <ICRUDRepository<Post>, PostRepository>();
+
             services.AddIdentity<AppUser, IdentityRole<int>>(options =>
                     {
                         options.Password.RequireNonAlphanumeric = false;

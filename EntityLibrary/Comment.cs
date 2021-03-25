@@ -12,10 +12,12 @@ namespace EntityLibrary
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
         [Required]
         [MinLength(1, ErrorMessage = "Minimum lenght is 1 character.")]
         [MaxLength(500, ErrorMessage = "Maximum lenght is 500 characters.")]
-        public string Content { get; set; }        
+        public string Content { get; set; }
+
         public DateTime TimeOfCommenting { get; set; } = DateTime.Now.ToLocalTime();
 
         //Navigation properties

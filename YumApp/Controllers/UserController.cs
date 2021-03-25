@@ -1,4 +1,5 @@
-﻿using EntityLibrary;
+﻿using EntityLibrary.Repository;
+using EntityLibrary;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,28 +7,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using YumApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace YumApp.Controllers
 {
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly PostRepository _postRepository;
 
-        public UserController(UserManager<AppUser> userManager)
+        public UserController(UserManager<AppUser> userManager, PostRepository postRepository)
         {
             _userManager = userManager;
+            _postRepository = postRepository;
         }
 
-        [HttpGet]
+        [HttpGet]        
         public async Task<IActionResult> Profile()
         {
-            AppUser currentUser = await _userManager.GetUserAsync(User);
+            var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
 
-            var userId = await _userManager.GetUserIdAsync(currentUser);
+            var currentUserPosts = await _postRepository.GetAll()
+                                                        .Where(p => p.AppUserId == currentUserId)
+                                                        .ToPostModel()
+                                                        .ToListAsync();
 
-
-
-            return View();
+            return View(currentUserPosts);
         }
 
         public IActionResult Feed()

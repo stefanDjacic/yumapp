@@ -19,13 +19,17 @@ namespace EntityLibrary
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }        
+
         [Required]
         [MinLength(1, ErrorMessage = "Minimum lengt is 1 character.")]
         [MaxLength(1000, ErrorMessage = "Maximum lengt is 1000 characters.")]
         public string Content { get; set; }
-        [MinLength(1, ErrorMessage = "Minimum lengt is 1 character.")]
+        
         [MaxLength(100, ErrorMessage = "Maximum lengt is 100 characters.")]
-        public string Notes { get; set; }        
+        public string Notes { get; set; }
+
+        public int NumberOfYums { get; set; } = 0;
+
         public DateTime TimeOfPosting { get; set; } = DateTime.Now.ToLocalTime();
 
         //Navigation properties

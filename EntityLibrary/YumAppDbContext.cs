@@ -22,7 +22,11 @@ namespace EntityLibrary
         public DbSet<Post_Ingredient> Post_Ingredients { get; set; }
         public DbSet<User_Follows> User_Follows { get; set; }
         public DbSet<User_Feed> User_Feeds { get; set; }
-
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

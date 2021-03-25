@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary.Repository
 {
-    class PostRepository : ICRUDRepository<Post>
+    public class PostRepository : ICRUDRepository<Post>
     {
         private readonly YumAppDbContext _context;
 
@@ -59,5 +60,16 @@ namespace EntityLibrary.Repository
 
             return null;
         }
+
+        //Additional methods
+        //public IQueryable<Ingredient> GetIngredienstFromPost(int postId)
+        //{
+        //    return (IQueryable<Ingredient>)_context.Posts
+        //                    .Include(p => p.Post_Ingredients
+        //                                .Where(pi => pi.PostId == postId))
+        //                    .ThenInclude(pi => pi.Ingredient)
+        //                    /*.Select(i => new Ingredient())*/;
+        //}
+
     }
 }
