@@ -1,6 +1,6 @@
 ﻿@model LoginModel
 
-<form action="Login" method="post" class="w-100">
+<form asp-action="Login" asp-controller="Home" method="post" class="w-100">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group mb-0">
         <label asp-for="Email"></label>

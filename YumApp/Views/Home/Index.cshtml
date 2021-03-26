@@ -5,7 +5,7 @@
 
 <div class="wrapper row  d-flex justify-content-around align-items-center pt-5 mt-5">
     <section class="registration w-100 col-5">
-        <form action="Index" method="post">
+        <form asp-action="Index" asp-controller="Home" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="row justify-content-between">
                 <div class="form-group col-6 mb-0">
@@ -59,14 +59,14 @@
             <p>Share your favourite/special meals with others on YumApp.</p>
         </div>
         <div class="align-self-end">
-            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalCenter">
+            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#ModalCenter">
                 Login
             </button>
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalCenterTitle">Welcome!</h5>
+                            <h5 class="modal-title" id="ModalCenterTitle">Welcome!</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

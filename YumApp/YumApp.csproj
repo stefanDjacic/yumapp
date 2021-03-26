@@ -19,8 +19,4 @@
     <ProjectReference Include="..\EntityLibrary\EntityLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\User\" />
-  </ItemGroup>
-
 </Project>

@@ -21,7 +21,7 @@ namespace YumApp
 
                 if (!context.Roles.Any())
                 {
-                    var role1 = new IdentityRole<int> { Name = "normalUser" };
+                    var role1 = new IdentityRole<int> { Name = "normaluser" };
                     var role2 = new IdentityRole<int> { Name = "admin" };
 
                     await roleManager.CreateAsync(role1);
@@ -45,6 +45,22 @@ namespace YumApp
                     /*var greske1 =*/ await userManager.CreateAsync(adminUser, "admin123");
 
                    /*var greske2 =*/ await userManager.AddToRoleAsync(adminUser, "admin");
+
+                    var testUser = new AppUser()
+                    {
+                        UserName = "testuser@gmail.com",
+                        FirstName = "test",
+                        LastName = "user",
+                        Email = "testuser@gmail.com",
+                        DateOfBirth = DateTime.UtcNow,
+                        Gender = GenderEnum.Male,
+                    };
+
+                    /*var greske1 =*/
+                    await userManager.CreateAsync(testUser, "testuser123");
+
+                    /*var greske2 =*/
+                    await userManager.AddToRoleAsync(testUser, "normaluser");
 
                     //AddErrors(greske1);
                     //AddErrors(greske2);

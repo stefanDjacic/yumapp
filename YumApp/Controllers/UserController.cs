@@ -15,9 +15,9 @@ namespace YumApp.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly PostRepository _postRepository;
+        private readonly ICRUDRepository<Post> _postRepository;
 
-        public UserController(UserManager<AppUser> userManager, PostRepository postRepository)
+        public UserController(UserManager<AppUser> userManager, ICRUDRepository<Post> postRepository)
         {
             _userManager = userManager;
             _postRepository = postRepository;

@@ -1,4 +1,5 @@
 ﻿using EntityLibrary;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,8 +24,13 @@ namespace YumApp.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Profile", "User");
+            }
             return View();
         }
 
@@ -41,11 +47,11 @@ namespace YumApp.Controllers
 
                     if (result.Succeeded)
                     {
-                        await _userManager.AddToRoleAsync(newUser, "normalUser");
+                        await _userManager.AddToRoleAsync(newUser, "normaluser");
 
                         await _signInManager.SignInAsync(newUser, false);
 
-                        return RedirectToAction("Feed", "User");
+                        return RedirectToAction("Profile", "User");
                     }
                     else
                     {
@@ -86,7 +92,7 @@ namespace YumApp.Controllers
 
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Feed", "User");
+                        return RedirectToAction("Profile", "User");
                     }
                     else
                     {

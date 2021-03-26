@@ -157,3 +157,4 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\bin\Debug\net5.0\zh-Hans\Microsoft.
 C:\Users\Korisnik\source\repos\YumApp\YumApp\bin\Debug\net5.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Korisnik\source\repos\YumApp\YumApp\bin\Debug\net5.0\runtimes\win-arm\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 C:\Users\Korisnik\source\repos\YumApp\YumApp\bin\Debug\net5.0\runtimes\win-arm64\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\Profile.cshtml.g.cs
