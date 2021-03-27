@@ -9,9 +9,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using YumApp.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace YumApp.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

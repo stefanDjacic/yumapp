@@ -12,6 +12,7 @@ using YumApp.Models;
 
 namespace YumApp.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -24,7 +25,6 @@ namespace YumApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Index()
         {
             if (_signInManager.IsSignedIn(User))
@@ -34,7 +34,6 @@ namespace YumApp.Controllers
             return View();
         }
 
-        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(RegisterModel model)
         {
@@ -111,9 +110,12 @@ namespace YumApp.Controllers
             }
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

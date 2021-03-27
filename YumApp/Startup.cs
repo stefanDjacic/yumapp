@@ -35,18 +35,18 @@ namespace YumApp
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequiredLength = 8;
-                    }).AddEntityFrameworkStores<YumAppDbContext>();                    
+                    }).AddEntityFrameworkStores<YumAppDbContext>();
 
             services.AddDbContext<YumAppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvc(config =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                                .RequireAuthenticatedUser()
-                                .Build();
+            //services.AddMvc(config =>
+            //{
+            //    var policy = new AuthorizationPolicyBuilder()
+            //                    .RequireAuthenticatedUser()
+            //                    .Build();
 
-                config.Filters.Add(new AuthorizeFilter(policy));
-            });
+            //    config.Filters.Add(new AuthorizeFilter(policy));
+            //});
 
             services.AddControllersWithViews();
         }
