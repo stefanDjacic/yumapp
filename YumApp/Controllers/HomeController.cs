@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using YumApp.Models;
 
@@ -34,8 +35,9 @@ namespace YumApp.Controllers
             return View();
         }
 
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(RegisterModel model)
+        public async Task<ActionResult> Register(RegisterModel model)
         {
             try
             {
@@ -50,7 +52,9 @@ namespace YumApp.Controllers
 
                         await _signInManager.SignInAsync(newUser, false);
 
-                        return RedirectToAction("Profile", "User");
+                        int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+
+                        return RedirectToAction("Profile", "User", currentUserId);
                     }
                     else
                     {
@@ -91,7 +95,10 @@ namespace YumApp.Controllers
 
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Profile", "User");
+                        AppUser appUser = await _userManager.GetUserAsync(HttpContext.User);
+                        int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+
+                        return RedirectToAction("Profile", "User", currentUserId);
                     }
                     else
                     {

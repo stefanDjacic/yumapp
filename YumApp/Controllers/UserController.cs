@@ -26,7 +26,7 @@ namespace YumApp.Controllers
         }
 
         [HttpGet]        
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Profile(int id)
         {
             var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
 
@@ -34,6 +34,7 @@ namespace YumApp.Controllers
                                                         .Where(p => p.AppUserId == currentUserId)
                                                         .ToPostModel()
                                                         .ToListAsync();
+            
 
             return View(currentUserPosts);
         }

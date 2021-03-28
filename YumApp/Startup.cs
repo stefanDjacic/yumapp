@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using EntityLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using System.Security.Claims;
 
 namespace YumApp
 {
@@ -35,6 +36,8 @@ namespace YumApp
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequiredLength = 8;
+                        
+                        //options.ClaimsIdentity.UserIdClaimType = ;
                     }).AddEntityFrameworkStores<YumAppDbContext>();
 
             services.AddDbContext<YumAppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
