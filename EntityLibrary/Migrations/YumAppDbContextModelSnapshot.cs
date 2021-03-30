@@ -198,6 +198,9 @@ namespace EntityLibrary.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("NumberOfYums")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("TimeOfPosting")
                         .HasColumnType("datetime2");
 

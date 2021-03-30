@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityLibrary.Migrations
 {
     [DbContext(typeof(YumAppDbContext))]
-    [Migration("20210322100259_InitialMigration")]
+    [Migration("20210329221213_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,9 @@ namespace EntityLibrary.Migrations
                     b.Property<string>("Notes")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("NumberOfYums")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("TimeOfPosting")
                         .HasColumnType("datetime2");

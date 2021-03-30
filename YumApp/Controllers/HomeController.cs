@@ -1,5 +1,6 @@
 ﻿using EntityLibrary;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,11 +19,13 @@ namespace YumApp.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        //private readonly IHttpContextAccessor _contextAccessor;
 
         public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            //_contextAccessor = contextAccessor;
         }
 
         [HttpGet]
@@ -52,9 +55,9 @@ namespace YumApp.Controllers
 
                         await _signInManager.SignInAsync(newUser, false);
 
-                        int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+                        int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);
 
-                        return RedirectToAction("Profile", "User", currentUserId);
+                        return RedirectToAction("Profile", "User", new { id = currentUserId });
                     }
                     else
                     {
@@ -95,10 +98,9 @@ namespace YumApp.Controllers
 
                     if (result.Succeeded)
                     {
-                        AppUser appUser = await _userManager.GetUserAsync(HttpContext.User);
-                        int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+                        int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);                        
 
-                        return RedirectToAction("Profile", "User", currentUserId);
+                        return RedirectToAction("Profile", "User", new { id = currentUserId });
                     }
                     else
                     {

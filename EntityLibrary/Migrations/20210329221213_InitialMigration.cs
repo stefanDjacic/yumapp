@@ -186,6 +186,7 @@ namespace EntityLibrary.Migrations
                     AppUserId = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    NumberOfYums = table.Column<int>(type: "int", nullable: false),
                     TimeOfPosting = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

@@ -31,13 +31,19 @@ namespace YumApp
         {
             services.AddTransient <ICRUDRepository<Post>, PostRepository>();
 
+            //services.AddHttpContextAccessor();
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+            //});
+
             services.AddIdentity<AppUser, IdentityRole<int>>(options =>
                     {
+                        options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequiredLength = 8;
-                        
-                        //options.ClaimsIdentity.UserIdClaimType = ;
                     }).AddEntityFrameworkStores<YumAppDbContext>();
 
             services.AddDbContext<YumAppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -65,7 +71,7 @@ namespace YumApp
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
+            app.UseStaticFiles();            
 
             app.UseRouting();
 
@@ -80,7 +86,7 @@ namespace YumApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            AppDbInitializer.Seed(app);
+            //AppDbInitializer.Seed(app);
         }
     }
 }
