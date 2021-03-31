@@ -1,0 +1,54 @@
+﻿@model List<PostModel>
+
+@foreach (var p in Model)
+{
+    <div class="post d-flex flex-column">
+        <div class="user-time-options d-flex justify-content-between">
+            @*<div class="d-flex flex-nowrap">
+                <img src="~/Photos/DefaultUserPhoto.png" alt="User photo" class="img-fluid rounded h-25" />
+                <div class="">
+                    <p>
+                        @p.User.FirstName @p.User.LastName
+                    </p>
+                    <p>
+                        @p.TimeOfPosting
+                    </p>
+                </div>
+            </div>*@
+            <div class="media">
+                <div class="d-flex align-items-center h-auto">
+                    <img src="~/Photos/DefaultUserPhoto.png" class="h-25" alt="User photo">
+                    <div class="media-body">
+                        <p>
+                            @p.User.FirstName @p.User.LastName
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <button class="dropdown-item" type="button">Save</button>
+                        <button class="dropdown-item" type="button">Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ingredients">
+
+        </div>
+
+        <div class="content">
+
+        </div>
+
+        <div class="comments">
+
+        </div>
+    </div>
+}

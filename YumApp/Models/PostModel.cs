@@ -13,6 +13,7 @@ namespace YumApp.Models
         {
             return entities.Select(pe => new PostModel
             {
+                User = pe.AppUser,
                 Content = pe.Content,
                 Notes = pe.Notes,
                 TimeOfPosting = pe.TimeOfPosting,
@@ -31,6 +32,8 @@ namespace YumApp.Models
             //Post_Ingredients = new HashSet<Post_Ingredient>();
             Ingredients = new List<Ingredient>();
         }
+
+        public AppUser User { get; set; }
 
         [Required]
         [MinLength(1, ErrorMessage = "Minimum lengt is 1 character.")]

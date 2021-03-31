@@ -29,11 +29,13 @@ namespace YumApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (_signInManager.IsSignedIn(User))
             {
-                return RedirectToAction("Profile", "User");
+                int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+
+                return RedirectToAction("Profile", "User", new { id = currentUserId });
             }
             return View();
         }
