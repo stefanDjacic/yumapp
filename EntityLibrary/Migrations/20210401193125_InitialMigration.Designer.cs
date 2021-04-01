@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityLibrary.Migrations
 {
     [DbContext(typeof(YumAppDbContext))]
-    [Migration("20210329221213_InitialMigration")]
+    [Migration("20210401193125_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

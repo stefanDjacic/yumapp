@@ -72,6 +72,39 @@ body {
 
 /* -----------------------MY CSS--------------------------*/
 
+
+/*------------------ PROFILE layout ------------------*/
 div .verical-line {
     width : 1px;
+}
+
+
+/*------------------ POST model ------------------*/
+.post {
+    background-color : #eee;
+    border-radius : 30px;
+}
+
+.post-profile-photo {
+    width: 50px;
+    height: 50px;
+}
+
+.post-username {
+    font-size : 130%;
+}
+
+.post-time {
+    font-size : 80%;
+}
+
+/*------------------ INGREDIENT ------------------*/
+
+.ingredient-photo {
+    width : 50px;
+    height : auto;
+}
+
+.ingredient-link-div {
+    width : max-content;
 }

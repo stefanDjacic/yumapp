@@ -1,0 +1,13 @@
+﻿@model List<Ingredient>
+
+@foreach (var i in Model)
+{
+    <div class="ingredient-link-div bg-light rounded-pill mb-2 text-center">
+        <a asp-action="IngredientDetails" asp-controller="" asp-route-id="@i.Id"  class="ingredient-link d-flex">
+            <img class="ingredient-photo rounded-circle" src="~/Photos/DefaultIngredientPhoto.jpg" alt="@i.Name" />
+            <p class="mb-0 ml-3 mr-3">
+                @i.Name
+            </p>
+        </a>
+    </div>
+}

@@ -18,7 +18,7 @@ namespace YumApp
             var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole<int>>>();
             var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
 
-            //context.Database.EnsureDeleted();
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             if (!context.Roles.Any())
@@ -151,26 +151,26 @@ namespace YumApp
                 await context.SaveChangesAsync();
             }
 
-            if (context.Post_Ingredients.Any())
+            if (!context.Post_Ingredients.Any())
             {
                 var pi1 = new Post_Ingredient
                 {
-                    AppUserId = 2,
                     PostId = 1,
-                    IngredientId = 1
+                    AppUserId = 2,
+                    IngredientId = 1                    
                 };
 
                 var pi2 = new Post_Ingredient
                 {
-                    AppUserId = 2,
                     PostId = 1,
+                    AppUserId = 2,
                     IngredientId = 2
                 };
 
                 var pi3 = new Post_Ingredient
                 {
-                    AppUserId = 2,
                     PostId = 1,
+                    AppUserId = 2,
                     IngredientId = 3
                 };
 
