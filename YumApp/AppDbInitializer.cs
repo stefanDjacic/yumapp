@@ -42,25 +42,57 @@ namespace YumApp
                     Email = "admin@gmail.com",
                     DateOfBirth = DateTime.UtcNow,
                     Gender = GenderEnum.Male,
+                    PhotoPath = @"/Photos/DefaultUserPhoto.png"
                 };
 
                 await userManager.CreateAsync(adminUser, "admin123");
 
                 await userManager.AddToRoleAsync(adminUser, "admin");
 
-                var testUser = new AppUser()
+                var testUser1 = new AppUser()
                 {
-                    UserName = "testuser@gmail.com",
-                    FirstName = "test",
-                    LastName = "user",
-                    Email = "testuser@gmail.com",
+                    UserName = "peraperic@gmail.com",
+                    FirstName = "Pera",
+                    LastName = "Peric",
+                    Email = "peraperic@gmail.com",
                     DateOfBirth = DateTime.UtcNow,
                     Gender = GenderEnum.Male,
+                    PhotoPath = @"/Photos/DefaultUserPhoto.png"
                 };
 
-                await userManager.CreateAsync(testUser, "testuser123");
+                await userManager.CreateAsync(testUser1, "testuser123");
 
-                await userManager.AddToRoleAsync(testUser, "normaluser");
+                await userManager.AddToRoleAsync(testUser1, "normaluser");
+
+                var testUser2 = new AppUser()
+                {
+                    UserName = "maramaric@gmail.com",
+                    FirstName = "Mara",
+                    LastName = "Maric",
+                    Email = "maramaric@gmail.com",
+                    DateOfBirth = DateTime.UtcNow,
+                    Gender = GenderEnum.Female,
+                    PhotoPath = @"/Photos/AnotherUserPhoto.jpg"
+                };
+
+                await userManager.CreateAsync(testUser2, "testuser123");
+
+                await userManager.AddToRoleAsync(testUser2, "normaluser");
+
+                var testUser3 = new AppUser()
+                {
+                    UserName = "mikimikic@gmail.com",
+                    FirstName = "Miki",
+                    LastName = "Mikic",
+                    Email = "mikimikic@gmail.com",
+                    DateOfBirth = DateTime.UtcNow,
+                    Gender = GenderEnum.Male,
+                    PhotoPath = @"/Photos/YetAnotherUserPhoto.jpg"
+                };
+
+                await userManager.CreateAsync(testUser3, "testuser123");
+
+                await userManager.AddToRoleAsync(testUser3, "normaluser");
 
 
                 await context.SaveChangesAsync();
@@ -71,24 +103,46 @@ namespace YumApp
                 var post1 = new Post
                 {
                     AppUserId = 2,
-                    Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s," +
-                    " when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into" +
-                    " electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages," +
-                    " and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                    Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
+                    " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
                     Notes = "Obavezno uzivati",
                 };
 
                 var post2 = new Post
                 {
                     AppUserId = 2,
-                    Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s," +
-                    " when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into" +
-                    " electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages," +
-                    " and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                    Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
+                    " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
                     NumberOfYums = 11
                 };
 
-                await context.Posts.AddRangeAsync(new Post[] { post1, post2 });
+                var post3 = new Post
+                {
+                    AppUserId = 3,
+                    Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
+    " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
+                    NumberOfYums = 9,
+                    Notes = "Happy meal!"
+                };
+
+                var post4 = new Post
+                {
+                    AppUserId = 3,
+                    Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
+" nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
+                    NumberOfYums = 2,                                   
+                };
+
+                var post5 = new Post
+                {
+                    AppUserId = 4,
+                    Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
+" nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
+                    NumberOfYums = 99,
+                    Notes = "Happy meal!"
+                };
+
+                await context.Posts.AddRangeAsync(new Post[] { post1, post2, post3, post4, post5 });
 
                 await context.SaveChangesAsync();
             }
@@ -108,7 +162,7 @@ namespace YumApp
                     AppUserId = 2,
                     PostId = 1,
                     Content = "NICE",
-                    CommentatorId = 2
+                    CommentatorId = 3
                 };
 
                 var comment3 = new Comment
@@ -116,10 +170,26 @@ namespace YumApp
                     AppUserId = 2,
                     PostId = 2,
                     Content = "good job",
+                    CommentatorId = 4
+                };
+
+                var comment4 = new Comment
+                {
+                    AppUserId = 4,
+                    PostId = 5,
+                    Content = "yumyum",
+                    CommentatorId = 3
+                };
+
+                var comment5 = new Comment
+                {
+                    AppUserId = 4,
+                    PostId = 5,
+                    Content = "yeayea",
                     CommentatorId = 2
                 };
 
-                await context.Comments.AddRangeAsync(new Comment[] { comment1, comment2, comment3 });
+                await context.Comments.AddRangeAsync(new Comment[] { comment1, comment2, comment3, comment4, comment5 });
 
                 await context.SaveChangesAsync();
             }
@@ -129,22 +199,22 @@ namespace YumApp
                 var ingredient1 = new Ingredient
                 {
                     Name = "Onion",
-                    PhotoPath = @"C:\Users\Korisnik\Desktop\YumApp Photos\Standard ingredient photo",
-                    Description = "Very delicios"
+                    PhotoPath = @"/Photos/DefaultIngredientPhoto.jpg",
+                    Description = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit."
                 };
 
                 var ingredient2 = new Ingredient
                 {
                     Name = "Avocado",
-                    PhotoPath = @"C:\Users\Korisnik\Desktop\YumApp Photos\Standard ingredient photo",
-                    Description = "Very delicios"
+                    PhotoPath = @"/Photos/DefaultIngredientPhoto.jpg",
+                    Description = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit."
                 };
 
                 var ingredient3 = new Ingredient
                 {
                     Name = "Chili pepper",
-                    PhotoPath = @"C:\Users\Korisnik\Desktop\YumApp Photos\Standard ingredient photo",
-                    Description = "Very delicios"
+                    PhotoPath = @"/Photos/DefaultIngredientPhoto.jpg",
+                    Description = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit."
                 };
 
                 await context.Ingredients.AddRangeAsync(new Ingredient[] { ingredient1, ingredient2, ingredient3 });
@@ -157,7 +227,7 @@ namespace YumApp
                 {
                     PostId = 1,
                     AppUserId = 2,
-                    IngredientId = 1                    
+                    IngredientId = 1
                 };
 
                 var pi2 = new Post_Ingredient

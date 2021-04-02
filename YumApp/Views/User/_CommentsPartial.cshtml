@@ -1,0 +1,13 @@
+﻿@model List<Comment>
+
+@foreach (var c in Model)
+{
+    <div class="d-flex">
+        <img src="@c.Commentator.PhotoPath" alt="User photo" />
+        <div class="rounded">
+            <p>
+                @c.Content
+            </p>
+        </div>
+    </div>
+}

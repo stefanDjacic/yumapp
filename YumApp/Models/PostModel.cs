@@ -1,4 +1,5 @@
 ﻿using EntityLibrary;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,9 +17,10 @@ namespace YumApp.Models
                 User = pe.AppUser,
                 Content = pe.Content,
                 Notes = pe.Notes,
+                NumberOfYums = pe.NumberOfYums,
                 TimeOfPosting = pe.TimeOfPosting,
-                Comments = pe.Comments,
-                //Post_Ingredients = pe.Post_Ingredients,
+                Comments = pe.Comments.Select(c => c),
+                //Ingredients = pe.Post_Ingredients.AsQueryable().Select(pi => pi.Ingredient).ToIngredientModel().AsEnumerable()
                 Ingredients = pe.Post_Ingredients.Select(pi => pi.Ingredient)
             });
         }
@@ -28,8 +30,7 @@ namespace YumApp.Models
     {
         public PostModel()
         {
-            Comments = new List<Comment>();
-            //Post_Ingredients = new HashSet<Post_Ingredient>();
+            Comments = new List<Comment>();            
             Ingredients = new List<Ingredient>();
         }
 
@@ -43,11 +44,11 @@ namespace YumApp.Models
         [MaxLength(100, ErrorMessage = "Maximum lengt is 100 characters.")]
         public string Notes { get; set; }
 
+        public int NumberOfYums { get; set; }
+
         public DateTime TimeOfPosting { get; set; }
 
-        public IEnumerable<Comment> Comments { get; set; }
-
-        //public ICollection<Post_Ingredient> Post_Ingredients { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }        
 
         public IEnumerable<Ingredient> Ingredients { get; set; }
     }

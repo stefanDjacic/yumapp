@@ -80,9 +80,14 @@ div .verical-line {
 
 
 /*------------------ POST model ------------------*/
+.number-of-yums {
+    height: max-content;
+    background-color: #eee;
+}
+
 .post {
-    background-color : #eee;
-    border-radius : 30px;
+    background-color: #eee;
+    border-radius: 30px;
 }
 
 .post-profile-photo {
@@ -107,4 +112,13 @@ div .verical-line {
 
 .ingredient-link-div {
     width : max-content;
+}
+
+.ingredient-btn {
+    height : max-content;
+}
+
+.modal-body-photo {
+    width : 200px;
+    height : auto;
 }
