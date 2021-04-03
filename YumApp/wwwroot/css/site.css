@@ -73,9 +73,24 @@ body {
 /* -----------------------MY CSS--------------------------*/
 
 
-/*------------------ PROFILE layout ------------------*/
+/*------------------ PROFILE ------------------*/
+
+/*.user-profile-background {
+    background-color: #2f9f2f;
+}*/
+
+.user-profile-photo {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.user-profile-info {
+    font-size : 120%;
+}
+
 div .verical-line {
-    width : 1px;
+    width: 1px;
 }
 
 
@@ -130,7 +145,7 @@ div .verical-line {
         width : 40px;
         height : 40px;
         border-radius : 50%;
-        object-fit : fill;
+        object-fit : cover;
     }
 
     .non-resizable-textarea {

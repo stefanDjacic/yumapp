@@ -25,16 +25,18 @@ namespace YumApp.Controllers
             _postRepository = postRepository;
         }
 
-        [HttpGet]        
+        [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
             //OVO SVE MORA DA SE MENJA DA PROVERAVA DA L JE TRENUTNI USER NA SVOM PROFILU ILI TUDJEM
-            var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            ViewBag.UserProfile = user.ToAppUserModel();
 
+            var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
             var currentUserPosts = await _postRepository.GetAll()
-                                                .Where(p => p.AppUserId == currentUserId)
+                                                .Where(p => p.AppUserId == id)
                                                 .ToPostModel()
-                                                .ToListAsync();            
+                                                .ToListAsync();
 
 
 

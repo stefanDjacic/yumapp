@@ -4,9 +4,16 @@
 {
     <div class="d-flex mb-3">
         <div>
-            <img src="@c.Commentator.PhotoPath" class="comment-user-photo" alt="User photo" />
+            <a asp-action="Profile" asp-controller="User" asp-route-id="@c.Commentator.Id">
+                <img src="@c.Commentator.PhotoPath" class="comment-user-photo" alt="User photo" />
+            </a>
         </div>
-        <div class="comment-user bg-light ml-2 p-2 d-flex align-items-center">
+        <div class="comment-user bg-light ml-2 p-2 d-flex align-items-center flex-column">
+            <a asp-action="Profile" asp-controller="User" asp-route-id="@c.Commentator.Id" class="align-self-start">
+                <p class="mb-1 font-weight-bold">
+                    @c.Commentator.FirstName @c.Commentator.LastName
+                </p>
+            </a>
             <p class="mb-0">
                 @c.Content
             </p>

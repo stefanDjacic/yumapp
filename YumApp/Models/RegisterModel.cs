@@ -60,7 +60,7 @@ namespace YumApp.Models
         [Required(ErrorMessage = "Password confirmation is required.")]
         [MinLength(8, ErrorMessage = "Minimum lenght is 8 characters.")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Confirmation password does not match with password.")]
+        [Compare("Password", ErrorMessage = "Confirmation password must match with password.")]
         public string ConfirmPassword { get; set; }
     }
 }

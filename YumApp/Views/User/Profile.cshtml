@@ -1,11 +1,30 @@
-﻿@model List<PostModel>
+﻿@*@model List<PostModel>*@
 @{    
-        ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Profile";
+
+    AppUserModel userProfile = ViewBag.UserProfile;
 }
 
 <div class="d-flex flex-column">
-    <div class="photo bg-dark h-75">
-
+    <div class="user-profile-background bg-success h-75 mb-5 mt-3 rounded-circle w-100 d-flex">
+        <img src="@userProfile.PhotoPath" alt="User photo" class="user-profile-photo img-thumbnail" />
+        <div class="user-profile-info ml-5 align-self-center font-weight-light">
+            <p class="mb-2 text-white">
+                Name: @userProfile.FirstName @userProfile.LastName
+            </p>
+            <p class="mb-2 text-white">
+                DOB: @userProfile.DateOfBirth.ToShortDateString()
+            </p>
+            <p class="mb-2 text-white">
+                Email: @userProfile.Email
+            </p>
+            <p class="mb-2 text-white">
+                Gender: @userProfile.Gender
+            </p>
+            @*<p class="mb-2">
+                About: @userProfile.About
+            </p>*@
+        </div>
     </div>
 
     <div class="d-flex row">
