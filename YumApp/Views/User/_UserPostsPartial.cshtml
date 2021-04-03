@@ -66,31 +66,38 @@
 
         @if (!string.IsNullOrEmpty(p.Notes))
         {
-            <hr class="horizontal-line w-100 mt-4 mb-2" />
+            @*<hr class="horizontal-line w-100 mt-4 mb-2" />*@
 
-            <div class="notes">
+            <div class="notes mt-4">
                 <p>
                     NOTES: @p.Notes
                 </p>
             </div>
         }
 
-    <div class="comments">
-        <div>
-            <img src="@currentUser.PhotoPath" alt="User photo" />
-            <form action="" method="post">
-                <div class="form-group">
-                    <textarea class="form-control rounded-pill" id="FormControlTextarea1" rows="3" required placeholder="Write a comment..."></textarea>
-                    <button type="submit" class="btn btn-primary">Comment</button>
-                </div>
-            </form>
-        </div>
+        <hr class="horizontal-line w-100 mt-4 mb-0" />
+        <hr class="horizontal-line w-100 mt-4 mb-3" />
 
-        @if (p.Comments.Any())
-        {
-            <partial name="_CommentsPartial" for="@p.Comments" />
-        }
-    </div>
+        <div class="comments">
+            <div class="d-flex">
+                <div>
+                    <img src="@currentUser.PhotoPath" class="comment-user-photo" alt="User photo" />
+                </div>
+                <div class="w-100 ml-2">
+                    <form action="" method="post">
+                        <div class="form-group d-flex flex-column">
+                            <textarea class="form-control rounded-pill non-resizable-textarea mb-2 respo" id="FormControlTextarea1" rows="3" required placeholder="Write a comment..."></textarea>
+                            <button type="submit" class="btn btn-primary align-self-end">Comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (p.Comments.Any())
+            {
+                <partial name="_CommentsPartial" for="@p.Comments" />
+            }
+        </div>
     </div>
 </div>
 }

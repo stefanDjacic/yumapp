@@ -32,10 +32,12 @@ namespace YumApp.Controllers
             var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
 
             var currentUserPosts = await _postRepository.GetAll()
-                                                        .Where(p => p.AppUserId == currentUserId)
-                                                        .ToPostModel()
-                                                        .ToListAsync();
-            
+                                                .Where(p => p.AppUserId == currentUserId)
+                                                .ToPostModel()
+                                                .ToListAsync();            
+
+
+
 
             return View(currentUserPosts);
         }

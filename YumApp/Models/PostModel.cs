@@ -19,18 +19,39 @@ namespace YumApp.Models
                 Notes = pe.Notes,
                 NumberOfYums = pe.NumberOfYums,
                 TimeOfPosting = pe.TimeOfPosting,
-                Comments = pe.Comments.Select(c => c),
-                //Ingredients = pe.Post_Ingredients.AsQueryable().Select(pi => pi.Ingredient).ToIngredientModel().AsEnumerable()
+                Comments = pe.Comments.Select(c => new CommentModel
+                                                        {
+                                                          Content = c.Content,
+                                                          Post = c.Post,
+                                                          Commentator = c.Commentator,
+                                                          TimeOfCommenting = c.TimeOfCommenting
+                                                        }),               
                 Ingredients = pe.Post_Ingredients.Select(pi => pi.Ingredient)
             });
         }
+
+        //public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> entities)
+        //{
+        //    return entities.SelectMany(pe => pe.Comments.ToCommentModel(),
+        //       (p, c) => new PostModel
+        //       {
+        //           User = p.AppUser,
+        //           Content = p.Content,
+        //           Notes = p.Notes,
+        //           NumberOfYums = p.NumberOfYums,
+        //           TimeOfPosting = p.TimeOfPosting,
+        //           Comments = p.Comments.ToCommentModel().Select(c => c),
+        //           //Ingredients = pe.Post_Ingredients.AsQueryable().Select(pi => pi.Ingredient).ToIngredientModel().AsEnumerable()
+        //           Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient)
+        //       });
+        //}
     }
 
     public class PostModel
     {
         public PostModel()
         {
-            Comments = new List<Comment>();            
+            Comments = new List<CommentModel>(); 
             Ingredients = new List<Ingredient>();
         }
 
@@ -48,7 +69,7 @@ namespace YumApp.Models
 
         public DateTime TimeOfPosting { get; set; }
 
-        public IEnumerable<Comment> Comments { get; set; }        
+        public IEnumerable<CommentModel> Comments { get; set; }        
 
         public IEnumerable<Ingredient> Ingredients { get; set; }
     }

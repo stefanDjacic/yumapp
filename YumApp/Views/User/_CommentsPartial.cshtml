@@ -1,11 +1,13 @@
-﻿@model List<Comment>
+﻿@model List<CommentModel>
 
 @foreach (var c in Model)
 {
-    <div class="d-flex">
-        <img src="@c.Commentator.PhotoPath" alt="User photo" />
-        <div class="rounded">
-            <p>
+    <div class="d-flex mb-3">
+        <div>
+            <img src="@c.Commentator.PhotoPath" class="comment-user-photo" alt="User photo" />
+        </div>
+        <div class="comment-user bg-light ml-2 p-2 d-flex align-items-center">
+            <p class="mb-0">
                 @c.Content
             </p>
         </div>

@@ -103,22 +103,40 @@ div .verical-line {
     font-size : 80%;
 }
 
-/*------------------ INGREDIENT ------------------*/
+    /*------------------ INGREDIENT ------------------*/
 
-.ingredient-photo {
-    width : 50px;
-    height : auto;
-}
+    .ingredient-photo {
+        width : 50px;
+        height : auto;
+    }
 
-.ingredient-link-div {
-    width : max-content;
-}
+    .ingredient-link-div {
+        width : max-content;
+    }
 
-.ingredient-btn {
-    height : max-content;
-}
+    .ingredient-btn {
+        height : max-content;
+    }
 
-.modal-body-photo {
-    width : 200px;
-    height : auto;
-}
+    .modal-body-photo {
+        width: 200px;
+        height: auto;
+/*        object-fit: contain;*/
+    }
+
+    /*------------------ COMMENT ------------------*/
+
+    .comment-user-photo {
+        width : 40px;
+        height : 40px;
+        border-radius : 50%;
+        object-fit : fill;
+    }
+
+    .non-resizable-textarea {
+        resize : none;
+    }
+
+    .comment-user{
+        border-radius : 20px;
+    }
