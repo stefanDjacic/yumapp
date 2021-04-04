@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using YumApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Http;
+using System.Net.Http.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace YumApp.Controllers
 {
@@ -18,11 +21,13 @@ namespace YumApp.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ICRUDRepository<Post> _postRepository;
+        private readonly IHttpClientFactory _httpClient;
 
-        public UserController(UserManager<AppUser> userManager, ICRUDRepository<Post> postRepository)
+        public UserController(UserManager<AppUser> userManager, ICRUDRepository<Post> postRepository, IHttpClientFactory httpClient)
         {
             _userManager = userManager;
             _postRepository = postRepository;
+            _httpClient = httpClient;
         }
 
         [HttpGet]
@@ -47,14 +52,24 @@ namespace YumApp.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet]        
         public async Task<IActionResult> Settings(int id)
-        {
+        {            
+            var client = _httpClient.CreateClient();
+            try
+            {
+                var countriesModel = await client.GetFromJsonAsync<CountriesModel>("https://restcountries.eu/rest/v2/all");
+                countriesModel.Countries.Insert(0, new Country { Name = string.Empty});                
+                ViewBag.Countries = new SelectList(countriesModel.Countries, "Name");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);                
+            }
+
             var currentUser = await _userManager.FindByIdAsync(id.ToString());
 
-            //TREBA DA UBACIS ZEMLJE IZ API-JA
-
-            return View(currentUser.ToAppUserModel());
+            return View(/*currentUser.ToAppUserModel()*/ );
         }
 
         // GET: UserController
