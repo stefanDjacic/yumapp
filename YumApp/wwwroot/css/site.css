@@ -73,8 +73,22 @@ body {
 /* -----------------------MY CSS--------------------------*/
 
 
-/*------------------ PROFILE ------------------*/
+/* ----------------------- NAVBAR --------------------------*/
 
+.navbar-nav-link {
+    width : max-content;
+}
+
+.navbar-dropdown-form {
+    width: max-content;
+}
+
+.navbar-dropdown-menu {
+    width: max-content;
+}
+
+
+/*------------------ PROFILE ------------------*/
 /*.user-profile-background {
     background-color: #2f9f2f;
 }*/
@@ -86,7 +100,12 @@ body {
 }
 
 .user-profile-info {
-    font-size : 120%;
+    font-size : 110%;
+}
+
+.user-profile-about {
+    width: inherit;
+    word-wrap : break-word;
 }
 
 div .verical-line {

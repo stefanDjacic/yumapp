@@ -28,25 +28,33 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
-            //OVO SVE MORA DA SE MENJA DA PROVERAVA DA L JE TRENUTNI USER NA SVOM PROFILU ILI TUDJEM
+            //Returns user whose profile is being viewed
             var user = await _userManager.FindByIdAsync(id.ToString());
             ViewBag.UserProfile = user.ToAppUserModel();
 
-            var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
-            var currentUserPosts = await _postRepository.GetAll()
+            //var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+            var UserPosts = await _postRepository.GetAll()
                                                 .Where(p => p.AppUserId == id)
                                                 .ToPostModel()
                                                 .ToListAsync();
 
-
-
-
-            return View(currentUserPosts);
+            return View(UserPosts);
         }
-
+        
+        [HttpGet]
         public IActionResult Feed()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Settings(int id)
+        {
+            var currentUser = await _userManager.FindByIdAsync(id.ToString());
+
+            //TREBA DA UBACIS ZEMLJE IZ API-JA
+
+            return View(currentUser.ToAppUserModel());
         }
 
         // GET: UserController
