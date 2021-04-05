@@ -21,13 +21,13 @@ namespace YumApp.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ICRUDRepository<Post> _postRepository;
-        private readonly IHttpClientFactory _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public UserController(UserManager<AppUser> userManager, ICRUDRepository<Post> postRepository, IHttpClientFactory httpClient)
+        public UserController(UserManager<AppUser> userManager, ICRUDRepository<Post> postRepository, IHttpClientFactory httpClientFactory)
         {
             _userManager = userManager;
             _postRepository = postRepository;
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpGet]
@@ -54,22 +54,25 @@ namespace YumApp.Controllers
 
         [HttpGet]        
         public async Task<IActionResult> Settings(int id)
-        {            
-            var client = _httpClient.CreateClient();
-            try
+        {           
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://restcountries.eu/rest/v2/all");
+            var client = _httpClientFactory.CreateClient();
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
             {
-                var countriesModel = await client.GetFromJsonAsync<CountriesModel>("https://restcountries.eu/rest/v2/all");
-                countriesModel.Countries.Insert(0, new Country { Name = string.Empty});                
-                ViewBag.Countries = new SelectList(countriesModel.Countries, "Name");
+                var countries = await response.Content.ReadFromJsonAsync<Country[]>();
+                //var countriesList = countries.ToList();
+                ViewBag.Countries = new SelectList(countries, "Name", "Name", "Name");
             }
-            catch (Exception ex)
+            else
             {
-                ModelState.AddModelError("", ex.Message);                
+                ModelState.AddModelError("", response.ReasonPhrase);
             }
 
             var currentUser = await _userManager.FindByIdAsync(id.ToString());
 
-            return View(/*currentUser.ToAppUserModel()*/ );
+            return View(currentUser.ToAppUserModel());
         }
 
         // GET: UserController
