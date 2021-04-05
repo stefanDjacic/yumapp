@@ -1,4 +1,5 @@
 ﻿using EntityLibrary;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,8 +20,7 @@ namespace YumApp.Models
                                 LastName = appUser.LastName,
                                 Email = appUser.Email,
                                 Username = appUser.UserName,
-                                DateOfBirth = appUser.DateOfBirth,
-                                DateCreated = appUser.DateCreated,
+                                DateOfBirth = appUser.DateOfBirth,                                
                                 Country = appUser.Country,
                                 Gender = appUser.Gender,
                                 About = appUser.About,
@@ -70,10 +70,12 @@ namespace YumApp.Models
         public GenderEnum Gender { get; set; }
 
         [MinLength(1, ErrorMessage = "Minimum lenght is 1 character.")]
-        [MaxLength(200, ErrorMessage = "Maximum lenght is 1000 characters.")]
+        [MaxLength(100, ErrorMessage = "Maximum lenght is 100 characters.")]
         public string About { get; set; }
 
         [Required]
         public string PhotoPath { get; set; } = @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";
+
+        public IFormFile Photo { get; set; }
     }
 }

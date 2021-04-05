@@ -174,3 +174,12 @@ div .verical-line {
     .comment-user{
         border-radius : 20px;
     }
+
+
+/*------------------ COMMENT ------------------*/
+
+.user-settings-photo {
+    width : 300px;
+    height: auto;
+    object-fit : contain;
+}

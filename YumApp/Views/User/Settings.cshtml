@@ -4,18 +4,24 @@
     ViewData["Title"] = "Settings";
 }
 
-<h1>Settings</h1>
-@*@foreach (var item in ViewBag.countries)
+@while (string.IsNullOrEmpty(Model.Country))
 {
-    <p>@item.Name</p>
-}*@
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            Loading...
+        </button>
+    </div>
+}
 
-<h4>AppUser</h4>
+<h1>Settings</h1>
+
+<h4>@Model.FirstName @Model.LastName</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Settings" asp-controller="User" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -28,20 +34,21 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="DateOfBirth" class="control-label"></label>
                 <input asp-for="DateOfBirth" class="form-control" />
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-            <label asp-for="DateCreated" class="control-label"></label>
-            <input asp-for="DateCreated" class="form-control" />
-            <span asp-validation-for="DateCreated" class="text-danger"></span>
-        </div>*@
             <div class="form-group">
                 <label asp-for="Country" class="control-label"></label>
-                <select asp-for="Country" asp-items="@ViewBag.Countries as SelectList" class="form-control"></select>
-                @*<input asp-for="Country" class="form-control" />*@
-                @*<span asp-validation-for="Country" class="text-danger"></span>*@
+                <select asp-for="Country" asp-items="@ViewBag.Countries as SelectList" class="form-control">
+                    <option>Please select</option>
+                </select>
+                <span asp-validation-for="Country" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Gender" class="control-label"></label>
@@ -52,92 +59,24 @@
             </div>
             <div class="form-group">
                 <label asp-for="About" class="control-label"></label>
-                <input asp-for="About" class="form-control" />
+                <textarea asp-for="About" class="form-control non-resizable-textarea" rows="3" placeholder="Write something about yourself"></textarea>
                 <span asp-validation-for="About" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhotoPath" class="control-label"></label>
+                <label asp-for="Photo" class="control-label"></label>
                 <input asp-for="PhotoPath" class="form-control" />
                 <span asp-validation-for="PhotoPath" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-            <label asp-for="UserName" class="control-label"></label>
-            <input asp-for="UserName" class="form-control" />
-            <span asp-validation-for="UserName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="NormalizedUserName" class="control-label"></label>
-            <input asp-for="NormalizedUserName" class="form-control" />
-            <span asp-validation-for="NormalizedUserName" class="text-danger"></span>
-        </div>*@
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-            <label asp-for="NormalizedEmail" class="control-label"></label>
-            <input asp-for="NormalizedEmail" class="form-control" />
-            <span asp-validation-for="NormalizedEmail" class="text-danger"></span>
-        </div>*@
-            @*<div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="EmailConfirmed" /> @Html.DisplayNameFor(model => model.EmailConfirmed)
-            </label>
-        </div>*@
-            @*<div class="form-group">
-            <label asp-for="PasswordHash" class="control-label"></label>
-            <input asp-for="PasswordHash" class="form-control" />
-            <span asp-validation-for="PasswordHash" class="text-danger"></span>
-        </div>*@
-            @*<div class="form-group">
-            <label asp-for="SecurityStamp" class="control-label"></label>
-            <input asp-for="SecurityStamp" class="form-control" />
-            <span asp-validation-for="SecurityStamp" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="ConcurrencyStamp" class="control-label"></label>
-            <input asp-for="ConcurrencyStamp" class="form-control" />
-            <span asp-validation-for="ConcurrencyStamp" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="PhoneNumber" class="control-label"></label>
-            <input asp-for="PhoneNumber" class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>*@
-            @*<div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="PhoneNumberConfirmed" /> @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
-            </label>
-        </div>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="TwoFactorEnabled" /> @Html.DisplayNameFor(model => model.TwoFactorEnabled)
-            </label>
-        </div>
-        <div class="form-group">
-            <label asp-for="LockoutEnd" class="control-label"></label>
-            <input asp-for="LockoutEnd" class="form-control" />
-            <span asp-validation-for="LockoutEnd" class="text-danger"></span>
-        </div>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="LockoutEnabled" /> @Html.DisplayNameFor(model => model.LockoutEnabled)
-            </label>
-        </div>
-        <div class="form-group">
-            <label asp-for="AccessFailedCount" class="control-label"></label>
-            <input asp-for="AccessFailedCount" class="form-control" />
-            <span asp-validation-for="AccessFailedCount" class="text-danger"></span>
-        </div>*@
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group d-flex justify-content-end">
+                <a asp-action="Profile" asp-controller="User" asp-route-id="@Model.Id" class="btn btn-danger">Cancel</a>
+                <input type="submit" value="Save" class="ml-3 btn btn-success" />
             </div>
         </form>
     </div>
+    <div>
+        <img src="@Model.PhotoPath" alt="User photo" class="img-fluid ml-5 user-settings-photo" />
+    </div>
 </div>
-
-<div>
-    <a asp-action="Profile" asp-controller="User" asp-route-id="@Model.Id">Cancel</a>
-</div>
-
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

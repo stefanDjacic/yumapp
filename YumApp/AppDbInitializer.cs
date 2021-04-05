@@ -55,8 +55,10 @@ namespace YumApp
                     FirstName = "Pera",
                     LastName = "Peric",
                     Email = "peraperic@gmail.com",
+                    Country = "Croatia",
                     DateOfBirth = DateTime.UtcNow,
                     Gender = GenderEnum.Male,
+                    About = "Very talented young chef.",
                     PhotoPath = @"/Photos/DefaultUserPhoto.png"
                 };
 
@@ -70,8 +72,10 @@ namespace YumApp
                     FirstName = "Mara",
                     LastName = "Maric",
                     Email = "maramaric@gmail.com",
+                    Country = "Austria",
                     DateOfBirth = DateTime.UtcNow,
                     Gender = GenderEnum.Female,
+                    About = "I like trains!",
                     PhotoPath = @"/Photos/AnotherUserPhoto.jpg"
                 };
 

@@ -52,25 +52,27 @@ namespace YumApp.Controllers
             return View();
         }
 
-        [HttpGet]        
-        public async Task<IActionResult> Settings(int id)
-        {           
+        [HttpGet]
+        public async Task<IActionResult> Settings()
+        {
             var request = new HttpRequestMessage(HttpMethod.Get, "https://restcountries.eu/rest/v2/all");
             var client = _httpClientFactory.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {
+                //Getting countrie from API and storing them in ViewBag to display them as select list in AppUserModel
                 var countries = await response.Content.ReadFromJsonAsync<Country[]>();
-                //var countriesList = countries.ToList();
                 ViewBag.Countries = new SelectList(countries, "Name", "Name", "Name");
             }
             else
             {
-                ModelState.AddModelError("", response.ReasonPhrase);
+                ModelState.AddModelError("Country", "Problem with loading countries, please try later again.");
             }
 
-            var currentUser = await _userManager.FindByIdAsync(id.ToString());
+            //var currentUser = await _userManager.FindByIdAsync(id.ToString()); //ovde ubaci User
+            var currentUser = await _userManager.GetUserAsync(User);
+
 
             return View(currentUser.ToAppUserModel());
         }

@@ -38,7 +38,7 @@ namespace EntityLibrary
         public DateTime DateOfBirth { get; set; }
 
         [Column(TypeName = "date")]
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public DateTime DateCreated { get; set; } /*= DateTime.UtcNow;*/
         
         [MaxLength(100)]
         public string Country { get; set; }
@@ -46,11 +46,11 @@ namespace EntityLibrary
         [Required]
         public GenderEnum Gender { get; set; }
 
-        [MaxLength(200)]
+        [MaxLength(100)]
         public string About { get; set; }
 
         [Required]
-        public string PhotoPath { get; set; } = @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";
+        public string PhotoPath { get; set; } /*= @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";*/
 
         //Navigation properties
         [InverseProperty("Follower")]

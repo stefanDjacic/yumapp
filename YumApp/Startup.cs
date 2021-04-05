@@ -41,7 +41,7 @@ namespace YumApp
 
             services.AddIdentity<AppUser, IdentityRole<int>>(options =>
                     {
-                        options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+                        //options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
 
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;

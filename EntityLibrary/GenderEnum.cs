@@ -8,7 +8,6 @@ namespace EntityLibrary
 {
     public enum GenderEnum
     {
-        Select,
         Male,
         Female,
         Nonbinary
