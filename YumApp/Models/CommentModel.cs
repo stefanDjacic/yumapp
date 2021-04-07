@@ -9,27 +9,27 @@ namespace YumApp.Models
 {
     public static class CommentModelExtensionMethods
     {
-        public static IQueryable<CommentModel> ToCommentModel(this IQueryable<Comment> entities)
-        {
-            return entities.Select(ce => new CommentModel
-            {
-                Content = ce.Content,
-                TimeOfCommenting = ce.TimeOfCommenting,
-                Post = ce.Post,
-                Commentator = ce.Commentator           
-            });
-        }
+        //public static IQueryable<CommentModel> ToCommentModel(this IQueryable<Comment> entities)
+        //{
+        //    return entities.Select(ce => new CommentModel
+        //    {
+        //        Content = ce.Content,
+        //        TimeOfCommenting = ce.TimeOfCommenting,
+        //        Post = ce.Post,
+        //        Commentator = ce.Commentator           
+        //    });
+        //}
 
-        public static IEnumerable<CommentModel> ToCommentModel(this IEnumerable<Comment> entities)
-        {
-            return entities.Select(ce => new CommentModel
-            {
-                Content = ce.Content,
-                TimeOfCommenting = ce.TimeOfCommenting,
-                Post = ce.Post,
-                Commentator = ce.Commentator
-            });
-        }
+        //public static IEnumerable<CommentModel> ToCommentModel(this IEnumerable<Comment> entities)
+        //{
+        //    return entities.Select(ce => new CommentModel
+        //    {
+        //        Content = ce.Content,
+        //        TimeOfCommenting = ce.TimeOfCommenting,
+        //        Post = ce.Post,
+        //        Commentator = ce.Commentator
+        //    });
+        //}
     }
 
     public class CommentModel
@@ -40,6 +40,6 @@ namespace YumApp.Models
         public string Content { get; set; }
         public DateTime TimeOfCommenting { get; set; }
         public Post Post { get; set; }
-        public AppUser Commentator { get; set; }
+        public AppUserModel Commentator { get; set; }
     }
 }

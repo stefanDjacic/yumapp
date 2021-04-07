@@ -1,0 +1,24 @@
+﻿@model List<PostTest>
+
+@foreach (var item in Model)
+{
+<div>
+    <div>
+        @item.Id
+    </div>
+    <div>
+        @item.Name
+    </div>
+    <div>
+        @item.Content
+    </div>
+    @foreach (var c in item.Comments)
+    {
+        <div class="ml-5 pl-5">
+            @c.TestAppUser.Name
+            <br />
+            @c.Content
+        </div>
+    }
+</div>
+}

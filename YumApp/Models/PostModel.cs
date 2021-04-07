@@ -36,53 +36,30 @@ namespace YumApp.Models
                                                         {
                                                             Content = c.Content,
                                                             Post = c.Post,
-                                                            Commentator = c.Commentator,
-                                                            TimeOfCommenting = c.TimeOfCommenting
-                                                        }),
+                                                            Commentator = new AppUserModel 
+                                                                                {
+                                                                                    Id = c.Commentator.Id,
+                                                                                    FirstName = c.Commentator.FirstName,
+                                                                                    LastName = c.Commentator.LastName,
+                                                                                    Email = c.Commentator.Email,
+                                                                                    Username = c.Commentator.Email,
+                                                                                    About = c.Commentator.About,
+                                                                                    DateCreated = c.Commentator.DateCreated,
+                                                                                    DateOfBirth = c.Commentator.DateOfBirth,
+                                                                                    Gender = c.Commentator.Gender,
+                                                                                    PhotoPath = c.Commentator.PhotoPath,
+                                                                                    Country = c.Commentator.Country
+                                                                                },
+                TimeOfCommenting = c.TimeOfCommenting
+                                                        }).ToList(),
                 Ingredients = pe.Post_Ingredients.Select(pi => pi.Ingredient).Select(i => new IngredientModel
                                                                                                 {
                                                                                                     Name = i.Name,
                                                                                                     Description = i.Description,
                                                                                                     PhotoPath = i.PhotoPath
-                                                                                                })
+                                                                                                }).ToList()
             });
         }
-
-        //public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> entities)
-        //{
-        //    return entities.Select(pe => new PostModel
-        //    {
-        //        User = pe.AppUser,
-        //        Content = pe.Content,
-        //        Notes = pe.Notes,
-        //        NumberOfYums = pe.NumberOfYums,
-        //        TimeOfPosting = pe.TimeOfPosting,
-        //        Comments = pe.Comments.Select(c => new CommentModel
-        //                                                {
-        //                                                  Content = c.Content,
-        //                                                  Post = c.Post,
-        //                                                  Commentator = c.Commentator,
-        //                                                  TimeOfCommenting = c.TimeOfCommenting
-        //                                                }),               
-        //        Ingredients = pe.Post_Ingredients.Select(pi => pi.Ingredient)
-        //    });
-        //}
-
-        //public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> entities)
-        //{
-        //    return entities.SelectMany(pe => pe.Comments.ToCommentModel(),
-        //       (p, c) => new PostModel
-        //       {
-        //           User = p.AppUser,
-        //           Content = p.Content,
-        //           Notes = p.Notes,
-        //           NumberOfYums = p.NumberOfYums,
-        //           TimeOfPosting = p.TimeOfPosting,
-        //           Comments = p.Comments.ToCommentModel().Select(c => c),
-        //           //Ingredients = pe.Post_Ingredients.AsQueryable().Select(pi => pi.Ingredient).ToIngredientModel().AsEnumerable()
-        //           Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient)
-        //       });
-        //}
     }
 
     public class PostModel

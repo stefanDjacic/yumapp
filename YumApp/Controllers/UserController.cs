@@ -38,12 +38,33 @@ namespace YumApp.Controllers
             ViewBag.UserProfile = user.ToAppUserModel();
 
             //var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
-            var UserPosts = await _postRepository.GetAll()
+            var userPosts = await _postRepository.GetAll()
                                                 .Where(p => p.AppUserId == id)
                                                 .ToPostModel()
                                                 .ToListAsync();
 
-            return View(UserPosts);
+            return View(userPosts);
+
+
+
+            /*
+             TESTING QUERY EFFICIENCY
+            */
+            //var userPosts = await _postRepository.GetAll().Select(p => new PostTest
+            //{
+            //    Id = p.Id,
+            //    Content = p.Content,
+            //    Name = p.AppUser.FirstName,
+            //    Comments = p.Comments.Select(c => new TestComment
+            //    {
+            //        Content = c.Content,
+            //        TestAppUser = new TestAppUser { Id = c.Commentator.Id, Name = c.Commentator.FirstName }
+            //    }).ToList()
+            //}).ToListAsync();
+
+            //var userPosts = await _postRepository.GetAll().ToPostTest1().ToListAsync();
+
+            //return View("TestView", userPosts);
         }
         
         [HttpGet]
@@ -73,8 +94,9 @@ namespace YumApp.Controllers
             //var currentUser = await _userManager.FindByIdAsync(id.ToString()); //ovde ubaci User
             var currentUser = await _userManager.GetUserAsync(User);
 
+            var currentUserModel = currentUser.ToAppUserModel();
 
-            return View(currentUser.ToAppUserModel());
+            return View(currentUserModel);
         }
 
         // GET: UserController

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Settings";
 }
 
-@while (string.IsNullOrEmpty(Model.Country))
+@*@while (string.IsNullOrEmpty(Model.Country))
 {
     <div class="d-flex justify-content-center">
         <button class="btn btn-primary" type="button" disabled>
@@ -12,9 +12,13 @@
             Loading...
         </button>
     </div>
-}
+}*@
 
 <h1>Settings</h1>
+
+<div>
+    @Html.ViewContext.HttpContext.Request.Cookies["ai_user"]
+</div>
 
 <h4>@Model.FirstName @Model.LastName</h4>
 <hr />

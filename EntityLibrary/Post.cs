@@ -30,7 +30,7 @@ namespace EntityLibrary
 
         public int NumberOfYums { get; set; } = 0;
 
-        public DateTime TimeOfPosting { get; set; } = DateTime.Now.ToLocalTime();
+        public DateTime TimeOfPosting { get; set; } /*= DateTime.Now.ToLocalTime();*/
 
         //Navigation properties
         public int AppUserId { get; set; }
