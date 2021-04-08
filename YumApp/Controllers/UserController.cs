@@ -36,8 +36,8 @@ namespace YumApp.Controllers
             //Returns user whose profile is being viewed
             var user = await _userManager.FindByIdAsync(id.ToString());
             ViewBag.UserProfile = user.ToAppUserModel();
-
-            //var currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+            
+            //Returns PostModel of selected user
             var userPosts = await _postRepository.GetAll()
                                                 .Where(p => p.AppUserId == id)
                                                 .ToPostModel()
@@ -45,8 +45,7 @@ namespace YumApp.Controllers
 
             return View(userPosts);
 
-
-
+            #region TestingQueries
             /*
              TESTING QUERY EFFICIENCY
             */
@@ -65,8 +64,9 @@ namespace YumApp.Controllers
             //var userPosts = await _postRepository.GetAll().ToPostTest1().ToListAsync();
 
             //return View("TestView", userPosts);
+            #endregion
         }
-        
+
         [HttpGet]
         public IActionResult Feed()
         {
@@ -76,9 +76,11 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Settings()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://restcountries.eu/rest/v2/all");
-            var client = _httpClientFactory.CreateClient();
-            HttpResponseMessage response = await client.SendAsync(request);
+            //var request = new HttpRequestMessage(HttpMethod.Get, "https://restcountries.eu/rest/v2/all");
+            //var client = _httpClientFactory.CreateClient();
+            //HttpResponseMessage response = await client.SendAsync(request);
+            
+            var response = await ControllerHelperMethods.CallApi(HttpMethod.Get, "https://restcountries.eu/rest/v2/all", _httpClientFactory);
 
             if (response.IsSuccessStatusCode)
             {
@@ -88,15 +90,59 @@ namespace YumApp.Controllers
             }
             else
             {
-                ModelState.AddModelError("Country", "Problem with loading countries, please try later again.");
+                ModelState.AddModelError("Country", "Problem with loading countries, please try again later.");
             }
 
-            //var currentUser = await _userManager.FindByIdAsync(id.ToString()); //ovde ubaci User
-            var currentUser = await _userManager.GetUserAsync(User);
+            var currentUser = await _userManager.CurrentUserToAppUserModel(User);
+            //var currentUser = await _userManager.FindByIdAsync(id.ToString());
 
-            var currentUserModel = currentUser.ToAppUserModel();
+            return View(currentUser);
+        }
 
-            return View(currentUserModel);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Settings(AppUserModel model)
+        {
+            //concurency stamp 8f1be089-611a-4cfb-b5b5-57991bf2e25e
+            //security stamp KU66MDBKFN2PDCNQ34L54KPK6ALJZRG3
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var appuser = model.ToAppUserEntity();
+
+                    //var a = await _userManager.GenerateConcurrencyStampAsync(appuser);
+                    //var securityStampResult = await _userManager.UpdateSecurityStampAsync(appuser);
+
+                    //var result = await _userManager.UpdateAsync(appuser);
+
+                    var result = await _userManager.UpdateUserAsync(appuser);
+
+                    if (result.Succeeded)
+                    {
+                        //var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
+
+                        return RedirectToAction("Profile", "User", new { id = model.Id });
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    return View(model);
+                }
+            }
+            catch
+            {
+                return View(model);                
+            }
         }
 
         // GET: UserController

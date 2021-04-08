@@ -9,27 +9,51 @@ namespace YumApp.Models
 {
     public static class CommentModelExtensionMethods
     {
-        //public static IQueryable<CommentModel> ToCommentModel(this IQueryable<Comment> entities)
-        //{
-        //    return entities.Select(ce => new CommentModel
-        //    {
-        //        Content = ce.Content,
-        //        TimeOfCommenting = ce.TimeOfCommenting,
-        //        Post = ce.Post,
-        //        Commentator = ce.Commentator           
-        //    });
-        //}
+        public static IQueryable<CommentModel> ToCommentModel(this IQueryable<Comment> entities)
+        {
+            return entities.Select(ce => new CommentModel
+            {
+                Content = ce.Content,
+                TimeOfCommenting = ce.TimeOfCommenting,
+                Post = ce.Post,
+                Commentator = new AppUserModel
+                {
+                    Id = ce.Commentator.Id,
+                    FirstName = ce.Commentator.FirstName,
+                    LastName = ce.Commentator.LastName,
+                    Email = ce.Commentator.Email,
+                    Username = ce.Commentator.UserName,
+                    DateOfBirth = ce.Commentator.DateOfBirth,
+                    Country = ce.Commentator.Country,
+                    Gender = ce.Commentator.Gender,
+                    About = ce.Commentator.About,
+                    PhotoPath = ce.Commentator.PhotoPath
+                }
+            });
+        }
 
-        //public static IEnumerable<CommentModel> ToCommentModel(this IEnumerable<Comment> entities)
-        //{
-        //    return entities.Select(ce => new CommentModel
-        //    {
-        //        Content = ce.Content,
-        //        TimeOfCommenting = ce.TimeOfCommenting,
-        //        Post = ce.Post,
-        //        Commentator = ce.Commentator
-        //    });
-        //}
+        public static IEnumerable<CommentModel> ToCommentModel(this IEnumerable<Comment> entities)
+        {
+            return entities.Select(ce => new CommentModel
+            {
+                Content = ce.Content,
+                TimeOfCommenting = ce.TimeOfCommenting,
+                Post = ce.Post,
+                Commentator = new AppUserModel
+                {
+                    Id = ce.Commentator.Id,
+                    FirstName = ce.Commentator.FirstName,
+                    LastName = ce.Commentator.LastName,
+                    Email = ce.Commentator.Email,
+                    Username = ce.Commentator.UserName,
+                    DateOfBirth = ce.Commentator.DateOfBirth,
+                    Country = ce.Commentator.Country,
+                    Gender = ce.Commentator.Gender,
+                    About = ce.Commentator.About,
+                    PhotoPath = ce.Commentator.PhotoPath
+                }
+            });
+        }
     }
 
     public class CommentModel

@@ -18,14 +18,12 @@ namespace YumApp.Controllers
     public class HomeController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        //private readonly IHttpContextAccessor _contextAccessor;
+        private readonly SignInManager<AppUser> _signInManager;        
 
         public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            //_contextAccessor = contextAccessor;
+            _signInManager = signInManager;            
         }
 
         [HttpGet]
@@ -33,8 +31,8 @@ namespace YumApp.Controllers
         {
             if (_signInManager.IsSignedIn(User))
             {
-                int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
-
+                //int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
+                int currentUserId = await _userManager.GetCurrentUserIdAsync(User);
                 return RedirectToAction("Profile", "User", new { id = currentUserId });
             }
             return View();
@@ -42,7 +40,7 @@ namespace YumApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterModel model)
         {
             try
             {
@@ -57,15 +55,16 @@ namespace YumApp.Controllers
 
                         await _signInManager.SignInAsync(newUser, false);
 
-                        int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);
+                        //int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);
+                        int currentUserId = await _userManager.GetCurrentUserIdAsync(model.Email);
 
                         return RedirectToAction("Profile", "User", new { id = currentUserId });
                     }
                     else
                     {
-                        foreach (var item in result.Errors)
+                        foreach (var error in result.Errors)
                         {
-                            ModelState.AddModelError("", item.Description);
+                            ModelState.AddModelError("", error.Description);
                         }
 
                         return View(model);
@@ -100,7 +99,8 @@ namespace YumApp.Controllers
 
                     if (result.Succeeded)
                     {
-                        int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);                        
+                        //int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);
+                        int currentUserId = await _userManager.GetCurrentUserIdAsync(model.Email);
 
                         return RedirectToAction("Profile", "User", new { id = currentUserId });
                     }

@@ -4,21 +4,11 @@
     ViewData["Title"] = "Settings";
 }
 
-@*@while (string.IsNullOrEmpty(Model.Country))
-{
-    <div class="d-flex justify-content-center">
-        <button class="btn btn-primary" type="button" disabled>
-            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-            Loading...
-        </button>
-    </div>
-}*@
-
 <h1>Settings</h1>
 
-<div>
-    @Html.ViewContext.HttpContext.Request.Cookies["ai_user"]
-</div>
+@*<div>
+        @Html.ViewContext.HttpContext.Request.Cookies["ai_user"]
+    </div>*@
 
 <h4>@Model.FirstName @Model.LastName</h4>
 <hr />
@@ -27,6 +17,7 @@
         <form asp-action="Settings" asp-controller="User" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            @*<input type="hidden" asp-for="SecurityStamp" />*@
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -39,7 +30,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control" id="inputEmail" onkeyup="updateUsername(this.value)" />
+                <input asp-for="Username" type="hidden" value="@Model.Username" id="inputUsername" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -69,12 +61,8 @@
             <div class="form-group">
                 <label asp-for="Photo" class="control-label"></label>
                 <br />
-                @*<input asp-for="PhotoPath" class="form-control" />*@
-                @*<div class="form-group">*@
-                    <input id="imgInp" type="file" asp-for="Photo" />
-                    <input id="imgName" type="hidden" asp-for="PhotoPath" />
-                @*</div>*@
-                @*<input type="hidden" asp-for="Photo" />*@
+                <input id="imgInp" type="file" asp-for="Photo" />
+                <input id="imgName" type="hidden" asp-for="PhotoPath" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div class="form-group d-flex justify-content-end">
@@ -88,7 +76,13 @@
     </div>
 </div>
 @section Scripts {
-    <script src="/js/ImageLoader.js"></script>
-
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="/js/ImageLoader.js"></script>
+    <script>
+        function updateUsername(emailValue) {
+            var inputUsername = document.getElementById('inputUsername');
+            inputUsername.value = emailValue;
+        }
+    </script>
 }

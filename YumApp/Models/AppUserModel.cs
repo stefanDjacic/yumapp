@@ -25,7 +25,28 @@ namespace YumApp.Models
                                 Gender = appUser.Gender,
                                 About = appUser.About,
                                 PhotoPath = appUser.PhotoPath
-                            };
+                                //SecurityStamp = appUser.SecurityStamp,
+                                //ConcurrencyStamp = appUser.ConcurrencyStamp
+                             };
+        }
+
+        public static AppUser ToAppUserEntity(this AppUserModel appUserModel)
+        {
+            return new AppUser
+            {
+                Id = appUserModel.Id,
+                FirstName = appUserModel.FirstName,
+                LastName = appUserModel.LastName,
+                Email = appUserModel.Email,
+                UserName = appUserModel.Username,                          //PAZI OVDE ZA GRESKE
+                DateOfBirth = appUserModel.DateOfBirth,
+                Country = appUserModel.Country,
+                Gender = appUserModel.Gender,
+                About = appUserModel.About,
+                PhotoPath = appUserModel.PhotoPath
+                //SecurityStamp = appUserModel.SecurityStamp,
+                //ConcurrencyStamp = appUserModel.ConcurrencyStamp
+            };
         }
     }
 
@@ -61,7 +82,7 @@ namespace YumApp.Models
         public DateTime DateOfBirth { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public DateTime DateCreated { get; set; }
 
         [MaxLength(100)]
         public string Country { get; set; }
@@ -72,6 +93,9 @@ namespace YumApp.Models
         [MinLength(1, ErrorMessage = "Minimum lenght is 1 character.")]
         [MaxLength(100, ErrorMessage = "Maximum lenght is 100 characters.")]
         public string About { get; set; }
+
+        //public string SecurityStamp { get; set; }
+        //public string ConcurrencyStamp { get; set; }
 
         [Required]
         public string PhotoPath { get; set; } = @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";
