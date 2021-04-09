@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Net.Http;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
 
 namespace YumApp.Controllers
 {
@@ -22,12 +23,14 @@ namespace YumApp.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly string _userPhotoFolderPath;
 
-        public UserController(UserManager<AppUser> userManager, ICRUDRepository<Post> postRepository, IHttpClientFactory httpClientFactory)
+        public UserController(UserManager<AppUser> userManager, ICRUDRepository<Post> postRepository, IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _postRepository = postRepository;
             _httpClientFactory = httpClientFactory;
+            _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
         }
 
         [HttpGet]
@@ -75,11 +78,7 @@ namespace YumApp.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Settings()
-        {
-            //var request = new HttpRequestMessage(HttpMethod.Get, "https://restcountries.eu/rest/v2/all");
-            //var client = _httpClientFactory.CreateClient();
-            //HttpResponseMessage response = await client.SendAsync(request);
-            
+        {            
             var response = await ControllerHelperMethods.CallApi(HttpMethod.Get, "https://restcountries.eu/rest/v2/all", _httpClientFactory);
 
             if (response.IsSuccessStatusCode)
@@ -103,47 +102,76 @@ namespace YumApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Settings(AppUserModel model)
         {
-            //concurency stamp 8f1be089-611a-4cfb-b5b5-57991bf2e25e
-            //security stamp KU66MDBKFN2PDCNQ34L54KPK6ALJZRG3
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var appuser = model.ToAppUserEntity();
-
-                    //var a = await _userManager.GenerateConcurrencyStampAsync(appuser);
-                    //var securityStampResult = await _userManager.UpdateSecurityStampAsync(appuser);
-
-                    //var result = await _userManager.UpdateAsync(appuser);
-
-                    var result = await _userManager.UpdateUserAsync(appuser);
-
-                    if (result.Succeeded)
-                    {
-                        //var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
-
-                        return RedirectToAction("Profile", "User", new { id = model.Id });
-                    }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError("", error.Description);
-                        }
-                        
-                        return View(model);
-                    }
-                }
-                else
+                if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
+
+                model.PhotoPath = ControllerHelperMethods.UpdatePhotoPath(_userPhotoFolderPath, model.Photo.FileName, model.Id);
+                var appuser = model.ToAppUserEntity();
+                
+                var result = await _userManager.UpdateUserAsync(appuser);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+
+                    return View(model);
+                }
+
+                await ControllerHelperMethods.SavePhoto(model.Photo, _userPhotoFolderPath, model.Id );
+
+                return RedirectToAction("Profile", "User", new { id = model.Id });
             }
-            catch
+            catch (Exception ex)
             {
-                return View(model);                
+                ModelState.AddModelError("", ex.Message);
+
+                return View(model);
             }
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Settings(AppUserModel model)
+        //{
+        //    try
+        //    {                
+        //        if (ModelState.IsValid)
+        //        {
+        //            var appuser = model.ToAppUserEntity();
+
+        //            var result = await _userManager.UpdateUserAsync(appuser);
+
+        //            if (result.Succeeded)
+        //            {                        
+        //                return RedirectToAction("Profile", "User", new { id = model.Id });
+        //            }
+        //            else
+        //            {
+        //                foreach (var error in result.Errors)
+        //                {
+        //                    ModelState.AddModelError("", error.Description);
+        //                }
+
+        //                return View(model);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return View(model);
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return View(model);                
+        //    }
+        //}
 
         // GET: UserController
         public ActionResult Index()

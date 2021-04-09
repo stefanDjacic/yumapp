@@ -22,4 +22,9 @@
     <ProjectReference Include="..\EntityLibrary\EntityLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Photos\IngredientPhotos\" />
+    <Folder Include="wwwroot\Photos\UserPhotos\" />
+  </ItemGroup>
+
 </Project>
