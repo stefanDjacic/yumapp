@@ -3,29 +3,53 @@
     ViewData["Title"] = "Profile";
 
     AppUserModel userProfile = ViewBag.UserProfile;
+
+    var currentLoggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 }
 
 <div class="d-flex flex-column">
     <div class="user-profile-background bg-success mb-4 mt-3 rounded-circle w-100 d-flex">
         <img src="@userProfile.PhotoPath" alt="User photo" class="user-profile-photo img-fluid img-thumbnail" />
-        <div class="user-profile-info ml-5 align-self-center font-weight-light d-flex flex-column">
-            <p class="mb-2 text-white">
-                Name: @userProfile.FirstName @userProfile.LastName
-            </p>
-            <p class="mb-2 text-white">
-                DOB: @userProfile.DateOfBirth.ToShortDateString()
-            </p>
-            <p class="mb-2 text-white">
-                Email: @userProfile.Email
-            </p>
-            <p class="mb-2 text-white">
-                Gender: @userProfile.Gender
-            </p>
-            @if (!string.IsNullOrWhiteSpace(userProfile.Country))
-            {
+        <div class="user-profile-info ml-5 align-self-center font-weight-light d-flex justify-content-between w-100 align-items-center">
+            <div>
                 <p class="mb-2 text-white">
-                    From: @userProfile.Country
+                    Name: @userProfile.FirstName @userProfile.LastName
                 </p>
+                <p class="mb-2 text-white">
+                    DOB: @userProfile.DateOfBirth.ToShortDateString()
+                </p>
+                <p class="mb-2 text-white">
+                    Email: @userProfile.Email
+                </p>
+                <p class="mb-2 text-white">
+                    Gender: @userProfile.Gender
+                </p>
+                @if (!string.IsNullOrWhiteSpace(userProfile.Country))
+                {
+                    <p class="mb-0 text-white">
+                        From: @userProfile.Country
+                    </p>
+                }
+            </div>
+
+            @if (currentLoggedInUserId != userProfile.Id)
+            {
+                @if (userProfile.IsBeingFollowed)
+                {
+                    <div class="mr-5 p-5">
+                        <form id="followButton" method="post">
+                            <button class="btn btn-danger">Unfollow</button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <div class="mr-5 p-5">
+                        <form id="followButton" method="post">
+                            <button class="btn btn-primary">Follow</button>
+                        </form>
+                    </div>
+                }
             }
         </div>
     </div>
@@ -70,3 +94,15 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+            @*$(document).ready(function () {
+        $('#followButton').click(function () {
+            $.post("/User/Follow/" + @currentLoggedInUserId.ToString(),
+            function() {
+                $('#followButton').removeClass("btn-primary").addClass("btn-danger").
+            })
+        });
+    });*@
+    </script>
+}

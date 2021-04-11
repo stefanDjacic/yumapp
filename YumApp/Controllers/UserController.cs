@@ -22,13 +22,19 @@ namespace YumApp.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ICRUDRepository<Post> _postRepository;
+        private readonly ICRDRepositoryT<User_Follows> _user_FollowsRepository;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly string _userPhotoFolderPath;
 
-        public UserController(UserManager<AppUser> userManager, ICRUDRepository<Post> postRepository, IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment)
+        public UserController(UserManager<AppUser> userManager,
+                              ICRUDRepository<Post> postRepository,
+                              ICRDRepositoryT<User_Follows> user_FollowsRepository,
+                              IHttpClientFactory httpClientFactory,
+                              IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _postRepository = postRepository;
+            _user_FollowsRepository = user_FollowsRepository;
             _httpClientFactory = httpClientFactory;
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
         }
@@ -36,9 +42,15 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
+            //Id of currently logged in user
+            var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
+
             //Returns user whose profile is being viewed
             var user = await _userManager.FindByIdAsync(id.ToString());
-            ViewBag.UserProfile = user.ToAppUserModel();
+            var userModel = user.ToAppUserModel();
+            userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
+                                                          .Any(u => u.FollowerId == currentUserId && u.FollowsId == id);
+            ViewBag.UserProfile = userModel;
             
             //Returns PostModel of selected user
             var userPosts = await _postRepository.GetAll()

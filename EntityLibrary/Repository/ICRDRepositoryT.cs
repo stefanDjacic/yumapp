@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary.Repository
 {
-    public interface ICRUDRepository<T> : ICRDRepositoryT<T>
+    public interface ICRDRepositoryT<T>
     {
-        Task<T> GetSingle(int id);
-        Task<T> Update(T instance);
+        IQueryable<T> GetAll();
+        Task<T> Add(T instance);
+        Task Remove(T instance);
     }
 }

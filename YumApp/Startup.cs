@@ -32,6 +32,7 @@ namespace YumApp
             services.AddHttpClient();
 
             services.AddTransient <ICRUDRepository<Post>, PostRepository>();
+            services.AddTransient<ICRDRepositoryT<User_Follows>, User_FollowsRepository>();
 
             //services.AddHttpContextAccessor();
             //services.Configure<IdentityOptions>(options =>
