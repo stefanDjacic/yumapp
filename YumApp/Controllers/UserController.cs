@@ -22,13 +22,13 @@ namespace YumApp.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ICRUDRepository<Post> _postRepository;
-        private readonly ICRDRepositoryT<User_Follows> _user_FollowsRepository;
+        private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly string _userPhotoFolderPath;
 
         public UserController(UserManager<AppUser> userManager,
                               ICRUDRepository<Post> postRepository,
-                              ICRDRepositoryT<User_Follows> user_FollowsRepository,
+                              ICRDRepository<User_Follows> user_FollowsRepository,
                               IHttpClientFactory httpClientFactory,
                               IWebHostEnvironment webHostEnvironment)
         {
@@ -148,42 +148,34 @@ namespace YumApp.Controllers
             }
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Settings(AppUserModel model)
-        //{
-        //    try
-        //    {                
-        //        if (ModelState.IsValid)
-        //        {
-        //            var appuser = model.ToAppUserEntity();
+        [HttpPost]
+        public async Task FollowUser(int id)
+        {
+            var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
 
-        //            var result = await _userManager.UpdateUserAsync(appuser);
+            var userFollows = new User_Follows
+            {
+                FollowerId = currentUserId,
+                FollowsId = id,
+                DateOfFollowing = DateTime.UtcNow
+            };
 
-        //            if (result.Succeeded)
-        //            {                        
-        //                return RedirectToAction("Profile", "User", new { id = model.Id });
-        //            }
-        //            else
-        //            {
-        //                foreach (var error in result.Errors)
-        //                {
-        //                    ModelState.AddModelError("", error.Description);
-        //                }
+            await _user_FollowsRepository.Add(userFollows);
 
-        //                return View(model);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            return View(model);
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        return View(model);                
-        //    }
-        //}
+            return;
+        }
+
+        [HttpPost]
+        public async Task UnfollowUser(int id)
+        {
+            var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
+
+            var userFollows = await _user_FollowsRepository.GetAll().SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
+
+            await _user_FollowsRepository.Remove(userFollows);
+
+            return;
+        }
 
         // GET: UserController
         public ActionResult Index()

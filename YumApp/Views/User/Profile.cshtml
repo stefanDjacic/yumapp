@@ -37,17 +37,13 @@
                 @if (userProfile.IsBeingFollowed)
                 {
                     <div class="mr-5 p-5">
-                        <form id="followButton" method="post">
-                            <button class="btn btn-danger">Unfollow</button>
-                        </form>
+                            <button id="" class="btn btn-danger unfollowButton">Unfollow</button>
                     </div>
                 }
                 else
                 {
                     <div class="mr-5 p-5">
-                        <form id="followButton" method="post">
-                            <button class="btn btn-primary">Follow</button>
-                        </form>
+                            <button id="" class="btn btn-primary followButton">Follow</button>
                     </div>
                 }
             }
@@ -96,13 +92,64 @@
 </div>
 @section Scripts {
     <script>
-            @*$(document).ready(function () {
-        $('#followButton').click(function () {
-            $.post("/User/Follow/" + @currentLoggedInUserId.ToString(),
-            function() {
-                $('#followButton').removeClass("btn-primary").addClass("btn-danger").
+        @*$(document).ready(function () {
+            $('#followButton').click(function () {
+                if (@userProfile.IsBeingFollowed) {
+                    $.post('/User/UnfollowUser/@userProfile.Id.ToString()',
+                        function () {
+                            $('#followButton').removeClass('btn-danger').addClass('btn-primary').text('Follow');
+                        }
+                )} else {
+                    $.post('/User/FollowUser/@userProfile.Id.ToString()',
+                        function () {
+                                $('#followButton').removeClass('btn-primary').addClass('btn-danger').text('Unfollow');
+                    });
+                }
+            });
+        });*@
+
+        $(document).ready(function () {
+            $('.followButton').click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/User/FollowUser/@userProfile.Id.ToString()',
+                    success: function () {
+                        $('.followButton').removeClass('followButton btn-primary').addClass('unfollowButton btn-danger').text('Unfollow');
+                        alert("DOSLO JE DO OVDE");
+                        //$('#followButton').hide();
+                        //$('#unfollowButton').show();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }                    
+                })
+            });
+
+            $('.unfollowButton').click(function () {
+                $.ajax({
+                    type : 'POST',
+                    url : '/User/UnfollowUser/@userProfile.Id.ToString()',
+                    success: function () {
+                        $('.unfollowButton').removeClass('unfollowButton btn-danger').addClass('followButton btn-primary').text('Follow');
+                        alert("DOSLO JE DO OVDE");
+                        //$('#unfollowButton').hide();
+                        //$('#followButton').show();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                })
             })
         });
-    });*@
+
+        @*function FollowUnfollow() {
+            var btn = document.getElementById('followButton');
+
+            if (@userProfile.IsBeingFollowed) {
+
+            }
+        }*@
+
+
     </script>
 }

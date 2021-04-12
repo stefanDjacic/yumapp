@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary.Repository
 {
-    public class User_FollowsRepository : ICRDRepositoryT<User_Follows>
+    public class User_FollowsRepository : ICRDRepository<User_Follows>
     {
         private readonly YumAppDbContext _context;
 
