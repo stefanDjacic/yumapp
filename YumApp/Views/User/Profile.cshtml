@@ -37,13 +37,13 @@
                 @if (userProfile.IsBeingFollowed)
                 {
                     <div class="mr-5 p-5">
-                            <button id="" class="btn btn-danger unfollowButton">Unfollow</button>
+                            <button id="followButton" class="btn btn-danger">Unfollow</button>
                     </div>
                 }
                 else
                 {
                     <div class="mr-5 p-5">
-                            <button id="" class="btn btn-primary followButton">Follow</button>
+                            <button id="followButton" class="btn btn-primary">Follow</button>
                     </div>
                 }
             }
@@ -108,7 +108,7 @@
             });
         });*@
 
-        $(document).ready(function () {
+        @*$(document).ready(function () {
             $('.followButton').click(function () {
                 $.ajax({
                     type: 'POST',
@@ -116,12 +116,11 @@
                     success: function () {
                         $('.followButton').removeClass('followButton btn-primary').addClass('unfollowButton btn-danger').text('Unfollow');
                         alert("DOSLO JE DO OVDE");
-                        //$('#followButton').hide();
-                        //$('#unfollowButton').show();
+
                     },
                     error: function (response) {
                         alert(response.responseText);
-                    }                    
+                    }
                 })
             });
 
@@ -140,15 +139,52 @@
                     }
                 })
             })
+        });*@
+
+        var doesFollow = '@userProfile.IsBeingFollowed.ToString()'.toLowerCase();
+
+            $(document).ready(function () {
+            $('#followButton').click(function () {
+                if (!doesFollow) {
+                    $.ajax({
+                    type : 'POST',
+                    url : '/User/UnfollowUser/@userProfile.Id.ToString()',
+                    success: function () {
+                        $('#followButton').removeClass('btn-danger').addClass('btn-primary').text('Follow');
+                        doesFollow = !doesFollow;
+                        alert("user unfollowed!");
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        }                    
+                })
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/User/FollowUser/@userProfile.Id.ToString()',
+                        success: function () {
+                            $('#followButton').removeClass('btn-primary').addClass('btn-danger').text('Unfollow');
+                            doesFollow = !doesFollow;
+                            alert("user followed!");
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    })
+                }
+            });
         });
 
-        @*function FollowUnfollow() {
-            var btn = document.getElementById('followButton');
 
-            if (@userProfile.IsBeingFollowed) {
+        //var btn = document.getElementById('followButton');
+        //var follows = btn.dataset.follows;
+        //btn.addEventListener('click', FollowUnfollow);
 
-            }
-        }*@
+        //function FollowUnfollow() {
+        //    if (follows == 'true') {
+
+        //    }
+        //}
 
 
     </script>
