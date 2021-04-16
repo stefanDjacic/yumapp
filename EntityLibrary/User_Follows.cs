@@ -16,11 +16,11 @@ namespace EntityLibrary
 
         //Navigation properties
         public int FollowerId { get; set; }
-        [ForeignKey("FollowerId")]
+        //[ForeignKey("FollowerId")]
         public AppUser Follower { get; set; }
 
         public int FollowsId { get; set; }
-        [ForeignKey("FollowsId")]
+        //[ForeignKey("FollowsId")]
         public AppUser Follows { get; set; }
     }
 }

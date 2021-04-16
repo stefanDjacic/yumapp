@@ -14,6 +14,9 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
+using YumApp.Models.NotificationStrategy;
+using Microsoft.AspNetCore.SignalR;
+using YumApp.Hubs;
 
 namespace YumApp.Controllers
 {
@@ -24,18 +27,21 @@ namespace YumApp.Controllers
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
 
         public UserController(UserManager<AppUser> userManager,
                               ICRUDRepository<Post> postRepository,
                               ICRDRepository<User_Follows> user_FollowsRepository,
                               IHttpClientFactory httpClientFactory,
+                              IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _postRepository = postRepository;
             _user_FollowsRepository = user_FollowsRepository;
             _httpClientFactory = httpClientFactory;
+            _hubContext = hubContext;
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
         }
 
@@ -121,7 +127,11 @@ namespace YumApp.Controllers
                     return View(model);
                 }
 
-                model.PhotoPath = ControllerHelperMethods.UpdatePhotoPath(_userPhotoFolderPath, model.Photo.FileName, model.Id);
+                if (model.Photo != null)
+                {
+                    model.PhotoPath = ControllerHelperMethods.UpdatePhotoPath(_userPhotoFolderPath, model.Photo.FileName, model.Id);
+                }
+                
                 var appuser = model.ToAppUserEntity();
                 
                 var result = await _userManager.UpdateUserAsync(appuser);
@@ -151,16 +161,22 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task FollowUser(int id)
         {
-            var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
+            var currentUser = await _userManager.GetUserAsync(User);
+            var followedUser = await _userManager.FindByIdAsync(id.ToString());
 
             var userFollows = new User_Follows
             {
-                FollowerId = currentUserId,
+                FollowerId = currentUser.Id,
                 FollowsId = id,
                 DateOfFollowing = DateTime.UtcNow
             };
 
             await _user_FollowsRepository.Add(userFollows);
+
+            var followNotificationBehavior = new FollowNotificationTextBehavoir();
+            var newNotification = new NotificationModel(currentUser.ToAppUserModel(), followedUser.ToAppUserModel(), followNotificationBehavior);
+
+            //_hubContext.Clients.User(id.ToString()).SendAsync()
 
             return;
         }

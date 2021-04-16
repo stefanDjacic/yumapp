@@ -3,16 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using YumApp.Models;
 
 namespace YumApp.Hubs
 {
     public class NotifyHub : Hub
     {
-        public async Task NotifyUser()
+        public async Task NotifyUser(NotificationModel notificationModel)
         {
-            IGroupManager group = n
-            
-            await this.Clients.User("2").SendAsync()
+            await Clients.User(notificationModel.Receiver.Id.ToString()).SendAsync("ReceiveNotification", notificationModel.Initiator, notificationModel.NotificationText);
         }
     }
 }

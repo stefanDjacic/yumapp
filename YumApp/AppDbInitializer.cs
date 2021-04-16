@@ -109,7 +109,7 @@ namespace YumApp
                     AppUserId = 2,
                     Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
                     " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
-                    Notes = "Obavezno uzivati",
+                    Notes = "Obavezno uzivati"
                 };
 
                 var post2 = new Post

@@ -14,7 +14,7 @@ namespace EntityLibrary
 
         //Navigation properties
         public int AppUserId { get; set; }
-        [ForeignKey("AppUserId")]
+        //[ForeignKey("AppUserId")]
         public AppUser AppUser { get; set; }
 
         public int PostId { get; set; }

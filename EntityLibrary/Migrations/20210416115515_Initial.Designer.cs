@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityLibrary.Migrations
 {
     [DbContext(typeof(YumAppDbContext))]
-    [Migration("20210401193125_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20210416115515_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,8 +29,8 @@ namespace EntityLibrary.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("About")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -181,6 +181,32 @@ namespace EntityLibrary.Migrations
                     b.ToTable("Ingredients");
                 });
 
+            modelBuilder.Entity("EntityLibrary.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NotificationText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id", "AppUserId");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("DoerId");
+
+                    b.ToTable("Notification");
+                });
+
             modelBuilder.Entity("EntityLibrary.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -265,6 +291,27 @@ namespace EntityLibrary.Migrations
                     b.HasIndex("FollowsId");
 
                     b.ToTable("User_Follows");
+                });
+
+            modelBuilder.Entity("EntityLibrary.YummyPost", b =>
+                {
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateYummed")
+                        .HasColumnType("date");
+
+                    b.Property<int>("PostAppUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "PostId");
+
+                    b.HasIndex("PostId", "PostAppUserId");
+
+                    b.ToTable("YummyPost");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -416,6 +463,25 @@ namespace EntityLibrary.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("EntityLibrary.Notification", b =>
+                {
+                    b.HasOne("EntityLibrary.AppUser", "AppUser")
+                        .WithMany("NotificationsReceiver")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EntityLibrary.AppUser", "Doer")
+                        .WithMany("NotificationDoers")
+                        .HasForeignKey("DoerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Doer");
+                });
+
             modelBuilder.Entity("EntityLibrary.Post", b =>
                 {
                     b.HasOne("EntityLibrary.AppUser", "AppUser")
@@ -484,6 +550,25 @@ namespace EntityLibrary.Migrations
                     b.Navigation("Follows");
                 });
 
+            modelBuilder.Entity("EntityLibrary.YummyPost", b =>
+                {
+                    b.HasOne("EntityLibrary.AppUser", "AppUser")
+                        .WithMany("YummyPosts")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EntityLibrary.Post", "Post")
+                        .WithMany("YummyPosts")
+                        .HasForeignKey("PostId", "PostAppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Post");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -543,9 +628,15 @@ namespace EntityLibrary.Migrations
 
                     b.Navigation("Followers");
 
+                    b.Navigation("NotificationDoers");
+
+                    b.Navigation("NotificationsReceiver");
+
                     b.Navigation("Posts");
 
                     b.Navigation("User_Feeds");
+
+                    b.Navigation("YummyPosts");
                 });
 
             modelBuilder.Entity("EntityLibrary.Ingredient", b =>
@@ -560,6 +651,8 @@ namespace EntityLibrary.Migrations
                     b.Navigation("Post_Ingredients");
 
                     b.Navigation("User_Feeds");
+
+                    b.Navigation("YummyPosts");
                 });
 #pragma warning restore 612, 618
         }

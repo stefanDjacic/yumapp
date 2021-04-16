@@ -106,7 +106,39 @@ namespace EntityLibrary
                 au.Property(p =>p.Email).IsRequired();
                 au.Property(p => p.PasswordHash).IsRequired();
                 au.Property(p => p.UserName).IsRequired();
-            });                        
+            });
+
+            modelBuilder.Entity<Notification>(n =>
+            {
+                n.HasOne(n => n.AppUser)
+                .WithMany(au => au.NotificationsReceiver)
+                .HasForeignKey(n => n.AppUserId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+                n.HasOne(n => n.Doer)
+                .WithMany(au => au.NotificationDoers)
+                .HasForeignKey(n => n.DoerId)
+                .IsRequired();
+
+                n.HasKey(n => new { n.Id, n.AppUserId });
+            });
+
+            modelBuilder.Entity<YummyPost>(yp => 
+            {
+                yp.HasOne(yp => yp.AppUser)
+                .WithMany(au => au.YummyPosts)
+                .HasForeignKey(yp => yp.AppUserId)
+                .IsRequired();
+
+                yp.HasOne(yp => yp.Post)
+                .WithMany(p => p.YummyPosts)
+                .HasForeignKey(yp => new { yp.PostId, yp.PostAppUserId })
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+                yp.HasKey(yp => new { yp.AppUserId, yp.PostId });
+            });
         }
     }
 }

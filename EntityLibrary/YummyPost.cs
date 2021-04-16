@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary
 {
-    public class Post_Ingredient
+    public class YummyPost
     {
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int Id { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime DateYummed { get; set; }
 
         //Navigation properties
-        public int PostId { get; set; }
-        public int AppUserId { get; set; }        
-        public Post Post { get; set; }
-        public int IngredientId { get; set; }
-        //[ForeignKey("IngredientId")]
-        public Ingredient Ingredient { get; set; }
+        public int AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
 
+        public int PostId { get; set; }
+        public int PostAppUserId { get; set; }
+        public Post Post { get; set; }
     }
 }

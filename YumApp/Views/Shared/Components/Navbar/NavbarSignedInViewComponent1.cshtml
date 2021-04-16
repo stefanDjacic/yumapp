@@ -1,5 +1,4 @@
-﻿@inject UserManager<AppUser> _userManager;
-<nav class="navbar navbar-expand-lg navbar-dark bg-success d-flex justify-content-between">    
+﻿<nav class="navbar navbar-expand-lg navbar-dark bg-success d-flex justify-content-between">    
         <a class="navbar-brand align-self-start" asp-action="Feed" asp-controller="User">
             <img src="~/Photos/Chef hat icon.jpg" width="30" height="30" class="d-inline-block align-top rounded-pill" alt="Chef hat icon">
             YumApp
@@ -11,17 +10,30 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item mr-lg-5">
-                        <a class="nav-link text-white" asp-action="Feed" asp-controller="User">HOME</a>
+                        <a class="nav-link text-white" asp-action="Feed" asp-controller="User">
+                            <i class="fas fa-home"></i>
+                        </a>
                     </li>
                     <li class="nav-item mr-lg-5">
-                        <a class="nav-link text-white" asp-action="Profile" asp-controller="User" asp-route-id="@_userManager.GetUserId(User)">PROFILE</a>
+                        <a class="nav-link text-white" asp-action="Profile" asp-controller="User" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">
+                            <i class="fas fa-user"></i>
+                        </a>
                     </li>
                     <li class="nav-item mr-lg-5">
-                        <a class="nav-link text-white" asp-action="Settings" asp-controller="User">SETTINGS</a>
+                        <a class="nav-link text-white">
+                            <i class="fas fa-bell"><span id="" class="number-of-notifications badge badge-danger"></span></i>
+                        </a>                        
+                    </li>
+                    <li class="nav-item mr-lg-5">
+                        <a class="nav-link text-white" asp-action="Settings" asp-controller="User">
+                            <i class="fas fa-cogs"></i>
+                        </a>
                     </li>
                     <li class="nav-item mr-lg-5">
                         <form class="pl-0" asp-action="Logout" asp-controller="Home" method="post">
-                            <button class="btn btn-link text-white text-decoration-none ml-0 pl-0 pr-0" type="submit">LOGOUT</button>
+                            <button class="btn btn-link text-white text-decoration-none ml-0 pl-0 pr-0" type="submit">
+                                <i class="fas fa-share-square"></i>
+                            </button>
                         </form>
                     </li>
                     @*<li class="nav-item dropdown">

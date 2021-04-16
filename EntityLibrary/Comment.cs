@@ -26,7 +26,7 @@ namespace EntityLibrary
         public Post Post { get; set; }
 
         public int CommentatorId { get; set; }
-        [ForeignKey("CommentatorId")]
+        //[ForeignKey("CommentatorId")]
         public AppUser Commentator { get; set; }
     }
 }

@@ -87,12 +87,21 @@ body {
     width: max-content;
 }
 
+.fa-bell {
+    position : relative;
+}
+
+.number-of-notifications {
+    position: absolute;
+    top : 60%;
+    left : 70%;
+}
+
 
 /*------------------ PROFILE ------------------*/
 /*.user-profile-background {
     background-color: #2f9f2f;
 }*/
-
 .user-profile-photo {
     width: 200px;
     height: 200px;
