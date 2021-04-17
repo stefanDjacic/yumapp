@@ -50,7 +50,7 @@ namespace YumApp.Models
                                                                                     PhotoPath = c.Commentator.PhotoPath,
                                                                                     Country = c.Commentator.Country
                                                                                 },
-                TimeOfCommenting = c.TimeOfCommenting
+                                                            TimeOfCommenting = c.TimeOfCommenting
                                                         }).ToList(),
                 Ingredients = pe.Post_Ingredients.Select(pi => pi.Ingredient).Select(i => new IngredientModel
                                                                                                 {

@@ -8,6 +8,9 @@ namespace YumApp.Models
 {
     public class NotificationModel
     {
+        public NotificationModel()
+        {
+        }
         public NotificationModel(AppUserModel initiator, AppUserModel receiver, INotificationTextStrategy notificationTextStrategy)
         {
             Initiator = initiator;
@@ -16,7 +19,7 @@ namespace YumApp.Models
         }
 
         //public INotificationTextStrategy NotificationTextStrategy { get; set; }
-        public string NotificationText { get; private set; }
+        public string NotificationText { get; set; }
         public AppUserModel Receiver { get; set; }
         public AppUserModel Initiator { get; set; }
     }

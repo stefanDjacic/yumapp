@@ -1,4 +1,5 @@
-﻿<nav class="navbar navbar-expand-lg navbar-dark bg-success d-flex justify-content-between">    
+﻿@model AppUser 
+<nav class="navbar navbar-expand-lg navbar-dark bg-success d-flex justify-content-between">    
         <a class="navbar-brand align-self-start" asp-action="Feed" asp-controller="User">
             <img src="~/Photos/Chef hat icon.jpg" width="30" height="30" class="d-inline-block align-top rounded-pill" alt="Chef hat icon">
             YumApp
@@ -15,14 +16,22 @@
                         </a>
                     </li>
                     <li class="nav-item mr-lg-5">
-                        <a class="nav-link text-white" asp-action="Profile" asp-controller="User" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">
+                        <a class="nav-link text-white" asp-action="Profile" asp-controller="User" asp-route-id="@Model.Id">
                             <i class="fas fa-user"></i>
                         </a>
                     </li>
                     <li class="nav-item mr-lg-5">
-                        <a class="nav-link text-white">
-                            <i class="fas fa-bell"><span id="" class="number-of-notifications badge badge-danger"></span></i>
-                        </a>                        
+                        <div class="dropdown">
+                            <a class="nav-link text-white" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell"><span id="" class="number-of-notifications badge badge-danger"></span></i>
+                            </a>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            @foreach (var notification in Model.NotificationsReceiver)
+                            {
+                                <partial name="_UserNotificationPartial" for="NotificationsReceiver" />
+                            }
+                        </div>
                     </li>
                     <li class="nav-item mr-lg-5">
                         <a class="nav-link text-white" asp-action="Settings" asp-controller="User">

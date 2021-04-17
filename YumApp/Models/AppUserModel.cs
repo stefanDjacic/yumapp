@@ -24,8 +24,28 @@ namespace YumApp.Models
                                 Country = appUser.Country,
                                 Gender = appUser.Gender,
                                 About = appUser.About,
-                                PhotoPath = appUser.PhotoPath
-                             };
+                                PhotoPath = appUser.PhotoPath,
+                                Notifications = appUser.NotificationsReceiver.Select(n => new NotificationModel 
+                                                                                                {
+                                                                                                    NotificationText = n.NotificationText,
+                                                                                                    Initiator = n.Doer.ToAppUserModel(),
+                                                                                                    //new AppUserModel 
+                                                                                                    //                {
+                                                                                                    //                    Id = n.Doer.Id,
+                                                                                                    //                    FirstName = n.Doer.FirstName,
+                                                                                                    //                    LastName = n.Doer.LastName,
+                                                                                                    //                    Email = n.Doer.Email,
+                                                                                                    //                    Username = n.Doer.UserName,
+                                                                                                    //                    DateOfBirth = n.Doer.DateOfBirth,
+                                                                                                    //                    Country = n.Doer.Country,
+                                                                                                    //                    Gender = n.Doer.Gender,
+                                                                                                    //                    About = n.Doer.About,
+                                                                                                    //                    PhotoPath = n.Doer.PhotoPath,
+                                                                                                    //                    Notifications = n.Doer.NotificationsReceiver.Select(n => n NotificationModel)
+                                                                                                    //}
+                                                                                                    Receiver = n.AppUser.ToAppUserModel()
+                                                                                                })
+            };
         }
 
         public static AppUser ToAppUserEntity(this AppUserModel appUserModel)
@@ -42,12 +62,26 @@ namespace YumApp.Models
                 Gender = appUserModel.Gender,
                 About = appUserModel.About,
                 PhotoPath = appUserModel.PhotoPath
+                //NotificationsReceiver = appUserModel.Notifications.ToHashSet()
+                //.Select(n => new NotificationModel
+                //                                                                {
+                //                                                                    Initiator = new AppUserModel
+                //                                                                                        {
+                                                                                                            
+                //                                                                                        }
+
+                //                                                                })
             };
         }
     }
 
     public class AppUserModel
     {
+        public AppUserModel()
+        {
+            Notifications = new List<NotificationModel>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -92,6 +126,8 @@ namespace YumApp.Models
 
         [Required]
         public string PhotoPath { get; set; } = @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";
+
+        public IEnumerable<NotificationModel> Notifications { get; set; }
 
         public bool IsBeingFollowed { get; set; }
 

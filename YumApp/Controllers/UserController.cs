@@ -176,7 +176,7 @@ namespace YumApp.Controllers
             var followNotificationBehavior = new FollowNotificationTextBehavoir();
             var newNotification = new NotificationModel(currentUser.ToAppUserModel(), followedUser.ToAppUserModel(), followNotificationBehavior);
 
-            //_hubContext.Clients.User(id.ToString()).SendAsync()
+            //await NotifyHubWrapper.Notify(newNotification);
 
             return;
         }

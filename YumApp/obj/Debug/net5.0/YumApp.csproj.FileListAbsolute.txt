@@ -434,6 +434,7 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\T
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_CommentsPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_IngredientsButtonPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_IngredientsPartial.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_UserNotificationPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_UserPostsPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\_ViewStart.cshtml.g.cs

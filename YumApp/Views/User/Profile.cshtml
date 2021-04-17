@@ -92,55 +92,7 @@
 </div>
 @section Scripts {
     <script>
-        @*$(document).ready(function () {
-            $('#followButton').click(function () {
-                if (@userProfile.IsBeingFollowed) {
-                    $.post('/User/UnfollowUser/@userProfile.Id.ToString()',
-                        function () {
-                            $('#followButton').removeClass('btn-danger').addClass('btn-primary').text('Follow');
-                        }
-                )} else {
-                    $.post('/User/FollowUser/@userProfile.Id.ToString()',
-                        function () {
-                                $('#followButton').removeClass('btn-primary').addClass('btn-danger').text('Unfollow');
-                    });
-                }
-            });
-        });*@
-
-        @*$(document).ready(function () {
-            $('.followButton').click(function () {
-                $.ajax({
-                    type: 'POST',
-                    url: '/User/FollowUser/@userProfile.Id.ToString()',
-                    success: function () {
-                        $('.followButton').removeClass('followButton btn-primary').addClass('unfollowButton btn-danger').text('Unfollow');
-                        alert("DOSLO JE DO OVDE");
-
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                    }
-                })
-            });
-
-            $('.unfollowButton').click(function () {
-                $.ajax({
-                    type : 'POST',
-                    url : '/User/UnfollowUser/@userProfile.Id.ToString()',
-                    success: function () {
-                        $('.unfollowButton').removeClass('unfollowButton btn-danger').addClass('followButton btn-primary').text('Follow');
-                        alert("DOSLO JE DO OVDE");
-                        //$('#unfollowButton').hide();
-                        //$('#followButton').show();
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                    }
-                })
-            })
-        });*@
-
+        //START OF AJAX CALL FOR FOLLOWING
         var doesFollow = '@userProfile.IsBeingFollowed.ToString()'.toLowerCase();
 
             $(document).ready(function () {
@@ -173,18 +125,17 @@
                     })
                 }
             });
+            });
+        //END OF AJAX CALL FOR FOLLOWING
+
+        //START OF SIGNALR
+        var connection = new signalR.HubConnectionBuilder().withUrl("/User/Profile/{id}").build();
+
+        connection.start().then(function () {
+            console.log("SignalR connected!")
+        }).catch(function (err) {
+            console.log(err.toString());
         });
-
-
-        //var btn = document.getElementById('followButton');
-        //var follows = btn.dataset.follows;
-        //btn.addEventListener('click', FollowUnfollow);
-
-        //function FollowUnfollow() {
-        //    if (follows == 'true') {
-
-        //    }
-        //}
 
 
     </script>
