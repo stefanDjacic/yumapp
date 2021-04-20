@@ -27,21 +27,21 @@ namespace YumApp.Controllers
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IHubContext<NotifyHub> _hubContext;
+        //private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
 
         public UserController(UserManager<AppUser> userManager,
                               ICRUDRepository<Post> postRepository,
                               ICRDRepository<User_Follows> user_FollowsRepository,
                               IHttpClientFactory httpClientFactory,
-                              IHubContext<NotifyHub> hubContext,
+                              //IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _postRepository = postRepository;
             _user_FollowsRepository = user_FollowsRepository;
             _httpClientFactory = httpClientFactory;
-            _hubContext = hubContext;
+            //_hubContext = hubContext;
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
         }
 
@@ -52,7 +52,7 @@ namespace YumApp.Controllers
             var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
 
             //Returns user whose profile is being viewed
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await  _userManager.FindByIdAsync(id.ToString());
             var userModel = user.ToAppUserModel();
             userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
                                                           .Any(u => u.FollowerId == currentUserId && u.FollowsId == id);

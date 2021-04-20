@@ -103,6 +103,14 @@ namespace EntityLibrary
                 au.Property(au => au.Gender)
                 .HasConversion<int>();
 
+                au.Navigation(au => au.Comments).AutoInclude();
+                au.Navigation(au => au.Follow).AutoInclude();
+                au.Navigation(au => au.Followers).AutoInclude();
+                au.Navigation(au => au.NotificationsReceiver).AutoInclude();
+                au.Navigation(au => au.NotificationDoers).AutoInclude();
+                au.Navigation(au => au.User_Feeds).AutoInclude();
+                au.Navigation(au => au.YummyPosts).AutoInclude();
+
                 au.Property(p =>p.Email).IsRequired();
                 au.Property(p => p.PasswordHash).IsRequired();
                 au.Property(p => p.UserName).IsRequired();

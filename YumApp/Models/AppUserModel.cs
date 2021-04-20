@@ -25,26 +25,13 @@ namespace YumApp.Models
                                 Gender = appUser.Gender,
                                 About = appUser.About,
                                 PhotoPath = appUser.PhotoPath,
-                                Notifications = appUser.NotificationsReceiver.Select(n => new NotificationModel 
-                                                                                                {
-                                                                                                    NotificationText = n.NotificationText,
-                                                                                                    Initiator = n.Doer.ToAppUserModel(),
-                                                                                                    //new AppUserModel 
-                                                                                                    //                {
-                                                                                                    //                    Id = n.Doer.Id,
-                                                                                                    //                    FirstName = n.Doer.FirstName,
-                                                                                                    //                    LastName = n.Doer.LastName,
-                                                                                                    //                    Email = n.Doer.Email,
-                                                                                                    //                    Username = n.Doer.UserName,
-                                                                                                    //                    DateOfBirth = n.Doer.DateOfBirth,
-                                                                                                    //                    Country = n.Doer.Country,
-                                                                                                    //                    Gender = n.Doer.Gender,
-                                                                                                    //                    About = n.Doer.About,
-                                                                                                    //                    PhotoPath = n.Doer.PhotoPath,
-                                                                                                    //                    Notifications = n.Doer.NotificationsReceiver.Select(n => n NotificationModel)
-                                                                                                    //}
-                                                                                                    Receiver = n.AppUser.ToAppUserModel()
-                                                                                                })
+                //Notifications = appUser.NotificationsReceiver.ToNotificationModel().ToList()
+                Notifications = appUser.NotificationsReceiver.Select(n => new NotificationModel
+                {
+                    NotificationText = n.NotificationText,
+                    Initiator = n.Doer.ToAppUserModel(),
+                    Receiver = n.AppUser.ToAppUserModel()
+                }).ToList()
             };
         }
 
@@ -62,15 +49,6 @@ namespace YumApp.Models
                 Gender = appUserModel.Gender,
                 About = appUserModel.About,
                 PhotoPath = appUserModel.PhotoPath
-                //NotificationsReceiver = appUserModel.Notifications.ToHashSet()
-                //.Select(n => new NotificationModel
-                //                                                                {
-                //                                                                    Initiator = new AppUserModel
-                //                                                                                        {
-                                                                                                            
-                //                                                                                        }
-
-                //                                                                })
             };
         }
     }
