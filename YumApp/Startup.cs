@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Security.Claims;
 using YumApp.Hubs;
+using YumApp.Controllers.HelperAndExtensionMethods;
 
 namespace YumApp
 {
@@ -30,36 +31,25 @@ namespace YumApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient();
-            
-            services.AddTransient<ICRUDRepository<Post>, PostRepository>();
-            services.AddTransient<ICRDRepository<User_Follows>, User_FollowsRepository>();
+            services.AddDbContext<YumAppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddHttpContextAccessor();
-            //services.Configure<IdentityOptions>(options =>
-            //{
-            //    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
-            //});
+            services.AddScoped<AppUserStore>();
 
             services.AddIdentity<AppUser, IdentityRole<int>>(options =>
                     {
-                        //options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
-
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequiredLength = 8;
-                    }).AddEntityFrameworkStores<YumAppDbContext>();
+                    }).AddEntityFrameworkStores<YumAppDbContext>()                      
+                      .AddUserManager<AppUserManager>()
+                      .AddUserStore<AppUserStore>();
+            
+            //services.AddSingleton<AppUserStore>();
 
-            services.AddDbContext<YumAppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddHttpClient();
 
-            //services.AddMvc(config =>
-            //{
-            //    var policy = new AuthorizationPolicyBuilder()
-            //                    .RequireAuthenticatedUser()
-            //                    .Build();
-
-            //    config.Filters.Add(new AuthorizeFilter(policy));
-            //});
+            services.AddTransient<ICRUDRepository<Post>, PostRepository>();
+            services.AddTransient<ICRDRepository<User_Follows>, User_FollowsRepository>();
 
             services.AddControllersWithViews();
 

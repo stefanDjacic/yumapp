@@ -21,7 +21,7 @@ namespace EntityLibrary
             Comments = new HashSet<Comment>();
             User_Feeds = new HashSet<User_Feed>();
             NotificationsReceiver = new HashSet<Notification>();
-            NotificationDoers = new HashSet<Notification>();
+            NotificationsInitiator = new HashSet<Notification>();
             YummyPosts = new HashSet<YummyPost>();
         }
 
@@ -56,10 +56,8 @@ namespace EntityLibrary
         public string PhotoPath { get; set; } /*= @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";*/
 
         //Navigation properties
-        //[InverseProperty("Follower")]
         [InverseProperty(nameof(User_Follows.Follower))]
         public ICollection<User_Follows> Followers { get; set; }
-        //[InverseProperty("Follows")]
         [InverseProperty(nameof(User_Follows.Follows))]
         public ICollection<User_Follows> Follow { get; set; }
 
@@ -69,10 +67,10 @@ namespace EntityLibrary
 
         public ICollection<User_Feed> User_Feeds { get; set; }
 
-        [InverseProperty(nameof(Notification.AppUser))]
+        [InverseProperty(nameof(Notification.Receiver))]
         public ICollection<Notification> NotificationsReceiver { get; set; }
-        [InverseProperty(nameof(Notification.Doer))]
-        public ICollection<Notification> NotificationDoers { get; set; }
+        [InverseProperty(nameof(Notification.Initiator))]
+        public ICollection<Notification> NotificationsInitiator { get; set; }
 
         public ICollection<YummyPost> YummyPosts { get; set; }
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EntityLibrary.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -178,30 +178,30 @@ namespace EntityLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notification",
+                name: "Notifications",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AppUserId = table.Column<int>(type: "int", nullable: false),
+                    ReceiverId = table.Column<int>(type: "int", nullable: false),
                     NotificationText = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DoerId = table.Column<int>(type: "int", nullable: false)
+                    InitiatorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Notification", x => new { x.Id, x.AppUserId });
+                    table.PrimaryKey("PK_Notifications", x => new { x.Id, x.ReceiverId });
                     table.ForeignKey(
-                        name: "FK_Notification_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Notification_AspNetUsers_DoerId",
-                        column: x => x.DoerId,
+                        name: "FK_Notifications_AspNetUsers_InitiatorId",
+                        column: x => x.InitiatorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Notifications_AspNetUsers_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -332,7 +332,7 @@ namespace EntityLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "YummyPost",
+                name: "YummyPosts",
                 columns: table => new
                 {
                     AppUserId = table.Column<int>(type: "int", nullable: false),
@@ -342,15 +342,15 @@ namespace EntityLibrary.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_YummyPost", x => new { x.AppUserId, x.PostId });
+                    table.PrimaryKey("PK_YummyPosts", x => new { x.AppUserId, x.PostId });
                     table.ForeignKey(
-                        name: "FK_YummyPost_AspNetUsers_AppUserId",
+                        name: "FK_YummyPosts_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_YummyPost_Posts_PostId_PostAppUserId",
+                        name: "FK_YummyPosts_Posts_PostId_PostAppUserId",
                         columns: x => new { x.PostId, x.PostAppUserId },
                         principalTable: "Posts",
                         principalColumns: new[] { "Id", "AppUserId" },
@@ -407,14 +407,14 @@ namespace EntityLibrary.Migrations
                 columns: new[] { "PostId", "AppUserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_AppUserId",
-                table: "Notification",
-                column: "AppUserId");
+                name: "IX_Notifications_InitiatorId",
+                table: "Notifications",
+                column: "InitiatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_DoerId",
-                table: "Notification",
-                column: "DoerId");
+                name: "IX_Notifications_ReceiverId",
+                table: "Notifications",
+                column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_Ingredients_IngredientId",
@@ -437,8 +437,8 @@ namespace EntityLibrary.Migrations
                 column: "FollowsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_YummyPost_PostId_PostAppUserId",
-                table: "YummyPost",
+                name: "IX_YummyPosts_PostId_PostAppUserId",
+                table: "YummyPosts",
                 columns: new[] { "PostId", "PostAppUserId" });
         }
 
@@ -463,7 +463,7 @@ namespace EntityLibrary.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Notification");
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Post_Ingredients");
@@ -475,7 +475,7 @@ namespace EntityLibrary.Migrations
                 name: "User_Follows");
 
             migrationBuilder.DropTable(
-                name: "YummyPost");
+                name: "YummyPosts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

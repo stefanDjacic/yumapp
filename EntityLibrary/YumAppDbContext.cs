@@ -22,7 +22,9 @@ namespace EntityLibrary
         public DbSet<Post_Ingredient> Post_Ingredients { get; set; }
         public DbSet<User_Follows> User_Follows { get; set; }
         public DbSet<User_Feed> User_Feeds { get; set; }
-        
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<YummyPost> YummyPosts { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
@@ -63,7 +65,7 @@ namespace EntityLibrary
                 .HasForeignKey(uf => uf.FollowsId)
                 .IsRequired();                
                 
-                uf.HasKey(uf => new { uf.FollowerId, uf.FollowsId });
+                uf.HasKey(uf => new { uf.FollowerId, uf.FollowsId });                    
             });
 
             modelBuilder.Entity<Post_Ingredient>(pi =>
@@ -103,13 +105,13 @@ namespace EntityLibrary
                 au.Property(au => au.Gender)
                 .HasConversion<int>();
 
-                au.Navigation(au => au.Comments).AutoInclude();
-                au.Navigation(au => au.Follow).AutoInclude();
-                au.Navigation(au => au.Followers).AutoInclude();
-                au.Navigation(au => au.NotificationsReceiver).AutoInclude();
-                au.Navigation(au => au.NotificationDoers).AutoInclude();
-                au.Navigation(au => au.User_Feeds).AutoInclude();
-                au.Navigation(au => au.YummyPosts).AutoInclude();
+                //au.Navigation(au => au.Comments).AutoInclude();
+                //au.Navigation(au => au.Follow).AutoInclude();
+                //au.Navigation(au => au.Followers).AutoInclude();
+                //au.Navigation(au => au.NotificationsReceiver).AutoInclude();
+                //au.Navigation(au => au.NotificationsInitiator).AutoInclude();
+                //au.Navigation(au => au.User_Feeds).AutoInclude();
+                //au.Navigation(au => au.YummyPosts).AutoInclude();
 
                 au.Property(p =>p.Email).IsRequired();
                 au.Property(p => p.PasswordHash).IsRequired();
@@ -118,18 +120,18 @@ namespace EntityLibrary
 
             modelBuilder.Entity<Notification>(n =>
             {
-                n.HasOne(n => n.AppUser)
+                n.HasOne(n => n.Receiver)
                 .WithMany(au => au.NotificationsReceiver)
-                .HasForeignKey(n => n.AppUserId)
+                .HasForeignKey(n => n.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
-                n.HasOne(n => n.Doer)
-                .WithMany(au => au.NotificationDoers)
-                .HasForeignKey(n => n.DoerId)
+                n.HasOne(n => n.Initiator)
+                .WithMany(au => au.NotificationsInitiator)
+                .HasForeignKey(n => n.InitiatorId)
                 .IsRequired();
 
-                n.HasKey(n => new { n.Id, n.AppUserId });
+                n.HasKey(n => new { n.Id, n.ReceiverId });                
             });
 
             modelBuilder.Entity<YummyPost>(yp => 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,10 +29,10 @@ namespace EntityLibrary.Repository
             return null;
         }
 
-        public IQueryable<User_Follows> GetAll()
-        {
-            return _context.User_Follows;
-        }
+        //public IQueryable<User_Follows> GetAll()
+        //{
+        //    return _context.User_Follows;
+        //}
 
         public async Task Remove(User_Follows instance)
         {
@@ -40,6 +41,11 @@ namespace EntityLibrary.Repository
                 _context.User_Follows.Remove(instance);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public IQueryable<User_Follows> GetAll()
+        {
+            return _context.User_Follows.Include(uf => uf.Follower).Include(uf => uf.Follows);
         }
     }
 }

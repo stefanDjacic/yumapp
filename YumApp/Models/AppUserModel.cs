@@ -29,8 +29,8 @@ namespace YumApp.Models
                 Notifications = appUser.NotificationsReceiver.Select(n => new NotificationModel
                 {
                     NotificationText = n.NotificationText,
-                    Initiator = n.Doer.ToAppUserModel(),
-                    Receiver = n.AppUser.ToAppUserModel()
+                    Initiator = n.Initiator.ToAppUserModel(),
+                    Receiver = n.Receiver.ToAppUserModel()
                 }).ToList()
             };
         }

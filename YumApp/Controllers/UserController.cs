@@ -17,27 +17,31 @@ using Microsoft.AspNetCore.Hosting;
 using YumApp.Models.NotificationStrategy;
 using Microsoft.AspNetCore.SignalR;
 using YumApp.Hubs;
+using YumApp.Controllers.HelperAndExtensionMethods;
 
 namespace YumApp.Controllers
 {
     [Authorize]
     public class UserController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
+        //private readonly UserManager<AppUser> _userManager;
+        private readonly AppUserManager _appUserManager;
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
         private readonly IHttpClientFactory _httpClientFactory;
         //private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
 
-        public UserController(UserManager<AppUser> userManager,
+        public UserController(/*UserManager<AppUser> userManager,*/
+                              AppUserManager appUserManager,
                               ICRUDRepository<Post> postRepository,
                               ICRDRepository<User_Follows> user_FollowsRepository,
                               IHttpClientFactory httpClientFactory,
                               //IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
         {
-            _userManager = userManager;
+            //_userManager = userManager;
+            _appUserManager = appUserManager;
             _postRepository = postRepository;
             _user_FollowsRepository = user_FollowsRepository;
             _httpClientFactory = httpClientFactory;
@@ -49,13 +53,14 @@ namespace YumApp.Controllers
         public async Task<IActionResult> Profile(int id)
         {
             //Id of currently logged in user
-            var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
+            var currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
 
             //Returns user whose profile is being viewed
-            var user = await  _userManager.FindByIdAsync(id.ToString());
+            var user = await _appUserManager.FindByIdAsync(id.ToString()); //ovo promeni
+            //.ContinueWith(u => u.Result.ToAppUserModel());
             var userModel = user.ToAppUserModel();
             userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
-                                                          .Any(u => u.FollowerId == currentUserId && u.FollowsId == id);
+                                                               .Any(u => u.FollowerId == currentUserId && u.FollowsId == id);
             ViewBag.UserProfile = userModel;
             
             //Returns PostModel of selected user
@@ -65,7 +70,7 @@ namespace YumApp.Controllers
                                                 .ToListAsync();
 
             return View(userPosts);
-
+            
             #region TestingQueries
             /*
              TESTING QUERY EFFICIENCY
@@ -110,7 +115,7 @@ namespace YumApp.Controllers
                 ModelState.AddModelError("Country", "Problem with loading countries, please try again later.");
             }
 
-            var currentUser = await _userManager.CurrentUserToAppUserModel(User);
+            var currentUser = await _appUserManager.CurrentUserToAppUserModel(User);
             //var currentUser = await _userManager.FindByIdAsync(id.ToString());
 
             return View(currentUser);
@@ -134,7 +139,7 @@ namespace YumApp.Controllers
                 
                 var appuser = model.ToAppUserEntity();
                 
-                var result = await _userManager.UpdateUserAsync(appuser);
+                var result = await _appUserManager.UpdateUserAsync(appuser);
 
                 if (!result.Succeeded)
                 {
@@ -161,8 +166,8 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task FollowUser(int id)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            var followedUser = await _userManager.FindByIdAsync(id.ToString());
+            var currentUser = await _appUserManager.GetUserAsync(User);
+            var followedUser = await _appUserManager.FindByIdAsync(id.ToString());
 
             var userFollows = new User_Follows
             {
@@ -184,7 +189,7 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task UnfollowUser(int id)
         {
-            var currentUserId = await _userManager.GetCurrentUserIdAsync(User);
+            var currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
 
             var userFollows = await _user_FollowsRepository.GetAll().SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
 

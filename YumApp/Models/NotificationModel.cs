@@ -13,8 +13,8 @@ namespace YumApp.Models
         {
             return entities.Select(n => new NotificationModel
                                             {
-                                                Receiver = n.AppUser.ToAppUserModel(),
-                                                Initiator = n.Doer.ToAppUserModel(),
+                                                Receiver = n.Receiver.ToAppUserModel(),
+                                                Initiator = n.Initiator.ToAppUserModel(),
                                                 NotificationText = n.NotificationText
                                             }
             );
@@ -24,8 +24,8 @@ namespace YumApp.Models
         {
             return entities.Select(n => new NotificationModel
             {
-                Receiver = n.AppUser.ToAppUserModel(),
-                Initiator = n.Doer.ToAppUserModel(),
+                Receiver = n.Receiver.ToAppUserModel(),
+                Initiator = n.Initiator.ToAppUserModel(),
                 NotificationText = n.NotificationText
                 //Receiver = new AppUserModel
                 //{

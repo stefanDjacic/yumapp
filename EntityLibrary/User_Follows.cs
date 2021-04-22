@@ -9,18 +9,14 @@ namespace EntityLibrary
 {
     public class User_Follows
     {
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int Id { get; set; }
         [Column(TypeName = "date")]
         public DateTime DateOfFollowing { get; set; } = DateTime.UtcNow;
 
         //Navigation properties
-        public int FollowerId { get; set; }
-        //[ForeignKey("FollowerId")]
+        public int FollowerId { get; set; }        
         public AppUser Follower { get; set; }
 
-        public int FollowsId { get; set; }
-        //[ForeignKey("FollowsId")]
+        public int FollowsId { get; set; }        
         public AppUser Follows { get; set; }
     }
 }

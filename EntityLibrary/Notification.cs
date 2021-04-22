@@ -17,12 +17,10 @@ namespace EntityLibrary
         public string NotificationText { get; set; }
 
         //Navigation Properties
-        public int AppUserId { get; set; }
-        //[ForeignKey(nameof(AppUserId))]
-        public AppUser AppUser { get; set; }
+        public int ReceiverId { get; set; }
+        public AppUser Receiver { get; set; }
         
-        public int DoerId { get; set; }
-        //[ForeignKey(nameof(DoerId))]
-        public AppUser Doer { get; set; }
+        public int InitiatorId { get; set; }
+        public AppUser Initiator { get; set; }
     }
 }

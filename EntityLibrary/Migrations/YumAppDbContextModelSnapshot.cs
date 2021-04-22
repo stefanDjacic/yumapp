@@ -186,23 +186,23 @@ namespace EntityLibrary.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AppUserId")
+                    b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DoerId")
+                    b.Property<int>("InitiatorId")
                         .HasColumnType("int");
 
                     b.Property<string>("NotificationText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id", "AppUserId");
+                    b.HasKey("Id", "ReceiverId");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("InitiatorId");
 
-                    b.HasIndex("DoerId");
+                    b.HasIndex("ReceiverId");
 
-                    b.ToTable("Notification");
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("EntityLibrary.Post", b =>
@@ -309,7 +309,7 @@ namespace EntityLibrary.Migrations
 
                     b.HasIndex("PostId", "PostAppUserId");
 
-                    b.ToTable("YummyPost");
+                    b.ToTable("YummyPosts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -463,21 +463,21 @@ namespace EntityLibrary.Migrations
 
             modelBuilder.Entity("EntityLibrary.Notification", b =>
                 {
-                    b.HasOne("EntityLibrary.AppUser", "AppUser")
-                        .WithMany("NotificationsReceiver")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EntityLibrary.AppUser", "Doer")
-                        .WithMany("NotificationDoers")
-                        .HasForeignKey("DoerId")
+                    b.HasOne("EntityLibrary.AppUser", "Initiator")
+                        .WithMany("NotificationsInitiator")
+                        .HasForeignKey("InitiatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.HasOne("EntityLibrary.AppUser", "Receiver")
+                        .WithMany("NotificationsReceiver")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Doer");
+                    b.Navigation("Initiator");
+
+                    b.Navigation("Receiver");
                 });
 
             modelBuilder.Entity("EntityLibrary.Post", b =>
@@ -626,7 +626,7 @@ namespace EntityLibrary.Migrations
 
                     b.Navigation("Followers");
 
-                    b.Navigation("NotificationDoers");
+                    b.Navigation("NotificationsInitiator");
 
                     b.Navigation("NotificationsReceiver");
 
