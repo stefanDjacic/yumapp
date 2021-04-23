@@ -1,4 +1,4 @@
-﻿@model AppUser 
+﻿@model AppUserModel
 <nav class="navbar navbar-expand-lg navbar-dark bg-success d-flex justify-content-between">    
         <a class="navbar-brand align-self-start" asp-action="Feed" asp-controller="User">
             <img src="~/Photos/Chef hat icon.jpg" width="30" height="30" class="d-inline-block align-top rounded-pill" alt="Chef hat icon">
@@ -27,9 +27,9 @@
                             </a>
                         </div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            @foreach (var notification in Model.NotificationsReceiver)
+                            @foreach (var notification in Model.Notifications)
                             {
-                                <partial name="_UserNotificationPartial" for="NotificationsReceiver" />
+                                <partial name="_UserNotificationPartial" for="Notifications" />
                             }
                         </div>
                     </li>

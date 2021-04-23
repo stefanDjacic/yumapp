@@ -11,7 +11,7 @@ namespace YumApp.Models
 {
     public static class AppUserExtensionMethods
     {
-        public static AppUser ToModel(this RegisterModel model)
+        public static AppUser ToAppUserEntity(this RegisterModel model)
         {
             var output = new AppUser
             {
@@ -19,7 +19,9 @@ namespace YumApp.Models
                 LastName = model.LastName,
                 Email = model.Email,
                 DateOfBirth = model.DateOfBirth,
-                Gender = model.Gender
+                Gender = model.Gender,
+                PasswordHash = model.Password,
+                UserName = model.UserName
             };
 
             return output;
@@ -60,7 +62,10 @@ namespace YumApp.Models
         [Required(ErrorMessage = "Password confirmation is required.")]
         [MinLength(8, ErrorMessage = "Minimum lenght is 8 characters.")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Confirmation password must match with password.")]
+        [Compare("Password", ErrorMessage = "Password confirmation must match with password.")]
+        [DisplayName("Confirm password")]
         public string ConfirmPassword { get; set; }
+
+        public string UserName { get; set; }
     }
 }

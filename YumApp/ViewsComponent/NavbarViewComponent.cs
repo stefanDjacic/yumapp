@@ -13,23 +13,23 @@ namespace YumApp.ViewsComponent
 {
     public class NavbarViewComponent : ViewComponent
     {
-        private readonly UserManager<AppUser> _userManager;
+        //private readonly UserManager<AppUser> _userManager;
         private readonly AppUserManager _appUserManager;
 
-        public NavbarViewComponent(UserManager<AppUser> userManager, AppUserManager appUserManager)
+        public NavbarViewComponent(/*UserManager<AppUser> userManager,*/ AppUserManager appUserManager)
         {
-            _userManager = userManager;
+            //_userManager = userManager;
             _appUserManager = appUserManager;
         }
 
         public IViewComponentResult Invoke(bool isSignedIn)
         {
-            //var currentUser = _userManager.GetUserAsync((System.Security.Claims.ClaimsPrincipal)User).Result; //ovo promeni i dodaj mu notifikacije
-
-            var currentUserModel = _appUserManager.GetUserWithNotifications((ClaimsPrincipal)User);
-
             if (isSignedIn)
             {
+                var currentUser = _appUserManager.FindByNameAsync(User.Identity.Name).Result;
+
+                var currentUserModel = _appUserManager.GetUserWithNotificationsById(currentUser.Id);
+
                 return View("NavbarSignedInViewComponent1", currentUserModel);
             }
             else

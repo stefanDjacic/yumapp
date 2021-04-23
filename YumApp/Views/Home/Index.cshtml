@@ -6,22 +6,23 @@
 <div class="wrapper row  d-flex justify-content-around align-items-center pt-5 mt-5">
     <section class="registration w-100 col-5">
         <form asp-action="Register" asp-controller="Home" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row justify-content-between">
                 <div class="form-group col-6 mb-0">
                     <label asp-for="FirstName"></label>
                     <input asp-for="FirstName" class="form-control" />
-                    <span asp-validation-for="FirstName" class="text-danger h-25 d-inline-block"></span>
+                    <span asp-validation-for="FirstName" class="text-danger h-25 d-inline-block text-nowrap"></span>
                 </div>
                 <div class="form-group col-6 mb-0">
                     <label asp-for="LastName"></label>
                     <input asp-for="LastName" class="form-control" />
-                    <span asp-validation-for="LastName" class="text-danger h-25 d-inline-block"></span>
+                    <span asp-validation-for="LastName" class="text-danger h-25 d-inline-block text-nowrap"></span>
                 </div>
             </div>
             <div class="form-group mb-0">
                 <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control" id="inputEmail" onkeyup="updateUsername(this.value)" />
+                <input asp-for="UserName" type="hidden" value="" id="inputUsername" />
                 <span asp-validation-for="Email" class="text-danger h-25 d-inline-block"></span>
             </div>
             <div class="form-group mb-0">
@@ -31,7 +32,9 @@
             </div>
             <div class="form-group mb-0">
                 <label asp-for="Gender"></label>
-                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-control"></select>
+                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-control">
+                    <option selected="selected" value="">Please select</option>
+                </select>
                 <span asp-validation-for="Gender" class="text-danger h-25 d-inline-block"></span>
             </div>
             <div class="form-group mb-0">
@@ -53,7 +56,7 @@
     </section>
     <section class="welcome col-7 w-100 d-flex justify-content-center align-items-center flex-column">
         <div>
-            <p class="">Welcome to YumApp!</p>            
+            <p class="">Welcome to YumApp!</p>
             <br />
             <p>Social network for chefs all over the world.</p>
             <p>Share your favourite/special meals with others on YumApp.</p>
@@ -74,10 +77,6 @@
                         <div class="modal-body">
                             <partial name="_LoginPartial" />
                         </div>
-                        @*<div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success">Save changes</button>
-                        </div>*@
                     </div>
                 </div>
             </div>
@@ -85,5 +84,12 @@
     </section>
 </div>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} 
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function updateUsername(emailValue) {
+            var inputUsername = document.getElementById('inputUsername');
+            inputUsername.value = emailValue;
+        }
+    </script>
 }

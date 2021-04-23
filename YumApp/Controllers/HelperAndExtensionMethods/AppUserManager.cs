@@ -27,34 +27,80 @@ namespace YumApp.Controllers.HelperAndExtensionMethods
                               : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
         }
-
+        
         //Hiding Store property of parent class because of needed type.
         //Don't know if it's bad practice, I could just cast it every time I use it.
-        public new AppUserStore Store { get; set; }
-        public AppUserModel GetUserWithNotifications(ClaimsPrincipal claimsPrincipal)
+        public AppUserStore MyStore => (AppUserStore)Store;
+
+        public AppUserModel GetUserWithNotificationsById(int id)
         {
-            return Store.GetUserWithNotifications(claimsPrincipal);
+            return MyStore.GetUserWithNotificationsById(id);
         }        
     }
 
     public class AppUserStore : UserStore<AppUser, IdentityRole<int>, YumAppDbContext, int>
     {
-        public AppUserStore(YumAppDbContext context, IdentityErrorDescriber identityErrorDescriber = null) : base(context, identityErrorDescriber)
+        public AppUserStore(YumAppDbContext context,
+                            IdentityErrorDescriber identityErrorDescriber = null)
+                            : base(context, identityErrorDescriber)
         {
         }
 
-        public AppUserModel GetUserWithNotifications(ClaimsPrincipal claimsPrincipal)
+        //automatski
+        public AppUserModel GetUserWithNotificationsById(int id)
         {
-            if (claimsPrincipal == null)
-            {
-                return null;
-            }
+            var appUserModelWithNotifications = Context.AppUsers
+                                                        .Include(au => au.NotificationsReceiver)                                                        
+                                                        .ThenInclude(n => n.Initiator)
+                                                        .Where(au => au.Id == id)
+                                                        .ToAppUserModel()
+                                                        .SingleOrDefault();
 
-            var appUserModelWithNotifications = Context.AppUsers.Where(au => au.Id == int.Parse(claimsPrincipal.Identity.Name))
-                                                        .Include(au => au.NotificationsReceiver)
-                                                        /*.Include(au => au.NotificationsInitiator)*/           //need this for photo
-                                                        .SingleOrDefault()
-                                                        .ToAppUserModel();
+
+            //manuelno
+            //var appUserModelWithNotifications = Context.AppUsers.Where(au => au.Id == id).Select(appUser => new AppUserModel
+            //{
+            //    Id = appUser.Id,
+            //    FirstName = appUser.FirstName,
+            //    LastName = appUser.LastName,
+            //    Email = appUser.Email,
+            //    Username = appUser.UserName,
+            //    DateOfBirth = appUser.DateOfBirth,
+            //    Country = appUser.Country,
+            //    Gender = appUser.Gender,
+            //    About = appUser.About,
+            //    PhotoPath = appUser.PhotoPath,
+            //    Notifications = appUser.NotificationsReceiver.Select(n => new NotificationModel
+            //    {
+            //        Initiator = new AppUserModel
+            //        {
+            //            Id = n.Initiator.Id,
+            //            FirstName = n.Initiator.FirstName,
+            //            LastName = n.Initiator.LastName,
+            //            Email = n.Initiator.Email,
+            //            Username = n.Initiator.UserName,
+            //            DateOfBirth = n.Initiator.DateOfBirth,
+            //            Country = n.Initiator.Country,
+            //            Gender = n.Initiator.Gender,
+            //            About = n.Initiator.About,
+            //            PhotoPath = n.Initiator.PhotoPath
+            //        },
+            //        Receiver = new AppUserModel
+            //        {
+            //            Id = appUser.Id,
+            //            FirstName = n.Receiver.FirstName,
+            //            LastName = n.Receiver.LastName,
+            //            Email = n.Receiver.Email,
+            //            Username = n.Receiver.UserName,
+            //            DateOfBirth = n.Receiver.DateOfBirth,
+            //            Country = n.Receiver.Country,
+            //            Gender = n.Receiver.Gender,
+            //            About = n.Receiver.About,
+            //            PhotoPath = n.Receiver.PhotoPath
+            //        },
+            //        NotificationText = n.NotificationText
+            //    }).ToList()
+            //}).SingleOrDefault();
 
             return appUserModelWithNotifications;
         }

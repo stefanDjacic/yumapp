@@ -52,6 +52,8 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
+            var userTest = _appUserManager.GetUserWithNotificationsById(id);
+
             //Id of currently logged in user
             var currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
 

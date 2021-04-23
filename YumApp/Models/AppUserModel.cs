@@ -25,14 +25,13 @@ namespace YumApp.Models
                                 Gender = appUser.Gender,
                                 About = appUser.About,
                                 PhotoPath = appUser.PhotoPath,
-                //Notifications = appUser.NotificationsReceiver.ToNotificationModel().ToList()
-                Notifications = appUser.NotificationsReceiver.Select(n => new NotificationModel
-                {
-                    NotificationText = n.NotificationText,
-                    Initiator = n.Initiator.ToAppUserModel(),
-                    Receiver = n.Receiver.ToAppUserModel()
-                }).ToList()
+                                Notifications = appUser.NotificationsReceiver.ToNotificationModel().ToList()
             };
+        }
+
+        public static IQueryable<AppUserModel> ToAppUserModel(this IQueryable<AppUser> entities)
+        {
+            return entities.Select(au => au.ToAppUserModel());
         }
 
         public static AppUser ToAppUserEntity(this AppUserModel appUserModel)

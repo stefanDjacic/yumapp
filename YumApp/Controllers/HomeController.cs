@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using YumApp.Controllers.HelperAndExtensionMethods;
 using YumApp.Models;
 
 namespace YumApp.Controllers
@@ -17,13 +18,16 @@ namespace YumApp.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
+        //private readonly UserManager<AppUser> _userManager;
+        private readonly AppUserManager _appUserManager;
         private readonly SignInManager<AppUser> _signInManager;        
 
-        public HomeController(UserManager<AppUser> userManager,
+        public HomeController(/*UserManager<AppUser> userManager,*/
+                              AppUserManager appUserManager,
                               SignInManager<AppUser> signInManager)
         {
-            _userManager = userManager;
+            //_userManager = userManager;
+            _appUserManager = appUserManager;
             _signInManager = signInManager;            
         }
 
@@ -31,11 +35,12 @@ namespace YumApp.Controllers
         public async Task<IActionResult> Index()
         {
             if (_signInManager.IsSignedIn(User))
-            {
-                //int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, User);
-                int currentUserId = await _userManager.GetCurrentUserIdAsync(User);
-                return RedirectToAction("Profile", "User", new { id = currentUserId });
+            {                
+                int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
+
+                return RedirectToAction("Profile", "User", new { id = currentUserId });                 //OVO MENJAJ
             }
+
             return View();
         }
 
@@ -45,36 +50,31 @@ namespace YumApp.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    AppUser newUser = AppUserExtensionMethods.ToModel(model);
-                    var result = await _userManager.CreateAsync(newUser, model.Password);
-
-                    if (result.Succeeded)
-                    {
-                        await _userManager.AddToRoleAsync(newUser, "normaluser");
-
-                        await _signInManager.SignInAsync(newUser, false);
-
-                        //int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);
-                        int currentUserId = await _userManager.GetCurrentUserIdAsync(model.Email);
-
-                        return RedirectToAction("Profile", "User", new { id = currentUserId });
-                    }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError("", error.Description);
-                        }
-
-                        return View(model);
-                    }
-                }
-                else
+                if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
+
+                AppUser newUser = model.ToAppUserEntity();
+                //var result = await _appUserManager.CreateAsync(newUser, model.Password);
+                var result = await _appUserManager.CreateAsync(newUser, newUser.PasswordHash);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+
+                    return View("Index", model);
+                }
+
+                await _appUserManager.AddToRoleAsync(newUser, "normaluser");                
+                await _signInManager.SignInAsync(newUser, false);
+                
+                int currentUserId = await _appUserManager.GetCurrentUserIdAsync(newUser.Email);
+
+                return RedirectToAction("Profile", "User", new { id = currentUserId });
             }
             catch
             {
@@ -101,7 +101,7 @@ namespace YumApp.Controllers
                     if (result.Succeeded)
                     {
                         //int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);
-                        int currentUserId = await _userManager.GetCurrentUserIdAsync(model.Email);
+                        int currentUserId = await _appUserManager.GetCurrentUserIdAsync(model.Email);
 
                         return RedirectToAction("Profile", "User", new { id = currentUserId });
                     }

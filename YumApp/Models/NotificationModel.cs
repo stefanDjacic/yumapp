@@ -9,53 +9,50 @@ namespace YumApp.Models
 {
     public static class NotificationModelExtensionMethods
     {
-        public static IQueryable<NotificationModel> ToNotificationModel(this IQueryable<Notification> entities)
-        {
-            return entities.Select(n => new NotificationModel
-                                            {
-                                                Receiver = n.Receiver.ToAppUserModel(),
-                                                Initiator = n.Initiator.ToAppUserModel(),
-                                                NotificationText = n.NotificationText
-                                            }
-            );
-        }
+        //public static IQueryable<NotificationModel> ToNotificationModel(this IQueryable<Notification> entities)
+        //{
+        //    return entities.Select(n => new NotificationModel
+        //                                    {
+        //                                        Receiver = n.Receiver.ToAppUserModel(),
+        //                                        //Initiator = n.Initiator.ToAppUserModel(),
+        //                                        NotificationText = n.NotificationText
+        //                                    }
+        //    );
+        //}
 
         public static IEnumerable<NotificationModel> ToNotificationModel(this IEnumerable<Notification> entities)
         {
             return entities.Select(n => new NotificationModel
             {
-                Receiver = n.Receiver.ToAppUserModel(),
-                Initiator = n.Initiator.ToAppUserModel(),
+                Receiver = new AppUserModel
+                {
+                    Id = n.Receiver.Id,
+                    FirstName = n.Receiver.FirstName,
+                    LastName = n.Receiver.LastName,
+                    Email = n.Receiver.Email,
+                    Username = n.Receiver.UserName,
+                    About = n.Receiver.About,
+                    DateCreated = n.Receiver.DateCreated,
+                    DateOfBirth = n.Receiver.DateOfBirth,
+                    Gender = n.Receiver.Gender,
+                    PhotoPath = n.Receiver.PhotoPath,
+                    Country = n.Receiver.Country
+                },
+                Initiator = new AppUserModel
+                {
+                    Id = n.Initiator.Id,
+                    FirstName = n.Initiator.FirstName,
+                    LastName = n.Initiator.LastName,
+                    Email = n.Initiator.Email,
+                    Username = n.Initiator.UserName,
+                    About = n.Initiator.About,
+                    DateCreated = n.Initiator.DateCreated,
+                    DateOfBirth = n.Initiator.DateOfBirth,
+                    Gender = n.Initiator.Gender,
+                    PhotoPath = n.Initiator.PhotoPath,
+                    Country = n.Initiator.Country
+                },
                 NotificationText = n.NotificationText
-                //Receiver = new AppUserModel
-                //{
-                //    Id = n.AppUser.Id,
-                //    FirstName = n.AppUser.FirstName,
-                //    LastName = n.AppUser.LastName,
-                //    Email = n.AppUser.Email,
-                //    Username = n.AppUser.UserName,
-                //    About = n.AppUser.About,
-                //    DateCreated = n.AppUser.DateCreated,
-                //    DateOfBirth = n.AppUser.DateOfBirth,
-                //    Gender = n.AppUser.Gender,
-                //    PhotoPath = n.AppUser.PhotoPath,
-                //    Country = n.AppUser.Country
-                //},
-                //Initiator = new AppUserModel
-                //{
-                //    Id = n.Doer.Id,
-                //    FirstName = n.Doer.FirstName,
-                //    LastName = n.Doer.LastName,
-                //    Email = n.Doer.Email,
-                //    Username = n.Doer.UserName,
-                //    About = n.Doer.About,
-                //    DateCreated = n.Doer.DateCreated,
-                //    DateOfBirth = n.Doer.DateOfBirth,
-                //    Gender = n.Doer.Gender,
-                //    PhotoPath = n.Doer.PhotoPath,
-                //    Country = n.Doer.Country
-                //},
-                //NotificationText = n.NotificationText
             }
             );
         }
@@ -68,7 +65,7 @@ namespace YumApp.Models
         }
         public NotificationModel(AppUserModel initiator, AppUserModel receiver, INotificationTextStrategy notificationTextStrategy)
         {
-            Initiator = initiator;
+            //Initiator = initiator;
             Receiver = receiver;
             NotificationText = notificationTextStrategy.GetNotificationText(initiator.FirstName + " " + initiator.LastName);
         }
