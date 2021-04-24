@@ -10,9 +10,10 @@ namespace YumApp.Models
 {
     public static class IngredientModelExtensionMethods
     {
-        public static IQueryable<IngredientModel> ToIngredientModel(this IQueryable<Ingredient> entities)
+        //Will probably need iqueriable verson too
+        public static IEnumerable<IngredientModel> ToIngredientModel(this IEnumerable<Ingredient> ingredients)
         {
-            return entities.Select(i => new IngredientModel
+            return ingredients.Select(i => new IngredientModel
             {
                 Name = i.Name,
                 Description = i.Description,
@@ -36,9 +37,8 @@ namespace YumApp.Models
 
         [Required]
         public string PhotoPath { get; set; }
-
-        //public ICollection<Post_Ingredient> Post_Ingredients { get; set; }
-
+        
+        //Other
         public IFormFile Photo { get; set; }
     }
 }

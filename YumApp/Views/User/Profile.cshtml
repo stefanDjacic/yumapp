@@ -1,10 +1,10 @@
 ﻿@*@model List<PostModel>*@
-@{    
+@{
     ViewData["Title"] = "Profile";
 
     AppUserModel userProfile = ViewBag.UserProfile;
 
-    var currentLoggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+    int currentLoggedInUserId = ViewBag.CurrentUserId;
 }
 
 <div class="d-flex flex-column">

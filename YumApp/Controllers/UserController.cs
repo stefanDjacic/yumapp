@@ -23,8 +23,7 @@ namespace YumApp.Controllers
 {
     [Authorize]
     public class UserController : Controller
-    {
-        //private readonly UserManager<AppUser> _userManager;
+    {        
         private readonly AppUserManager _appUserManager;
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
@@ -32,15 +31,13 @@ namespace YumApp.Controllers
         //private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
 
-        public UserController(/*UserManager<AppUser> userManager,*/
-                              AppUserManager appUserManager,
+        public UserController(AppUserManager appUserManager,
                               ICRUDRepository<Post> postRepository,
                               ICRDRepository<User_Follows> user_FollowsRepository,
                               IHttpClientFactory httpClientFactory,
                               //IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
-        {
-            //_userManager = userManager;
+        {            
             _appUserManager = appUserManager;
             _postRepository = postRepository;
             _user_FollowsRepository = user_FollowsRepository;
@@ -52,26 +49,32 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
+            //delete this line after testing
             var userTest = _appUserManager.GetUserWithNotificationsById(id);
 
             //Id of currently logged in user
-            var currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
+            int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
 
-            //Returns user whose profile is being viewed
-            var user = await _appUserManager.FindByIdAsync(id.ToString()); //ovo promeni
-            //.ContinueWith(u => u.Result.ToAppUserModel());
-            var userModel = user.ToAppUserModel();
-            userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
-                                                               .Any(u => u.FollowerId == currentUserId && u.FollowsId == id);
-            ViewBag.UserProfile = userModel;
-            
-            //Returns PostModel of selected user
-            var userPosts = await _postRepository.GetAll()
+            //Returns List<PostModel> of user whose profile is being viewed
+            var userPostsModel = await _postRepository.GetAll()
                                                 .Where(p => p.AppUserId == id)
                                                 .ToPostModel()
                                                 .ToListAsync();
 
-            return View(userPosts);
+            //________________________________________probably dont need this line
+            //Returns user whose profile is being viewed
+            //var userModel = await _appUserManager.FindByIdAsync(id.ToString())
+            //                                     .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());
+
+            var userModel = userPostsModel.Select(p => p.User).FirstOrDefault();
+            //Checks and sets bool if current user is following the one whose profile is being viewed
+            userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
+                                                               .Any(u => u.FollowerId == currentUserId && u.FollowsId == id);
+
+            ViewBag.UserProfile = userModel;
+            ViewBag.CurrentUserId = currentUserId;
+
+            return View(userPostsModel);
             
             #region TestingQueries
             /*

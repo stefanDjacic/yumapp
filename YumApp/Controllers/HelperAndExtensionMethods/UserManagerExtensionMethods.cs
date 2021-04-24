@@ -5,38 +5,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using YumApp.Controllers.HelperAndExtensionMethods;
 using YumApp.Models;
 
 namespace YumApp.Controllers
 {
     public static class UserManagerExtensionMethods
     {
-        public static async Task<int> GetCurrentUserIdAsync(this UserManager<AppUser> userManager, string userEmail)
+        public static async Task<int> GetCurrentUserIdAsync(this AppUserManager appUserManager, string userEmail)
         {
-            AppUser currentUser = await userManager.FindByEmailAsync(userEmail);
-            int currentUserId = int.Parse(await userManager.GetUserIdAsync(currentUser));
+            AppUser currentUser = await appUserManager.FindByEmailAsync(userEmail);
+            int currentUserId = int.Parse(await appUserManager.GetUserIdAsync(currentUser));
 
             return currentUserId;
         }
 
-        public static async Task<int> GetCurrentUserIdAsync(this UserManager<AppUser> userManager, ClaimsPrincipal claimsPrincipal)
+        public static async Task<int> GetCurrentUserIdAsync(this AppUserManager appUserManager, ClaimsPrincipal claimsPrincipal)
         {
-            AppUser currentUser = await userManager.GetUserAsync(claimsPrincipal);
-            int currentUserId = int.Parse(await userManager.GetUserIdAsync(currentUser));
+            AppUser currentUser = await appUserManager.GetUserAsync(claimsPrincipal);
+            int currentUserId = int.Parse(await appUserManager.GetUserIdAsync(currentUser));
 
             return currentUserId;
         }
 
-        public static async Task<AppUserModel> CurrentUserToAppUserModel(this UserManager<AppUser> userManager, ClaimsPrincipal claimsPrincipal)
+        public static async Task<AppUserModel> CurrentUserToAppUserModel(this AppUserManager appUserManager, ClaimsPrincipal claimsPrincipal)
         {
-            var currentUser = await userManager.GetUserAsync(claimsPrincipal);
+            var currentUser = await appUserManager.GetUserAsync(claimsPrincipal);
 
             return currentUser.ToAppUserModel();
         }
 
-        public static async Task<IdentityResult> UpdateUserAsync(this UserManager<AppUser> userManager, AppUser model)
+        public static async Task<IdentityResult> UpdateUserAsync(this AppUserManager appUserManager, AppUser model)
         {
-            var userToBeUpdated = await userManager.FindByIdAsync(model.Id.ToString());
+            var userToBeUpdated = await appUserManager.FindByIdAsync(model.Id.ToString());
 
             userToBeUpdated.FirstName = model.FirstName;
             userToBeUpdated.LastName = model.LastName;
@@ -48,8 +49,8 @@ namespace YumApp.Controllers
             userToBeUpdated.About = model.About;
             userToBeUpdated.PhotoPath = model.PhotoPath;
 
-            var result = await userManager.UpdateAsync(userToBeUpdated);
-            return result;
+            var updatedUser = await appUserManager.UpdateAsync(userToBeUpdated);
+            return updatedUser;
         }
     }
 }

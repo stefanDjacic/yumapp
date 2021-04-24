@@ -12,30 +12,25 @@ using YumApp.Models;
 namespace YumApp.ViewsComponent
 {
     public class NavbarViewComponent : ViewComponent
-    {
-        //private readonly UserManager<AppUser> _userManager;
+    {        
         private readonly AppUserManager _appUserManager;
 
-        public NavbarViewComponent(/*UserManager<AppUser> userManager,*/ AppUserManager appUserManager)
-        {
-            //_userManager = userManager;
+        public NavbarViewComponent(AppUserManager appUserManager)
+        {            
             _appUserManager = appUserManager;
         }
 
         public IViewComponentResult Invoke(bool isSignedIn)
         {
-            if (isSignedIn)
-            {
-                var currentUser = _appUserManager.FindByNameAsync(User.Identity.Name).Result;
-
-                var currentUserModel = _appUserManager.GetUserWithNotificationsById(currentUser.Id);
-
-                return View("NavbarSignedInViewComponent1", currentUserModel);
-            }
-            else
+            if (!isSignedIn)
             {
                 return Content(string.Empty);
             }
+
+            var currentUser = _appUserManager.FindByNameAsync(User.Identity.Name).Result;
+            var currentUserModel = _appUserManager.GetUserWithNotificationsById(currentUser.Id);
+
+            return View("NavbarSignedInViewComponent1", currentUserModel);
         }
     }
 }

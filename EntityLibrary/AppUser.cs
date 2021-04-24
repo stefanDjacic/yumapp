@@ -75,7 +75,7 @@ namespace EntityLibrary
         public ICollection<YummyPost> YummyPosts { get; set; }
 
         //Other
-        [NotMapped]
-        public IFormFile Photo { get; set; }
+        //[NotMapped]
+        //public IFormFile Photo { get; set; }
     }
 }

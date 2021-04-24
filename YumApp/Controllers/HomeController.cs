@@ -17,23 +17,20 @@ namespace YumApp.Controllers
 {
     [AllowAnonymous]
     public class HomeController : Controller
-    {
-        //private readonly UserManager<AppUser> _userManager;
+    {        
         private readonly AppUserManager _appUserManager;
         private readonly SignInManager<AppUser> _signInManager;        
 
-        public HomeController(/*UserManager<AppUser> userManager,*/
-                              AppUserManager appUserManager,
+        public HomeController(AppUserManager appUserManager,
                               SignInManager<AppUser> signInManager)
         {
-            //_userManager = userManager;
             _appUserManager = appUserManager;
             _signInManager = signInManager;            
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
-        {
+        {            
             if (_signInManager.IsSignedIn(User))
             {                
                 int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
@@ -54,9 +51,10 @@ namespace YumApp.Controllers
                 {
                     return View(model);
                 }
-
+                
                 AppUser newUser = model.ToAppUserEntity();
-                //var result = await _appUserManager.CreateAsync(newUser, model.Password);
+                newUser.SetDefaultPhotoPathAndUserName();
+
                 var result = await _appUserManager.CreateAsync(newUser, newUser.PasswordHash);
 
                 if (!result.Succeeded)
@@ -69,7 +67,8 @@ namespace YumApp.Controllers
                     return View("Index", model);
                 }
 
-                await _appUserManager.AddToRoleAsync(newUser, "normaluser");                
+                await _appUserManager.AddToRoleAsync(newUser, "normaluser");     
+                
                 await _signInManager.SignInAsync(newUser, false);
                 
                 int currentUserId = await _appUserManager.GetCurrentUserIdAsync(newUser.Email);
@@ -84,7 +83,7 @@ namespace YumApp.Controllers
 
         [HttpGet]
         public IActionResult Login()
-        {
+        {         
             return View();
         }
 
@@ -93,28 +92,23 @@ namespace YumApp.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             try
-            {
-                if (ModelState.IsValid)
-                {
-                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-
-                    if (result.Succeeded)
-                    {
-                        //int currentUserId = await ControllerHelperMethods.GetCurrentUserIdAsync(_userManager, model.Email);
-                        int currentUserId = await _appUserManager.GetCurrentUserIdAsync(model.Email);
-
-                        return RedirectToAction("Profile", "User", new { id = currentUserId });
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(model);
-                    }
-                }
-                else
+            {                
+                if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
+
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
+                }
+
+                int currentUserId = await _appUserManager.GetCurrentUserIdAsync(model.Email);
+
+                return RedirectToAction("Profile", "User", new { id = currentUserId });
             }
             catch
             {

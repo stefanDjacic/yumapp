@@ -21,7 +21,8 @@ namespace YumApp.Models
                 DateOfBirth = model.DateOfBirth,
                 Gender = model.Gender,
                 PasswordHash = model.Password,
-                UserName = model.UserName
+                UserName = model.UserName,
+                PhotoPath = model.PhotoPath
             };
 
             return output;
@@ -67,5 +68,7 @@ namespace YumApp.Models
         public string ConfirmPassword { get; set; }
 
         public string UserName { get; set; }
+
+        public string PhotoPath { get; set; }
     }
 }

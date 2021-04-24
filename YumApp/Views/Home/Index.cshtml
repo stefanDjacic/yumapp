@@ -5,54 +5,7 @@
 
 <div class="wrapper row  d-flex justify-content-around align-items-center pt-5 mt-5">
     <section class="registration w-100 col-5">
-        <form asp-action="Register" asp-controller="Home" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="row justify-content-between">
-                <div class="form-group col-6 mb-0">
-                    <label asp-for="FirstName"></label>
-                    <input asp-for="FirstName" class="form-control" />
-                    <span asp-validation-for="FirstName" class="text-danger h-25 d-inline-block text-nowrap"></span>
-                </div>
-                <div class="form-group col-6 mb-0">
-                    <label asp-for="LastName"></label>
-                    <input asp-for="LastName" class="form-control" />
-                    <span asp-validation-for="LastName" class="text-danger h-25 d-inline-block text-nowrap"></span>
-                </div>
-            </div>
-            <div class="form-group mb-0">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" id="inputEmail" onkeyup="updateUsername(this.value)" />
-                <input asp-for="UserName" type="hidden" value="" id="inputUsername" />
-                <span asp-validation-for="Email" class="text-danger h-25 d-inline-block"></span>
-            </div>
-            <div class="form-group mb-0">
-                <label asp-for="DateOfBirth"></label>
-                <input asp-for="DateOfBirth" class="form-control" />
-                <span asp-validation-for="DateOfBirth" class="text-danger h-25 d-inline-block"></span>
-            </div>
-            <div class="form-group mb-0">
-                <label asp-for="Gender"></label>
-                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-control">
-                    <option selected="selected" value="">Please select</option>
-                </select>
-                <span asp-validation-for="Gender" class="text-danger h-25 d-inline-block"></span>
-            </div>
-            <div class="form-group mb-0">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger h-25 d-inline-block"></span>
-            </div>
-            <div class="form-group mb-0">
-                <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger h-25 d-inline-block"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-success" />
-            </div>
-        </form>
-        <hr />
-        <button class="btn btn-primary">Register with facebook</button>
+        <partial name="_RegisterPartial" />
     </section>
     <section class="welcome col-7 w-100 d-flex justify-content-center align-items-center flex-column">
         <div>
@@ -62,7 +15,10 @@
             <p>Share your favourite/special meals with others on YumApp.</p>
         </div>
         <div class="align-self-end">
-            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#ModalCenter">
+            <a class="btn btn-outline-success" asp-action="Login" asp-controller="Home">
+                Login
+            </a>
+            @*<button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#ModalCenter">
                 Login
             </button>
             <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
@@ -75,21 +31,22 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <partial name="_LoginPartial" />
+                            <partial name="_LoginPartial" for="LoginModel" />
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
     </section>
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script>
+    @*<script>
+        //For changing the username
         function updateUsername(emailValue) {
             var inputUsername = document.getElementById('inputUsername');
             inputUsername.value = emailValue;
         }
-    </script>
+    </script>*@
 }

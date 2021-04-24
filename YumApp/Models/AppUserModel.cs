@@ -11,27 +11,55 @@ namespace YumApp.Models
 {
     public static class AppUserModelExtensionMethods
     {
-        public static AppUserModel ToAppUserModel(this AppUser appUser)
+        public static IQueryable<AppUserModel> ToAppUserModel(this IQueryable<AppUser> appUsers)
         {
-            return new AppUserModel
-                            {
-                                Id = appUser.Id,
-                                FirstName = appUser.FirstName,
-                                LastName = appUser.LastName,
-                                Email = appUser.Email,
-                                Username = appUser.UserName,
-                                DateOfBirth = appUser.DateOfBirth,                                
-                                Country = appUser.Country,
-                                Gender = appUser.Gender,
-                                About = appUser.About,
-                                PhotoPath = appUser.PhotoPath,
-                                Notifications = appUser.NotificationsReceiver.ToNotificationModel().ToList()
-            };
+            return appUsers.Select(au => au.ToAppUserModel());
         }
 
-        public static IQueryable<AppUserModel> ToAppUserModel(this IQueryable<AppUser> entities)
+        public static AppUserModel ToAppUserModel(this AppUser appUser)
         {
-            return entities.Select(au => au.ToAppUserModel());
+            var appUserModel = appUser.ToAppUserModelBaseInfo();
+            appUserModel.Notifications = appUser.NotificationsReceiver
+                                                .ToNotificationModel()
+                                                .ToList();
+
+            return appUserModel;
+
+            #region bad code
+            //return new AppUserModel
+            //{
+            //    Id = appUser.Id,
+            //    FirstName = appUser.FirstName,
+            //    LastName = appUser.LastName,
+            //    Email = appUser.Email,
+            //    Username = appUser.UserName,
+            //    DateOfBirth = appUser.DateOfBirth,                                
+            //    Country = appUser.Country,
+            //    Gender = appUser.Gender,
+            //    About = appUser.About,
+            //    PhotoPath = appUser.PhotoPath,
+            //    Notifications = appUser.NotificationsReceiver
+            //                            .ToNotificationModel()
+            //                            .ToList()
+            //};
+            #endregion
+        }
+
+        public static AppUserModel ToAppUserModelBaseInfo(this AppUser appUser)
+        {
+            return new AppUserModel
+            {
+                Id = appUser.Id,
+                FirstName = appUser.FirstName,
+                LastName = appUser.LastName,
+                Email = appUser.Email,
+                Username = appUser.UserName,
+                DateOfBirth = appUser.DateOfBirth,
+                Country = appUser.Country,
+                Gender = appUser.Gender,
+                About = appUser.About,
+                PhotoPath = appUser.PhotoPath
+            };
         }
 
         public static AppUser ToAppUserEntity(this AppUserModel appUserModel)
@@ -49,6 +77,17 @@ namespace YumApp.Models
                 About = appUserModel.About,
                 PhotoPath = appUserModel.PhotoPath
             };
+        }
+
+        public static void SetDefaultPhotoPathAndUserName(this AppUser appUser)
+        {
+            appUser.PhotoPath = @"/Photos/DefaultUserPhoto.png";
+            appUser.SetDefaultUserName();
+        }
+
+        public static void SetDefaultUserName(this AppUser appUser)
+        {
+            appUser.UserName = appUser.Email;
         }
     }
 
@@ -89,7 +128,7 @@ namespace YumApp.Models
         public DateTime DateOfBirth { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
         [MaxLength(100)]
         public string Country { get; set; }

@@ -88,5 +88,13 @@ namespace YumApp.Controllers
 
             return relativePath;
         }
+
+        //public static void SetDefaultPhotoPathAndUserName(this RegisterModel model)
+        //{
+        //    model.PhotoPath = @"/Photos/DefaultUserPhoto.png";
+        //    model.UserName = model.Email;
+        //}
+
+        //public static void SetDefaultUserName(this )
     }
 }

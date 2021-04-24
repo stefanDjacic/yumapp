@@ -10,56 +10,70 @@ namespace YumApp.Models
 {
     public static class PostModelExtensionMethods
     {
-        public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> entities)
+        public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> posts)
         {
-            return entities.Select(pe => new PostModel
+            return posts.Select(p => new PostModel
             {
-                User = new AppUserModel 
-                            {
-                                Id = pe.AppUser.Id,
-                                FirstName = pe.AppUser.FirstName,
-                                LastName = pe.AppUser.LastName,
-                                Email = pe.AppUser.Email,
-                                Username = pe.AppUser.UserName,
-                                About = pe.AppUser.About,
-                                DateCreated = pe.AppUser.DateCreated,
-                                DateOfBirth = pe.AppUser.DateOfBirth,
-                                Gender = pe.AppUser.Gender,
-                                PhotoPath = pe.AppUser.PhotoPath,
-                                Country = pe.AppUser.Country
-                            },
-                Content = pe.Content,
-                Notes = pe.Notes,
-                NumberOfYums = pe.NumberOfYums,
-                TimeOfPosting = pe.TimeOfPosting,
-                Comments = pe.Comments.Select(c => new CommentModel
-                                                        {
-                                                            Content = c.Content,
-                                                            Post = c.Post,
-                                                            Commentator = new AppUserModel 
-                                                                                {
-                                                                                    Id = c.Commentator.Id,
-                                                                                    FirstName = c.Commentator.FirstName,
-                                                                                    LastName = c.Commentator.LastName,
-                                                                                    Email = c.Commentator.Email,
-                                                                                    Username = c.Commentator.Email,
-                                                                                    About = c.Commentator.About,
-                                                                                    DateCreated = c.Commentator.DateCreated,
-                                                                                    DateOfBirth = c.Commentator.DateOfBirth,
-                                                                                    Gender = c.Commentator.Gender,
-                                                                                    PhotoPath = c.Commentator.PhotoPath,
-                                                                                    Country = c.Commentator.Country
-                                                                                },
-                                                            TimeOfCommenting = c.TimeOfCommenting
-                                                        }).ToList(),
-                Ingredients = pe.Post_Ingredients.Select(pi => pi.Ingredient).Select(i => new IngredientModel
-                                                                                                {
-                                                                                                    Name = i.Name,
-                                                                                                    Description = i.Description,
-                                                                                                    PhotoPath = i.PhotoPath
-                                                                                                }).ToList()
+                User = p.AppUser.ToAppUserModelBaseInfo(),
+                Content = p.Content,
+                Notes = p.Notes,
+                NumberOfYums = p.NumberOfYums,
+                TimeOfPosting = p.TimeOfPosting,
+                Comments = p.Comments.ToCommentModel().ToList(),
+                Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
             });
         }
+        #region bad code
+        //public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> entities)
+        //{
+        //    return entities.Select(pe => new PostModel
+        //    {
+        //        User = new AppUserModel
+        //                    {
+        //                        Id = pe.AppUser.Id,
+        //                        FirstName = pe.AppUser.FirstName,
+        //                        LastName = pe.AppUser.LastName,
+        //                        Email = pe.AppUser.Email,
+        //                        Username = pe.AppUser.UserName,
+        //                        About = pe.AppUser.About,                                
+        //                        DateOfBirth = pe.AppUser.DateOfBirth,
+        //                        Gender = pe.AppUser.Gender,
+        //                        PhotoPath = pe.AppUser.PhotoPath,
+        //                        Country = pe.AppUser.Country
+        //                    },
+        //        Content = pe.Content,
+        //        Notes = pe.Notes,
+        //        NumberOfYums = pe.NumberOfYums,
+        //        TimeOfPosting = pe.TimeOfPosting,
+        //        Comments = pe.Comments.Select(c => new CommentModel
+        //                                                {
+        //                                                    Content = c.Content,
+        //                                                    Post = c.Post,
+        //                                                    Commentator = new AppUserModel 
+        //                                                                        {
+        //                                                                            Id = c.Commentator.Id,
+        //                                                                            FirstName = c.Commentator.FirstName,
+        //                                                                            LastName = c.Commentator.LastName,
+        //                                                                            Email = c.Commentator.Email,
+        //                                                                            Username = c.Commentator.Email,
+        //                                                                            About = c.Commentator.About,
+        //                                                                            DateCreated = c.Commentator.DateCreated,
+        //                                                                            DateOfBirth = c.Commentator.DateOfBirth,
+        //                                                                            Gender = c.Commentator.Gender,
+        //                                                                            PhotoPath = c.Commentator.PhotoPath,
+        //                                                                            Country = c.Commentator.Country
+        //                                                                        },
+        //                                                    TimeOfCommenting = c.TimeOfCommenting
+        //                                                }).ToList(),
+        //        Ingredients = pe.Post_Ingredients.Select(pi => pi.Ingredient).Select(i => new IngredientModel
+        //                                                                                        {
+        //                                                                                            Name = i.Name,
+        //                                                                                            Description = i.Description,
+        //                                                                                            PhotoPath = i.PhotoPath
+        //                                                                                        }).ToList()
+        //    });
+        //}
+        #endregion
     }
 
     public class PostModel
