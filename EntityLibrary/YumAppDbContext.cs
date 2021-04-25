@@ -50,6 +50,8 @@ namespace EntityLibrary
                 .OnDelete(DeleteBehavior.Restrict);
 
                 c.HasKey(c => new { c.Id, c.PostId, c.AppUserId });
+                
+                //c.Navigation(c => c.Commentator).AutoInclude();
             });
 
             modelBuilder.Entity<User_Follows>(uf =>
@@ -111,7 +113,14 @@ namespace EntityLibrary
                 //au.Navigation(au => au.NotificationsReceiver).AutoInclude();
                 //au.Navigation(au => au.NotificationsInitiator).AutoInclude();
                 //au.Navigation(au => au.User_Feeds).AutoInclude();
-                //au.Navigation(au => au.YummyPosts).AutoInclude();
+                //au.Navigation(au => au.YummyPosts).AutoInclude();                
+
+                //au.Ignore(au => au.AccessFailedCount);
+                //au.Ignore(au => au.LockoutEnabled);
+                //au.Ignore(au => au.LockoutEnd);
+                //au.Ignore(au => au.PhoneNumber);
+                //au.Ignore(au => au.PhoneNumberConfirmed);
+                //au.Ignore(au => au.TwoFactorEnabled);
 
                 au.Property(p =>p.Email).IsRequired();
                 au.Property(p => p.PasswordHash).IsRequired();

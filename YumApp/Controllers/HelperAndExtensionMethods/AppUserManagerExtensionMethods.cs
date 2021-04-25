@@ -10,7 +10,7 @@ using YumApp.Models;
 
 namespace YumApp.Controllers
 {
-    public static class UserManagerExtensionMethods
+    public static class AppUserManagerExtensionMethods
     {
         public static async Task<int> GetCurrentUserIdAsync(this AppUserManager appUserManager, string userEmail)
         {
@@ -28,12 +28,12 @@ namespace YumApp.Controllers
             return currentUserId;
         }
 
-        public static async Task<AppUserModel> CurrentUserToAppUserModel(this AppUserManager appUserManager, ClaimsPrincipal claimsPrincipal)
-        {
-            var currentUser = await appUserManager.GetUserAsync(claimsPrincipal);
+        //public static async Task<AppUserModel> GetCurrentUserToAppUserModelBaseInfo(this AppUserManager appUserManager, ClaimsPrincipal claimsPrincipal)
+        //{
+        //    var currentUser = await appUserManager.GetUserAsync(claimsPrincipal);
 
-            return currentUser.ToAppUserModel();
-        }
+        //    return currentUser.ToAppUserModelBaseInfo();
+        //}
 
         public static async Task<IdentityResult> UpdateUserAsync(this AppUserManager appUserManager, AppUser model)
         {

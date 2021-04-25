@@ -23,6 +23,20 @@ namespace YumApp.Models
                 Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
             });
         }
+
+        public static IEnumerable<PostModel> ToPostModel(this IEnumerable<Post> posts)
+        {
+            return posts.Select(p => new PostModel
+            {
+                User = p.AppUser.ToAppUserModelBaseInfo(),
+                Content = p.Content,
+                Notes = p.Notes,
+                NumberOfYums = p.NumberOfYums,
+                TimeOfPosting = p.TimeOfPosting,
+                Comments = p.Comments.ToCommentModel().ToList(),
+                Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
+            });
+        }
         #region bad code
         //public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> entities)
         //{

@@ -30,10 +30,11 @@ namespace YumApp.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index()
-        {            
+        {
+            //Checkes if current user is logged in to redirect him to his profile
             if (_signInManager.IsSignedIn(User))
-            {                
-                int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
+            {
+                int currentUserId = this.GetCurrentUserIdFromCookie(); /*await _appUserManager.GetCurrentUserIdAsync(User);*/
 
                 return RedirectToAction("Profile", "User", new { id = currentUserId });                 //OVO MENJAJ
             }
@@ -52,6 +53,7 @@ namespace YumApp.Controllers
                     return View(model);
                 }
                 
+                //
                 AppUser newUser = model.ToAppUserEntity();
                 newUser.SetDefaultPhotoPathAndUserName();
 
@@ -108,6 +110,12 @@ namespace YumApp.Controllers
 
                 int currentUserId = await _appUserManager.GetCurrentUserIdAsync(model.Email);
 
+
+                CookieOptions cookieOptions = new CookieOptions();
+                cookieOptions.Path = "/User";
+                cookieOptions.Expires = DateTime.Now.AddDays(5);
+                Response.Cookies.Append("MyCookie", currentUserId.ToString(), cookieOptions);
+                
                 return RedirectToAction("Profile", "User", new { id = currentUserId });
             }
             catch
@@ -121,6 +129,9 @@ namespace YumApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+
+            Response.Cookies.Delete("MyCookie");
+
             return RedirectToAction("Index", "Home");
         }
 

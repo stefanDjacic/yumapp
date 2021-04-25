@@ -47,8 +47,15 @@ using System.Security.Claims;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 6 "C:\Users\Korisnik\source\repos\YumApp\YumApp\Views\_ViewImports.cshtml"
+using YumApp.Controllers.HelperAndExtensionMethods;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"757df34e7ac81f62d68e41752c6df2cba6ce98b5", @"/Views/Home/Index.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"60d5f8c0af2d9347d971bfd671903c85a2a6d41c", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"9f88dfa0b9cbed3320497eb3617375aff10cadfa", @"/Views/_ViewImports.cshtml")]
     public class Views_Home_Index : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<RegisterModel>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("name", "_RegisterPartial", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -89,7 +96,7 @@ using System.Security.Claims;
 #line hidden
 #nullable disable
             WriteLiteral("\r\n<div class=\"wrapper row  d-flex justify-content-around align-items-center pt-5 mt-5\">\r\n    <section class=\"registration w-100 col-5\">\r\n        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "757df34e7ac81f62d68e41752c6df2cba6ce98b55323", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "757df34e7ac81f62d68e41752c6df2cba6ce98b55527", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_PartialTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.PartialTagHelper>();
@@ -107,7 +114,7 @@ using System.Security.Claims;
             BeginWriteAttribute("class", " class=\"", 398, "\"", 406, 0);
             EndWriteAttribute();
             WriteLiteral(">Welcome to YumApp!</p>\r\n            <br />\r\n            <p>Social network for chefs all over the world.</p>\r\n            <p>Share your favourite/special meals with others on YumApp.</p>\r\n        </div>\r\n        <div class=\"align-self-end\">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "757df34e7ac81f62d68e41752c6df2cba6ce98b57004", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "757df34e7ac81f62d68e41752c6df2cba6ce98b57208", async() => {
                 WriteLiteral("\r\n                Login\r\n            ");
             }
             );

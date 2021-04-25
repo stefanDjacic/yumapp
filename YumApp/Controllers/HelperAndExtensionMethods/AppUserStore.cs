@@ -22,11 +22,12 @@ namespace YumApp.Controllers.HelperAndExtensionMethods
         {
             //automatski
             var appUserModelWithNotifications = Context.AppUsers
-                                                        .Include(au => au.NotificationsReceiver)
-                                                        .ThenInclude(n => n.Initiator)
-                                                        .Where(au => au.Id == id)
-                                                        .ToAppUserModel()
-                                                        .SingleOrDefault();
+                                                       .Include(au => au.NotificationsReceiver)
+                                                       .ThenInclude(n => n.Initiator)
+                                                       .Where(au => au.Id == id)
+                                                       .ToAppUserModel()
+                                                       .AsNoTracking()
+                                                       .SingleOrDefault();
 
             #region slower query
             //manuelno

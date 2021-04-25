@@ -1,7 +1,9 @@
 ﻿@model List<PostModel>
-@inject UserManager<AppUser> _userManager
+@*@inject AppUserManager _appUserManager*@
 @{ 
-    AppUser currentUser = await _userManager.GetUserAsync(User);
+    //AppUser currentUser = await _appUserManager.GetUserAsync(User);
+
+    AppUser currentUser = ViewBag.CurrentUser;
 }
 
 @foreach (var p in Model)

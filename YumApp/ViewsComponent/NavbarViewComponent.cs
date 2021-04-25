@@ -27,8 +27,10 @@ namespace YumApp.ViewsComponent
                 return Content(string.Empty);
             }
 
-            var currentUser = _appUserManager.FindByNameAsync(User.Identity.Name).Result;
-            var currentUserModel = _appUserManager.GetUserWithNotificationsById(currentUser.Id);
+            //var currentUser = _appUserManager.FindByNameAsync(User.Identity.Name).Result;
+            //AppUser currentUser = ViewBag.CurrentUser;
+            int currentUserId = 
+            var currentUserModel = _appUserManager.GetUserWithNotificationsById(currentUser.Id); OVDE SI STAO
 
             return View("NavbarSignedInViewComponent1", currentUserModel);
         }

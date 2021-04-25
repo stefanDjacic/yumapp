@@ -50,29 +50,42 @@ namespace YumApp.Controllers
         public async Task<IActionResult> Profile(int id)
         {
             //delete this line after testing
-            var userTest = _appUserManager.GetUserWithNotificationsById(id);
+            //AppUserModel userTest = _appUserManager.GetUserWithNotificationsById(id);
 
-            //Id of currently logged in user
-            int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
+            //Gets Id of currently logged in user from database
+            AppUser currentUser = await _appUserManager.GetUserAsync(User);
 
-            //Returns List<PostModel> of user whose profile is being viewed
-            var userPostsModel = await _postRepository.GetAll()
-                                                .Where(p => p.AppUserId == id)
-                                                .ToPostModel()
-                                                .ToListAsync();
+            ////Returns List<Post> and loads data to List<PostModel> of user whose profile is being viewed, from database
+            List<Post> userPosts = await _postRepository.GetAll()
+                                                        .Include(p => p.AppUser)
+                                                        .Include(p => p.Comments)
+                                                        .ThenInclude(c => c.Commentator)      //Don't like this....
+                                                        .Where(p => p.AppUserId == id)
+                                                        .AsSplitQuery()         //SplitQuery because of cartesian explosion
+                                                        .ToListAsync();
 
-            //________________________________________probably dont need this line
-            //Returns user whose profile is being viewed
-            //var userModel = await _appUserManager.FindByIdAsync(id.ToString())
-            //                                     .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());
+            List<PostModel> userPostsModel = userPosts.ToPostModel()
+                                                      .ToList();
 
+            #region SlowerQuery
+            ////Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database
+            //List< PostModel > userPostsModel = await _postRepository.GetAll()
+            //                                             .Include(p => p.Comments)
+            //                                             .ThenInclude(c => c.Commentator)
+            //                                             .Where(p => p.AppUserId == id)
+            //                                             .ToPostModel()
+            //                                             .ToListAsync();
+            #endregion
+
+            //Gets the user (post owner) from List<PostModel>
             var userModel = userPostsModel.Select(p => p.User).FirstOrDefault();
-            //Checks and sets bool if current user is following the one whose profile is being viewed
+
+            //Checks and sets bool if current user is following the one whose profile is being viewed, from database
             userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
-                                                               .Any(u => u.FollowerId == currentUserId && u.FollowsId == id);
+                                                               .Any(u => u.FollowerId == currentUser.Id && u.FollowsId == id);
 
             ViewBag.UserProfile = userModel;
-            ViewBag.CurrentUserId = currentUserId;
+            ViewBag.CurrentUser = currentUser;
 
             return View(userPostsModel);
             
@@ -120,7 +133,8 @@ namespace YumApp.Controllers
                 ModelState.AddModelError("Country", "Problem with loading countries, please try again later.");
             }
 
-            var currentUser = await _appUserManager.CurrentUserToAppUserModel(User);
+            var currentUser = await _appUserManager.GetUserAsync(User)
+                                                   .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());
             //var currentUser = await _userManager.FindByIdAsync(id.ToString());
 
             return View(currentUser);
@@ -194,9 +208,10 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task UnfollowUser(int id)
         {
-            var currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
+            int currentUserId = this.GetCurrentUserIdFromCookie(); /*await _appUserManager.GetCurrentUserIdAsync(User);*/
 
-            var userFollows = await _user_FollowsRepository.GetAll().SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
+            var userFollows = await _user_FollowsRepository.GetAll()
+                                                           .SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
 
             await _user_FollowsRepository.Remove(userFollows);
 

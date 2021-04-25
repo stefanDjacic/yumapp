@@ -18,6 +18,13 @@ namespace YumApp.Controllers
 {
     public static class ControllerHelperMethods
     {
+        public static int GetCurrentUserIdFromCookie(this Controller controller)
+        {
+            int currentUserId = int.Parse(controller.HttpContext.Request.Cookies["MyCookie"]);
+
+            return currentUserId;
+        }
+
         public static async Task<HttpResponseMessage> CallApi(HttpMethod httpMethod, string uri, IHttpClientFactory httpClientFactory)
         {
             try

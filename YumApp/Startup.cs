@@ -39,15 +39,10 @@ namespace YumApp
                     {
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;
-                        options.Password.RequiredLength = 8;                        
-                    }).AddEntityFrameworkStores<YumAppDbContext>()                      
+                        options.Password.RequiredLength = 8;
+                    }).AddEntityFrameworkStores<YumAppDbContext>()
                       .AddUserManager<AppUserManager>()
                       .AddUserStore<AppUserStore>();
-
-            services.ConfigureApplicationCookie(options =>
-                    {
-                        options.LoginPath = "/Home/Login";
-                    });
 
             services.AddHttpClient();
 

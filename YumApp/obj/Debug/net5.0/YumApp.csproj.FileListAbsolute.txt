@@ -423,6 +423,7 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Home\I
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Home\Login.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Home\Privacy.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Home\_LoginPartial.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Home\_RegisterPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Shared\Components\Footer\FooterNotSignedInViewComponent1.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Shared\Components\Navbar\NavbarSignedInViewComponent1.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Shared\Error.cshtml.g.cs
@@ -446,4 +447,3 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.dll
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\ref\YumApp.dll
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.pdb
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.genruntimeconfig.cache
-C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Home\_RegisterPartial.cshtml.g.cs

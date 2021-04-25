@@ -1,10 +1,12 @@
-﻿@*@model List<PostModel>*@
+﻿@model List<PostModel>
 @{
     ViewData["Title"] = "Profile";
 
     AppUserModel userProfile = ViewBag.UserProfile;
 
-    int currentLoggedInUserId = ViewBag.CurrentUserId;
+    AppUser currentLoggedInUser = ViewBag.CurrentUser;
+
+    //bool isUserBeingFollowed = ViewBag.IsUserBeingFollowed;
 }
 
 <div class="d-flex flex-column">
@@ -32,7 +34,7 @@
                 }
             </div>
 
-            @if (currentLoggedInUserId != userProfile.Id)
+            @if (currentLoggedInUser.Id != userProfile.Id)
             {
                 @if (userProfile.IsBeingFollowed)
                 {
@@ -62,9 +64,6 @@
     <div class="d-flex row mt-3">
         <div class="friends-and-yums col-3">
             <div class="list-group">
-                @*<button type="button" class="list-group-item list-group-item-action active">
-                        Cras justo odio
-                    </button>*@
                 <button type="button" class="list-group-item list-group-item-action">
                     <i class="fas fa-user"></i>
                     Following
@@ -86,7 +85,7 @@
         </div>
 
         <div class="userposts col-8">
-            <partial name="_UserPostsPartial" />
+            <partial name="_UserPostsPartial"/>
         </div>
     </div>
 </div>

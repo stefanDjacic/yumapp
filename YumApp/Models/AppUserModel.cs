@@ -128,7 +128,7 @@ namespace YumApp.Models
         public DateTime DateOfBirth { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public DateTime DateCreated { get; set; } /*= DateTime.UtcNow;*/
 
         [MaxLength(100)]
         public string Country { get; set; }
@@ -141,7 +141,7 @@ namespace YumApp.Models
         public string About { get; set; }
 
         [Required]
-        public string PhotoPath { get; set; } = @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";
+        public string PhotoPath { get; set; } /*= @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";*/
 
         public IEnumerable<NotificationModel> Notifications { get; set; }
 
