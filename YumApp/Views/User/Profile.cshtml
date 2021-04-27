@@ -96,14 +96,14 @@
 
             $(document).ready(function () {
             $('#followButton').click(function () {
-                if (!doesFollow) {
+                if (doesFollow) {
                     $.ajax({
                     type : 'POST',
                     url : '/User/UnfollowUser/@userProfile.Id.ToString()',
                     success: function () {
                         $('#followButton').removeClass('btn-danger').addClass('btn-primary').text('Follow');
                         doesFollow = !doesFollow;
-                        alert("user unfollowed!");
+                        /*alert("user unfollowed!");*/
                     },
                     error: function (response) {
                         alert(response.responseText);
@@ -116,7 +116,7 @@
                         success: function () {
                             $('#followButton').removeClass('btn-primary').addClass('btn-danger').text('Unfollow');
                             doesFollow = !doesFollow;
-                            alert("user followed!");
+                            /*alert("user followed!");*/
                         },
                         error: function (response) {
                             alert(response.responseText);

@@ -15,7 +15,7 @@ namespace YumApp.Models
             {
                 Content = c.Content,
                 TimeOfCommenting = c.TimeOfCommenting,
-                Post = c.Post,
+                //Post = c.Post,
                 Commentator = c.Commentator.ToAppUserModelBaseInfo()
             });
         }
@@ -26,7 +26,7 @@ namespace YumApp.Models
             {
                 Content = c.Content,
                 TimeOfCommenting = c.TimeOfCommenting,
-                Post = c.Post,
+                //Post = c.Post,
                 Commentator = c.Commentator.ToAppUserModelBaseInfo()
             });
         }
@@ -39,7 +39,7 @@ namespace YumApp.Models
         [MaxLength(500, ErrorMessage = "Maximum lenght is 500 characters.")]
         public string Content { get; set; }
         public DateTime TimeOfCommenting { get; set; }
-        public Post Post { get; set; }
+        //public Post Post { get; set; }
         public AppUserModel Commentator { get; set; }
     }
 }

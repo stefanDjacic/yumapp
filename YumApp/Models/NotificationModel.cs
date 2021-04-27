@@ -18,6 +18,17 @@ namespace YumApp.Models
                 NotificationText = n.NotificationText
             });
         }
+
+        public static IEnumerable<NotificationModel> ToNotificationModelTEST(this IEnumerable<Notification> notifications)
+        {
+            return notifications.Select(n => new NotificationModel
+            {
+                //Receiver = n.Receiver.ToAppUserModelBaseInfo(),
+                InitiatorFullName = n.Initiator.FirstName + " " + n.Initiator.LastName,
+                InitiatorPhotoPath = n.Initiator.PhotoPath,
+                NotificationText = n.NotificationText
+            });
+        }
         #region bad code
         //public static IEnumerable<NotificationModel> ToNotificationModel(this IEnumerable<Notification> entities)
         //{
@@ -72,5 +83,10 @@ namespace YumApp.Models
         public string NotificationText { get; set; }
         public AppUserModel Receiver { get; set; }
         public AppUserModel Initiator { get; set; }
+
+
+        //testing
+        public string InitiatorPhotoPath { get; set; }
+        public string InitiatorFullName { get; set; }
     }
 }

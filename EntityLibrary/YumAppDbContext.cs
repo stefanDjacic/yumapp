@@ -115,12 +115,12 @@ namespace EntityLibrary
                 //au.Navigation(au => au.User_Feeds).AutoInclude();
                 //au.Navigation(au => au.YummyPosts).AutoInclude();                
 
-                //au.Ignore(au => au.AccessFailedCount);
-                //au.Ignore(au => au.LockoutEnabled);
-                //au.Ignore(au => au.LockoutEnd);
-                //au.Ignore(au => au.PhoneNumber);
-                //au.Ignore(au => au.PhoneNumberConfirmed);
-                //au.Ignore(au => au.TwoFactorEnabled);
+                au.Ignore(au => au.AccessFailedCount);
+                au.Ignore(au => au.LockoutEnabled);
+                au.Ignore(au => au.LockoutEnd);
+                au.Ignore(au => au.PhoneNumber);
+                au.Ignore(au => au.PhoneNumberConfirmed);
+                au.Ignore(au => au.TwoFactorEnabled);
 
                 au.Property(p =>p.Email).IsRequired();
                 au.Property(p => p.PasswordHash).IsRequired();

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary.Repository
 {
-    public class PostRepository : ICRUDRepository<Post>
+    public class PostRepository : ICRUDRepository<Post>  /*IPostRepository */
     {
         private readonly YumAppDbContext _context;
 
@@ -33,6 +33,17 @@ namespace EntityLibrary.Repository
         {
             return _context.Posts;
         }
+
+        //public IQueryable<Post> GetAllWhere()
+        //{
+        //    var posts = _context.Posts/*.Where(p => p.AppUserId == id)*/;
+        //    posts.Include(p => p.Post_Ingredients).ThenInclude(pi => pi.Ingredient).Load();
+        //    posts.Include(p => p.AppUser).Load();
+        //    posts.Include(p => p.Comments).ThenInclude(c => c.Commentator).Load();
+
+
+        //    return posts;
+        //}
 
         public async Task<Post> GetSingle(int id)
         {

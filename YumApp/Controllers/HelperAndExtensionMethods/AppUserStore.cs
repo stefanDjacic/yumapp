@@ -21,13 +21,31 @@ namespace YumApp.Controllers.HelperAndExtensionMethods
         public AppUserModel GetUserWithNotificationsById(int id)
         {
             //automatski
-            var appUserModelWithNotifications = Context.AppUsers
-                                                       .Include(au => au.NotificationsReceiver)
-                                                       .ThenInclude(n => n.Initiator)
-                                                       .Where(au => au.Id == id)
-                                                       .ToAppUserModel()
-                                                       .AsNoTracking()
-                                                       .SingleOrDefault();
+            //var appUserModelWithNotifications = Context.AppUsers
+            //                                           .Include(au => au.NotificationsReceiver)
+            //                                           .ThenInclude(n => n.Initiator)
+            //                                           .Where(au => au.Id == id)
+            //                                           .ToAppUserModel()
+            //                                           .AsNoTracking()
+            //                                           .SingleOrDefault();
+
+            //test
+            //var appUserModelWithNotifications = Context.AppUsers
+            //                               //.Include(au => au.NotificationsReceiver)
+            //                               //.ThenInclude(n => n.Initiator)
+            //                               .Where(au => au.Id == id)
+            //                               .ToAppUserModel()
+            //                               .AsNoTracking()
+            //                               .SingleOrDefault();
+
+            var appUserModelWithNotifications = Context.AppUsers.Where(au => au.Id == id).Include(au => au.NotificationsReceiver)
+                .ThenInclude(n => n.Initiator).ToAppUserModel().SingleOrDefault();
+                               //.Include(au => au.NotificationsReceiver)
+                               //.ThenInclude(n => n.Initiator)
+                               //.Where(au => au.Id == id)
+                               //.ToAppUserModel()
+                               //.AsNoTracking()
+                               //.SingleOrDefault();
 
             #region slower query
             //manuelno

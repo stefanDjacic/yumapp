@@ -63,10 +63,8 @@ namespace YumApp.Controllers
             DeletePhoto(userId, fullPath);
 
             //Creates updated photo
-            using (var stream = File.Create(fullPath))
-            {
-                await photo.CopyToAsync(stream);
-            }
+            using var stream = File.Create(fullPath);
+            await photo.CopyToAsync(stream);
 
             return;
         }

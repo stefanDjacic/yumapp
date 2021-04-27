@@ -20,7 +20,7 @@ namespace YumApp.Models
         {
             var appUserModel = appUser.ToAppUserModelBaseInfo();
             appUserModel.Notifications = appUser.NotificationsReceiver
-                                                .ToNotificationModel()
+                                                .ToNotificationModelTEST()////OVO PROMENI NA TONOTIFICATIONMODEL!!!!!!!!!!!!!
                                                 .ToList();
 
             return appUserModel;

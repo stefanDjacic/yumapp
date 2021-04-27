@@ -39,7 +39,7 @@ namespace YumApp.Controllers
                               IWebHostEnvironment webHostEnvironment)
         {            
             _appUserManager = appUserManager;
-            _postRepository = postRepository;
+            _postRepository = postRepository;            
             _user_FollowsRepository = user_FollowsRepository;
             _httpClientFactory = httpClientFactory;
             //_hubContext = hubContext;
@@ -55,30 +55,24 @@ namespace YumApp.Controllers
             //Gets Id of currently logged in user from database
             AppUser currentUser = await _appUserManager.GetUserAsync(User);
 
-            ////Returns List<Post> and loads data to List<PostModel> of user whose profile is being viewed, from database
+            //Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database with split query,
+            //because of cartesian explosion
             List<Post> userPosts = await _postRepository.GetAll()
+                                                        .Include(p => p.Post_Ingredients)
+                                                        .ThenInclude(pi => pi.Ingredient)
                                                         .Include(p => p.AppUser)
                                                         .Include(p => p.Comments)
-                                                        .ThenInclude(c => c.Commentator)      //Don't like this....
+                                                        .ThenInclude(c => c.Commentator)
                                                         .Where(p => p.AppUserId == id)
-                                                        .AsSplitQuery()         //SplitQuery because of cartesian explosion
+                                                        .AsSplitQuery()
+                                                        .AsNoTracking()
                                                         .ToListAsync();
 
             List<PostModel> userPostsModel = userPosts.ToPostModel()
                                                       .ToList();
 
-            #region SlowerQuery
-            ////Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database
-            //List< PostModel > userPostsModel = await _postRepository.GetAll()
-            //                                             .Include(p => p.Comments)
-            //                                             .ThenInclude(c => c.Commentator)
-            //                                             .Where(p => p.AppUserId == id)
-            //                                             .ToPostModel()
-            //                                             .ToListAsync();
-            #endregion
-
             //Gets the user (post owner) from List<PostModel>
-            var userModel = userPostsModel.Select(p => p.User).FirstOrDefault();
+            AppUserModel userModel = userPostsModel.Select(p => p.User).FirstOrDefault();
 
             //Checks and sets bool if current user is following the one whose profile is being viewed, from database
             userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
@@ -88,7 +82,20 @@ namespace YumApp.Controllers
             ViewBag.CurrentUser = currentUser;
 
             return View(userPostsModel);
-            
+
+            #region BadQuery
+            ////Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database using small queries instead of one big,
+            ////because of cartesian explosion
+            //List<PostModel> userPostsModel = await _postRepository.GetAll()
+            //                                             .Include(p => p.Post_Ingredients)
+            //                                             .ThenInclude(pi => pi.)
+            //                                             .Include(p => p.Comments)
+            //                                             .ThenInclude(c => c.Commentator)
+            //                                             .Where(p => p.AppUserId == id)
+            //                                             .ToPostModel()
+            //                                             .ToListAsync();
+            #endregion
+
             #region TestingQueries
             /*
              TESTING QUERY EFFICIENCY
@@ -208,13 +215,13 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task UnfollowUser(int id)
         {
-            int currentUserId = this.GetCurrentUserIdFromCookie(); /*await _appUserManager.GetCurrentUserIdAsync(User);*/
+            int currentUserId = /*this.GetCurrentUserIdFromCookie();*/ await _appUserManager.GetCurrentUserIdAsync(User);
 
             var userFollows = await _user_FollowsRepository.GetAll()
                                                            .SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
 
             await _user_FollowsRepository.Remove(userFollows);
-
+            
             return;
         }
 
