@@ -13,20 +13,21 @@ namespace YumApp.Models
         {
             return notifications.Select(n => new NotificationModel
             {
-                Receiver = n.Receiver.ToAppUserModelBaseInfo(),
-                Initiator = n.Initiator.ToAppUserModelBaseInfo(),
+                //Receiver = n.Receiver.ToAppUserModelBaseInfo(),
+                //Initiator = n.Initiator.ToAppUserModelBaseInfo(),
                 NotificationText = n.NotificationText
             });
         }
 
-        public static IEnumerable<NotificationModel> ToNotificationModelTEST(this IEnumerable<Notification> notifications)
+        public static IQueryable<NotificationModel> ToNotificationModelTEST(this IQueryable<Notification> notifications)
         {
             return notifications.Select(n => new NotificationModel
             {
                 //Receiver = n.Receiver.ToAppUserModelBaseInfo(),
                 InitiatorFullName = n.Initiator.FirstName + " " + n.Initiator.LastName,
                 InitiatorPhotoPath = n.Initiator.PhotoPath,
-                NotificationText = n.NotificationText
+                NotificationText = n.NotificationText,
+                TimeOfNotification = n.TimeOfNotification
             });
         }
         #region bad code
@@ -72,17 +73,19 @@ namespace YumApp.Models
         public NotificationModel()
         {
         }
-        public NotificationModel(AppUserModel initiator, AppUserModel receiver, INotificationTextStrategy notificationTextStrategy)
-        {
-            Initiator = initiator;
-            Receiver = receiver;
-            NotificationText = notificationTextStrategy.GetNotificationText(initiator.FirstName + " " + initiator.LastName);
-        }
+        //public NotificationModel(AppUserModel initiator, AppUserModel receiver, INotificationTextStrategy notificationTextStrategy)
+        //{
+        //    Initiator = initiator;
+        //    Receiver = receiver;
+        //    NotificationText = notificationTextStrategy.GetNotificationText(initiator.FirstName + " " + initiator.LastName);
+        //}
 
         //public INotificationTextStrategy NotificationTextStrategy { get; set; }
         public string NotificationText { get; set; }
-        public AppUserModel Receiver { get; set; }
-        public AppUserModel Initiator { get; set; }
+
+        public DateTime TimeOfNotification { get; set; }
+        //public AppUserModel Receiver { get; set; }
+        //public AppUserModel Initiator { get; set; }
 
 
         //testing

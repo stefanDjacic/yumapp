@@ -204,8 +204,8 @@ namespace YumApp.Controllers
 
             await _user_FollowsRepository.Add(userFollows);
 
-            var followNotificationBehavior = new FollowNotificationTextBehavoir();
-            var newNotification = new NotificationModel(currentUser.ToAppUserModel(), followedUser.ToAppUserModel(), followNotificationBehavior);
+            //var followNotificationBehavior = new FollowNotificationTextBehavoir();
+            //var newNotification = new NotificationModel(currentUser.ToAppUserModel(), followedUser.ToAppUserModel(), followNotificationBehavior);
 
             //await NotifyHubWrapper.Notify(newNotification);
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary.Repository
 {
-    public interface ICRDRepository<T>
+    public interface ICRDRepository<T> /*: IReadRepository<T>*/
     {
         IQueryable<T> GetAll();
         Task<T> Add(T instance);

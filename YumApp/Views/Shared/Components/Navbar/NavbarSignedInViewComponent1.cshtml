@@ -1,4 +1,8 @@
-﻿@model AppUserModel
+﻿@model List<NotificationModel>
+@{ 
+    int currentUserId = ViewBag.CurrentUserId;
+}
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-success d-flex justify-content-between">    
         <a class="navbar-brand align-self-start" asp-action="Feed" asp-controller="User">
             <img src="~/Photos/Chef hat icon.jpg" width="30" height="30" class="d-inline-block align-top rounded-pill" alt="Chef hat icon">
@@ -16,7 +20,7 @@
                         </a>
                     </li>
                     <li class="nav-item mr-lg-5">
-                        <a class="nav-link text-white" asp-action="Profile" asp-controller="User" asp-route-id="@Model.Id">
+                        <a class="nav-link text-white" asp-action="Profile" asp-controller="User" asp-route-id="@currentUserId">
                             <i class="fas fa-user"></i>
                         </a>
                     </li>
@@ -27,10 +31,7 @@
                             </a>
                         </div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            @foreach (var notification in Model.Notifications)
-                            {
-                                <partial name="_UserNotificationPartial" for="Notifications" />
-                            }
+                                <partial name="_UserNotificationPartial" />
                         </div>
                     </li>
                     <li class="nav-item mr-lg-5">

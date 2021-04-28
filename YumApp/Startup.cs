@@ -48,6 +48,7 @@ namespace YumApp
 
             services.AddTransient<ICRUDRepository<Post>, PostRepository>();            
             services.AddTransient<ICRDRepository<User_Follows>, User_FollowsRepository>();
+            services.AddTransient<ICRDRepository<Notification>, NotificationRepository>();
 
             services.AddControllersWithViews();
 

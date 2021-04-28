@@ -16,6 +16,9 @@ namespace EntityLibrary
         [Required]
         public string NotificationText { get; set; }
 
+        [Required]
+        public DateTime TimeOfNotification { get; set; }
+
         //Navigation Properties
         public int ReceiverId { get; set; }
         public AppUser Receiver { get; set; }

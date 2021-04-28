@@ -1,1 +1,16 @@
 ﻿@model List<NotificationModel>
+
+@foreach (var notification in Model)
+{
+    <div class="dropdown-item">
+        <figure class="d-flex">
+            <img src="@notification.InitiatorPhotoPath" alt="User photo" />
+            <figcaption>
+                @notification.NotificationText
+            </figcaption>
+        </figure>
+        <p class="small">
+            @notification.TimeOfNotification
+        </p>
+    </div>
+}

@@ -19,7 +19,7 @@ namespace YumApp.Models
         public static AppUserModel ToAppUserModel(this AppUser appUser)
         {
             var appUserModel = appUser.ToAppUserModelBaseInfo();
-            appUserModel.Notifications = appUser.NotificationsReceiver
+            appUserModel.Notifications = appUser.NotificationsReceiver.AsQueryable() // ukloni asqueryable!!!!!!!!!!
                                                 .ToNotificationModelTEST()////OVO PROMENI NA TONOTIFICATIONMODEL!!!!!!!!!!!!!
                                                 .ToList();
 
