@@ -105,22 +105,14 @@ namespace EntityLibrary
             modelBuilder.Entity<AppUser>(au =>
             {
                 au.Property(au => au.Gender)
-                .HasConversion<int>();
+                .HasConversion<int>();               
 
-                //au.Navigation(au => au.Comments).AutoInclude();
-                //au.Navigation(au => au.Follow).AutoInclude();
-                //au.Navigation(au => au.Followers).AutoInclude();
-                //au.Navigation(au => au.NotificationsReceiver).AutoInclude();
-                //au.Navigation(au => au.NotificationsInitiator).AutoInclude();
-                //au.Navigation(au => au.User_Feeds).AutoInclude();
-                //au.Navigation(au => au.YummyPosts).AutoInclude();                
-
-                au.Ignore(au => au.AccessFailedCount);
-                au.Ignore(au => au.LockoutEnabled);
-                au.Ignore(au => au.LockoutEnd);
-                au.Ignore(au => au.PhoneNumber);
-                au.Ignore(au => au.PhoneNumberConfirmed);
-                au.Ignore(au => au.TwoFactorEnabled);
+                //au.Ignore(au => au.AccessFailedCount);
+                //au.Ignore(au => au.LockoutEnabled);
+                //au.Ignore(au => au.LockoutEnd);
+                //au.Ignore(au => au.PhoneNumber);
+                //au.Ignore(au => au.PhoneNumberConfirmed);
+                //au.Ignore(au => au.TwoFactorEnabled);
 
                 au.Property(p =>p.Email).IsRequired();
                 au.Property(p => p.PasswordHash).IsRequired();

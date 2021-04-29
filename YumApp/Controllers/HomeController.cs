@@ -111,10 +111,10 @@ namespace YumApp.Controllers
                 int currentUserId = await _appUserManager.GetCurrentUserIdAsync(model.Email);
 
 
-                CookieOptions cookieOptions = new();
-                cookieOptions.Path = "/User";
-                cookieOptions.Expires = DateTime.Now.AddDays(5);                
-                Response.Cookies.Append("MyCookie", currentUserId.ToString(), cookieOptions);
+                //CookieOptions cookieOptions = new();
+                //cookieOptions.Path = "/User";
+                //cookieOptions.Expires = DateTime.Now.AddDays(5);                
+                //Response.Cookies.Append("MyCookie", currentUserId.ToString(), cookieOptions);
                 
                 return RedirectToAction("Profile", "User", new { id = currentUserId });
             }

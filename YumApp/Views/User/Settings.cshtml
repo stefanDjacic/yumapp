@@ -37,7 +37,7 @@
             <div class="form-group">
                 <label asp-for="Country" class="control-label"></label>
                 <select asp-for="Country" asp-items="@ViewBag.Countries as SelectList" class="form-control">
-                    <option>Please select</option>
+                    <option disabled>Please select</option>
                 </select>
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>

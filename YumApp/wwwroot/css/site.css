@@ -91,10 +91,15 @@ body {
     position : relative;
 }
 
+.dropdown-item-notification-photo {
+    width : 50px;
+    height : auto;
+}
+
 .number-of-notifications {
     position: absolute;
-    top : 60%;
-    left : 70%;
+    top: 60%;
+    left: 70%;
 }
 
 

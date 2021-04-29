@@ -27,6 +27,7 @@ namespace YumApp.Controllers
         private readonly AppUserManager _appUserManager;
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
+        private readonly ICRDRepository<Notification> _notificationRepository;
         private readonly IHttpClientFactory _httpClientFactory;
         //private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
@@ -34,6 +35,7 @@ namespace YumApp.Controllers
         public UserController(AppUserManager appUserManager,
                               ICRUDRepository<Post> postRepository,
                               ICRDRepository<User_Follows> user_FollowsRepository,
+                              ICRDRepository<Notification> notificationRepository,
                               IHttpClientFactory httpClientFactory,
                               //IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
@@ -41,6 +43,7 @@ namespace YumApp.Controllers
             _appUserManager = appUserManager;
             _postRepository = postRepository;            
             _user_FollowsRepository = user_FollowsRepository;
+            _notificationRepository = notificationRepository;
             _httpClientFactory = httpClientFactory;
             //_hubContext = hubContext;
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
@@ -54,6 +57,8 @@ namespace YumApp.Controllers
 
             //Gets Id of currently logged in user from database
             AppUser currentUser = await _appUserManager.GetUserAsync(User);
+
+            //var curretnUserId = int.Parse(Request.Cookies["MyCookie"]);
 
             //Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database with split query,
             //because of cartesian explosion
@@ -126,14 +131,14 @@ namespace YumApp.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Settings()
-        {            
-            var response = await ControllerHelperMethods.CallApi(HttpMethod.Get, "https://restcountries.eu/rest/v2/all", _httpClientFactory);
+        {
+            HttpResponseMessage response = await ControllerHelperMethods.CallApi(HttpMethod.Get, "https://restcountries.eu/rest/v2/all", _httpClientFactory);
 
             if (response.IsSuccessStatusCode)
             {
                 //Getting countrie from API and storing them in ViewBag to display them as select list in AppUserModel
-                var countries = await response.Content.ReadFromJsonAsync<Country[]>();
-                ViewBag.Countries = new SelectList(countries, "Name", "Name", "Name");
+                Country[] countries = await response.Content.ReadFromJsonAsync<Country[]>();
+                ViewBag.Countries = new SelectList(countries, "Name", "Name", "Name");                
             }
             else
             {
@@ -141,8 +146,7 @@ namespace YumApp.Controllers
             }
 
             var currentUser = await _appUserManager.GetUserAsync(User)
-                                                   .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());
-            //var currentUser = await _userManager.FindByIdAsync(id.ToString());
+                                                   .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());            
 
             return View(currentUser);
         }
@@ -163,9 +167,9 @@ namespace YumApp.Controllers
                     model.PhotoPath = ControllerHelperMethods.UpdatePhotoPath(_userPhotoFolderPath, model.Photo.FileName, model.Id);
                 }
                 
-                var appuser = model.ToAppUserEntity();
+                AppUser user = model.ToAppUserEntity();
                 
-                var result = await _appUserManager.UpdateUserAsync(appuser);
+                IdentityResult result = await _appUserManager.UpdateUserAsync(user);
 
                 if (!result.Succeeded)
                 {
@@ -203,11 +207,11 @@ namespace YumApp.Controllers
             };
 
             await _user_FollowsRepository.Add(userFollows);
+            
+            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, new FollowNotificationTextBehavoir())
+                                                       .ToNotificationEntity(currentUser.Id, followedUser.Id);
 
-            //var followNotificationBehavior = new FollowNotificationTextBehavoir();
-            //var newNotification = new NotificationModel(currentUser.ToAppUserModel(), followedUser.ToAppUserModel(), followNotificationBehavior);
-
-            //await NotifyHubWrapper.Notify(newNotification);
+            await _notificationRepository.Add(newNotification);
 
             return;
         }
@@ -215,7 +219,7 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task UnfollowUser(int id)
         {
-            int currentUserId = /*this.GetCurrentUserIdFromCookie();*/ await _appUserManager.GetCurrentUserIdAsync(User);
+            int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User); /*int.Parse(Request.Cookies["MyCookie"]);*/
 
             var userFollows = await _user_FollowsRepository.GetAll()
                                                            .SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
