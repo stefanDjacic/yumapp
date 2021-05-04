@@ -28,6 +28,7 @@ namespace YumApp.Controllers
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
         private readonly ICRDRepository<Notification> _notificationRepository;
+        private readonly ICRDRepository<Comment> _commentRepo;
         private readonly IHttpClientFactory _httpClientFactory;
         //private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
@@ -36,6 +37,7 @@ namespace YumApp.Controllers
                               ICRUDRepository<Post> postRepository,
                               ICRDRepository<User_Follows> user_FollowsRepository,
                               ICRDRepository<Notification> notificationRepository,
+                              ICRDRepository<Comment> commentRepo,//obrisi ovo
                               IHttpClientFactory httpClientFactory,
                               //IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
@@ -44,6 +46,7 @@ namespace YumApp.Controllers
             _postRepository = postRepository;            
             _user_FollowsRepository = user_FollowsRepository;
             _notificationRepository = notificationRepository;
+            _commentRepo = commentRepo;
             _httpClientFactory = httpClientFactory;
             //_hubContext = hubContext;
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
@@ -52,13 +55,13 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
+
+            var comments = _commentRepo.GetAll().Where(c => c.AppUserId == id).ToCommentModelTest().ToList();
             //delete this line after testing
-            //AppUserModel userTest = _appUserManager.GetUserWithNotificationsById(id);
+            var postModelTest = _postRepository.GetAll().Where(p => p.AppUserId == id).ToPostModelTest().ToList();
 
-            //Gets Id of currently logged in user from database
+            //Gets currently logged in user from database
             AppUser currentUser = await _appUserManager.GetUserAsync(User);
-
-            //var curretnUserId = int.Parse(Request.Cookies["MyCookie"]);
 
             //Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database with split query,
             //because of cartesian explosion

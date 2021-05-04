@@ -10,6 +10,22 @@ namespace YumApp.Models
 {
     public static class PostModelExtensionMethods
     {
+        //Testing only
+        public static IQueryable<PostModel> ToPostModelTest(this IQueryable<Post> posts)
+        {
+            return posts.Select(p => new PostModel
+            {
+                User = p.AppUser.ToAppUserModelBaseInfo(),
+                Content = p.Content,
+                Notes = p.Notes,
+                NumberOfYums = p.NumberOfYums,
+                TimeOfPosting = p.TimeOfPosting,
+                Comments = p.Comments.AsQueryable().Select(CommentModelExtensionMethods.MapCommentToCommentModelTest).ToList(),
+                //Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
+            });
+        }
+        //end testing
+
         public static PostModel ToPostModel(this Post post)
         {
             return new PostModel

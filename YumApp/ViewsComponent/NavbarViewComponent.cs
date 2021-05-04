@@ -30,20 +30,18 @@ namespace YumApp.ViewsComponent
                 return Content(string.Empty);
             }
 
-            var currentUser = _appUserManager.FindByNameAsync(User.Identity.Name).Result;
+            //var currentUser = _appUserManager.FindByNameAsync(User.Identity.Name).Result;
 
-            //Gets notifications of current user with necessary data
-            //List<NotificationModel> notificationsModel = _notificationRepository.GetAll()
-            //                                               .Where(n => n.ReceiverId == currentUser.Id)
-            //                                               .ToNotificationModel()
-            //                                               .ToList();
+            //Gets id of currently logged in user from cookie
+            int currentUserId = int.Parse(Request.Cookies["MyCookie"]);
 
-            var query = _notificationRepository.GetAll();
-            query = query.Where(n => n.ReceiverId == currentUser.Id);
-            var query1 = query.ToNotificationModel();
-            var notificationsModel = query1.ToList();
+            //Gets notifications of current user
+            List<NotificationModel> notificationsModel = _notificationRepository.GetAll()
+                                                                                .Where(n => n.ReceiverId == currentUserId)
+                                                                                .ToNotificationModel()
+                                                                                .ToList();
 
-            ViewBag.CurrentUserId = currentUser.Id;
+            ViewBag.CurrentUserId = currentUserId;
 
             return View("NavbarSignedInViewComponent1", notificationsModel);
         }

@@ -3,12 +3,44 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace YumApp.Models
 {
     public static class CommentModelExtensionMethods
     {
+        #region testing
+        public static readonly Expression<Func<Comment, CommentModel>> MapCommentToCommentModelTest =
+            comment => new CommentModel
+            {
+                Content = comment.Content,
+                TimeOfCommenting = comment.TimeOfCommenting,
+                CommentatorId = comment.Commentator.Id,
+                CommentatorFirstName = comment.Commentator.FirstName,
+                CommentatorLastName = comment.Commentator.LastName,
+                CommentatorPhotoPath = comment.Commentator.PhotoPath
+            };
+
+        public static IQueryable<CommentModel> ToCommentModelTest(this IQueryable<Comment> comments)
+        {
+            return comments.Select(MapCommentToCommentModelTest);
+        }
+
+        public static IEnumerable<CommentModel> ToCommentModelTest(this IEnumerable<Comment> comments)
+        {
+            return comments.Select(c => new CommentModel
+            {
+                Content = c.Content,
+                TimeOfCommenting = c.TimeOfCommenting,
+                CommentatorId = c.Commentator.Id,
+                CommentatorFirstName = c.Commentator.FirstName,
+                CommentatorLastName = c.Commentator.LastName,
+                CommentatorPhotoPath = c.Commentator.PhotoPath
+            });
+        }
+        #endregion
+
         public static IQueryable<CommentModel> ToCommentModel(this IQueryable<Comment> comments)
         {
             return comments.Select(c => new CommentModel
@@ -41,5 +73,11 @@ namespace YumApp.Models
         public DateTime TimeOfCommenting { get; set; }
         //public Post Post { get; set; }
         public AppUserModel Commentator { get; set; }
+
+        //TESTING ONLY INSTEAD OF COMMENTATOR PROPERTY
+        public int CommentatorId { get; set; }
+        public string CommentatorFirstName { get; set; }
+        public string CommentatorLastName { get; set; }
+        public string CommentatorPhotoPath { get; set; }
     }
 }

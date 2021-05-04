@@ -18,12 +18,28 @@ namespace YumApp.Controllers
 {
     public static class ControllerHelperMethods
     {
+
+        #region Cookie Methods
+        public static void CreateUserIdCookie(this Controller controller, int userId)
+        {
+            CookieOptions cookieOptions = new ();
+            cookieOptions.Path = "/User";
+            cookieOptions.Expires = DateTime.Now.AddDays(5);
+            controller.Response.Cookies.Append("MyCookie", userId.ToString(), cookieOptions);
+        }
+
+        public static void RemoveUserIdCookie(this Controller controller)
+        {
+            controller.Response.Cookies.Delete("MyCookie");
+        }
+
         public static int GetCurrentUserIdFromCookie(this Controller controller)
         {
             int currentUserId = int.Parse(controller.HttpContext.Request.Cookies["MyCookie"]);
 
             return currentUserId;
         }
+        #endregion
 
         public static async Task<HttpResponseMessage> CallApi(HttpMethod httpMethod, string uri, IHttpClientFactory httpClientFactory)
         {
@@ -44,6 +60,7 @@ namespace YumApp.Controllers
 
         }
 
+        #region User Photo Methods
         public static async Task SavePhoto(IFormFile photo, string folderPath, int userId)
         {
             if (photo == null)
@@ -93,13 +110,6 @@ namespace YumApp.Controllers
 
             return relativePath;
         }
-
-        //public static void SetDefaultPhotoPathAndUserName(this RegisterModel model)
-        //{
-        //    model.PhotoPath = @"/Photos/DefaultUserPhoto.png";
-        //    model.UserName = model.Email;
-        //}
-
-        //public static void SetDefaultUserName(this )
+        #endregion
     }
 }

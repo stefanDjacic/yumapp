@@ -5,8 +5,6 @@
     AppUserModel userProfile = ViewBag.UserProfile;
 
     AppUser currentLoggedInUser = ViewBag.CurrentUser;
-
-    //bool isUserBeingFollowed = ViewBag.IsUserBeingFollowed;
 }
 
 <div class="d-flex flex-column">
@@ -102,8 +100,7 @@
                     url : '/User/UnfollowUser/@userProfile.Id.ToString()',
                     success: function () {
                         $('#followButton').removeClass('btn-danger').addClass('btn-primary').text('Follow');
-                        doesFollow = !doesFollow;
-                        /*alert("user unfollowed!");*/
+                        doesFollow = !doesFollow;                        
                     },
                     error: function (response) {
                         alert(response.responseText);
@@ -115,8 +112,7 @@
                         url: '/User/FollowUser/@userProfile.Id.ToString()',
                         success: function () {
                             $('#followButton').removeClass('btn-primary').addClass('btn-danger').text('Unfollow');
-                            doesFollow = !doesFollow;
-                            /*alert("user followed!");*/
+                            doesFollow = !doesFollow;                            
                         },
                         error: function (response) {
                             alert(response.responseText);

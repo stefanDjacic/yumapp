@@ -111,11 +111,9 @@ namespace YumApp.Controllers
                 int currentUserId = await _appUserManager.GetCurrentUserIdAsync(model.Email);
 
 
-                //CookieOptions cookieOptions = new();
-                //cookieOptions.Path = "/User";
-                //cookieOptions.Expires = DateTime.Now.AddDays(5);                
-                //Response.Cookies.Append("MyCookie", currentUserId.ToString(), cookieOptions);
-                
+                //Creates new cookie with currently logged in user id
+                this.CreateUserIdCookie(currentUserId);
+
                 return RedirectToAction("Profile", "User", new { id = currentUserId });
             }
             catch
@@ -130,7 +128,8 @@ namespace YumApp.Controllers
         {
             await _signInManager.SignOutAsync();
 
-            Response.Cookies.Delete("MyCookie");
+            //Response.Cookies.Delete("MyCookie");
+            this.RemoveUserIdCookie();
 
             return RedirectToAction("Index", "Home");
         }

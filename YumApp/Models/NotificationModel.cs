@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using YumApp.Models.NotificationStrategy;
 
@@ -9,26 +10,19 @@ namespace YumApp.Models
 {
     public static class NotificationModelExtensionMethods
     {
-        private static NotificationModel CreateNewNotificationModel(this Notification notification)
-        {
-            return new NotificationModel
+        //Expression for IQueryable, because it has problems with projections
+        public static readonly Expression<Func<Notification, NotificationModel>> MapNotificationToNotificationModel = 
+            notification => new NotificationModel
             {
                 InitiatorFullName = notification.Initiator.FirstName + " " + notification.Initiator.LastName,
                 InitiatorPhotoPath = notification.Initiator.PhotoPath,
                 NotificationText = notification.NotificationText,
                 TimeOfNotification = notification.TimeOfNotification
             };
-        }
-
-        public static IEnumerable<NotificationModel> ToNotificationModel(this IEnumerable<Notification> notifications)
-        {
-            return notifications.Select(n => CreateNewNotificationModel(n));
-        }
 
         public static IQueryable<NotificationModel> ToNotificationModel(this IQueryable<Notification> notifications)
         {
-            //DOESNT WORK BUT CHECK UR BOOKMARK SECOND ANSWER FROM EFCORE FOLDER!!!!!!!!!!
-            return notifications.Select(n => n.CreateNewNotificationModel());
+            return notifications.Select(MapNotificationToNotificationModel);
         }
 
         public static Notification ToNotificationEntity(this NotificationModel notification, int initiatorId, int receiverId)
@@ -41,6 +35,24 @@ namespace YumApp.Models
                 TimeOfNotification = notification.TimeOfNotification
             };
         }
+
+        #region Doesn't work because of IQueryable
+        //private static NotificationModel CreateNewNotificationModel(this Notification notification)
+        //{
+        //    return new NotificationModel
+        //    {
+        //        InitiatorFullName = notification.Initiator.FirstName + " " + notification.Initiator.LastName,
+        //        InitiatorPhotoPath = notification.Initiator.PhotoPath,
+        //        NotificationText = notification.NotificationText,
+        //        TimeOfNotification = notification.TimeOfNotification
+        //    };
+        //}
+
+        //public static IEnumerable<NotificationModel> ToNotificationModel(this IEnumerable<Notification> notifications)
+        //{
+        //    return notifications.Select(n => n.CreateNewNotificationModel());
+        //}
+        #endregion
 
         #region Bad code
         //public static IEnumerable<NotificationModel> ToNotificationModel(this IEnumerable<Notification> notifications)
