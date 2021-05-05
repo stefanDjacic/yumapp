@@ -6,28 +6,28 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary.Repository
 {
-    public class TestCommentRepository : ICRDRepository<Comment>
-    {
-        private readonly YumAppDbContext _context;
+    //public class TestCommentRepository : ICRDRepository<Comment>
+    //{
+    //    private readonly YumAppDbContext _context;
 
-        public TestCommentRepository(YumAppDbContext context)
-        {
-            _context = context;
-        }
+    //    public TestCommentRepository(YumAppDbContext context)
+    //    {
+    //        _context = context;
+    //    }
 
-        public Task<Comment> Add(Comment instance)
-        {
-            throw new NotImplementedException();
-        }
+    //    public Task<Comment> Add(Comment instance)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public IQueryable<Comment> GetAll()
-        {
-            return _context.Comments;
-        }
+    //    public IQueryable<Comment> GetAll()
+    //    {
+    //        return _context.Comments;
+    //    }
 
-        public Task Remove(Comment instance)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public Task Remove(Comment instance)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

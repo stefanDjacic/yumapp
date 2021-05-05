@@ -10,7 +10,6 @@ namespace YumApp.Models
 {
     public static class IngredientModelExtensionMethods
     {
-        //Will probably need iqueriable verson too
         public static IEnumerable<IngredientModel> ToIngredientModel(this IEnumerable<Ingredient> ingredients)
         {
             return ingredients.Select(i => new IngredientModel

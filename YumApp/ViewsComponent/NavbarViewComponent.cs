@@ -14,12 +14,12 @@ namespace YumApp.ViewsComponent
 {
     public class NavbarViewComponent : ViewComponent
     {        
-        private readonly AppUserManager _appUserManager;
+        //private readonly AppUserManager _appUserManager;
         private readonly ICRDRepository<Notification> _notificationRepository;
 
-        public NavbarViewComponent(AppUserManager appUserManager, ICRDRepository<Notification> notificationRepository)
+        public NavbarViewComponent(/*AppUserManager appUserManager,*/ ICRDRepository<Notification> notificationRepository)
         {            
-            _appUserManager = appUserManager;
+            //_appUserManager = appUserManager;
             _notificationRepository = notificationRepository;
         }
 
@@ -39,6 +39,7 @@ namespace YumApp.ViewsComponent
             List<NotificationModel> notificationsModel = _notificationRepository.GetAll()
                                                                                 .Where(n => n.ReceiverId == currentUserId)
                                                                                 .ToNotificationModel()
+                                                                                .OrderByDescending(n => n.TimeOfNotification)
                                                                                 .ToList();
 
             ViewBag.CurrentUserId = currentUserId;

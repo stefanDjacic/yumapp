@@ -53,67 +53,6 @@ namespace YumApp.Models
         //    return notifications.Select(n => n.CreateNewNotificationModel());
         //}
         #endregion
-
-        #region Bad code
-        //public static IEnumerable<NotificationModel> ToNotificationModel(this IEnumerable<Notification> notifications)
-        //{
-        //    return notifications.Select(n => new NotificationModel
-        //    {
-        //        InitiatorFullName = n.Initiator.FirstName + " " + n.Initiator.LastName,
-        //        InitiatorPhotoPath = n.Initiator.PhotoPath,
-        //        NotificationText = n.NotificationText,
-        //        TimeOfNotification = n.TimeOfNotification
-        //    });
-        //}
-
-        //public static IQueryable<NotificationModel> ToNotificationModel(this IQueryable<Notification> notifications)
-        //{
-        //    return notifications.Select(n => new NotificationModel
-        //    {
-        //        InitiatorFullName = n.Initiator.FirstName + " " + n.Initiator.LastName,
-        //        InitiatorPhotoPath = n.Initiator.PhotoPath,
-        //        NotificationText = n.NotificationText,
-        //        TimeOfNotification = n.TimeOfNotification
-        //    });
-        //}
-        #endregion
-
-        #region bad code
-        //public static IEnumerable<NotificationModel> ToNotificationModel(this IEnumerable<Notification> entities)
-        //{
-        //    return entities.Select(n => new NotificationModel
-        //    {
-        //        Receiver = new AppUserModel
-        //                        {
-        //                            Id = n.Receiver.Id,
-        //                            FirstName = n.Receiver.FirstName,
-        //                            LastName = n.Receiver.LastName,
-        //                            Email = n.Receiver.Email,
-        //                            Username = n.Receiver.UserName,
-        //                            About = n.Receiver.About,                                    
-        //                            DateOfBirth = n.Receiver.DateOfBirth,
-        //                            Gender = n.Receiver.Gender,
-        //                            PhotoPath = n.Receiver.PhotoPath,
-        //                            Country = n.Receiver.Country
-        //                        },
-        //        Initiator = new AppUserModel
-        //                        {
-        //                            Id = n.Initiator.Id,
-        //                            FirstName = n.Initiator.FirstName,
-        //                            LastName = n.Initiator.LastName,
-        //                            Email = n.Initiator.Email,
-        //                            Username = n.Initiator.UserName,
-        //                            About = n.Initiator.About,                                    
-        //                            DateOfBirth = n.Initiator.DateOfBirth,
-        //                            Gender = n.Initiator.Gender,
-        //                            PhotoPath = n.Initiator.PhotoPath,
-        //                            Country = n.Initiator.Country
-        //                        },
-        //        NotificationText = n.NotificationText
-        //    }
-        //    );
-        //}
-        #endregion
     }
 
     public class NotificationModel
@@ -121,9 +60,10 @@ namespace YumApp.Models
         public NotificationModel()
         {
         }
-        public NotificationModel(string initiatorFirstName, string initiatorLastName, INotificationTextStrategy notificationTextStrategy)
+        public NotificationModel(string initiatorFirstName, string initiatorLastName, DateTime timeOfNotification, INotificationTextStrategy notificationTextStrategy)
         {
             InitiatorFullName = initiatorFirstName + " " + initiatorLastName;
+            TimeOfNotification = timeOfNotification;
             NotificationText = notificationTextStrategy.GetNotificationText(InitiatorFullName);
         }
 

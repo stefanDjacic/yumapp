@@ -46,7 +46,7 @@ namespace YumApp
 
             services.AddHttpClient();
 
-            services.AddTransient<ICRDRepository<Comment>, TestCommentRepository>(); //obrisi ovo
+            //services.AddTransient<ICRDRepository<Comment>, TestCommentRepository>(); //obrisi ovo
             services.AddTransient<ICRUDRepository<Post>, PostRepository>();            
             services.AddTransient<ICRDRepository<User_Follows>, User_FollowsRepository>();
             services.AddTransient<ICRDRepository<Notification>, NotificationRepository>();

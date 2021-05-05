@@ -10,54 +10,68 @@ namespace YumApp.Models
 {
     public static class PostModelExtensionMethods
     {
-        //Testing only
-        public static IQueryable<PostModel> ToPostModelTest(this IQueryable<Post> posts)
-        {
-            return posts.Select(p => new PostModel
-            {
-                User = p.AppUser.ToAppUserModelBaseInfo(),
-                Content = p.Content,
-                Notes = p.Notes,
-                NumberOfYums = p.NumberOfYums,
-                TimeOfPosting = p.TimeOfPosting,
-                Comments = p.Comments.AsQueryable().Select(CommentModelExtensionMethods.MapCommentToCommentModelTest).ToList(),
-                //Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
-            });
-        }
-        //end testing
+        #region Most efficient query for postmodel, use it when entity framework core 6.0 gets released!!
+        //Most efficient query for postmodel, use it when entity framework core 6.0 gets released!! Don't forget to chain AsSplitQuery()!!
+        //public static IQueryable<PostModel> ToPostModelTest(this IQueryable<Post> posts)
+        //{
+        //    return posts.Select(p => new PostModel
+        //    {
+        //        User = new AppUserModel {
+        //            Id = p.AppUser.Id,
+        //            FirstName = p.AppUser.FirstName,
+        //            LastName = p.AppUser.LastName,
+        //            Email = p.AppUser.Email,
+        //            Username = p.AppUser.UserName,
+        //            DateOfBirth = p.AppUser.DateOfBirth,
+        //            Country = p.AppUser.Country,
+        //            Gender = p.AppUser.Gender,
+        //            About = p.AppUser.About,
+        //            PhotoPath = p.AppUser.PhotoPath
+        //        },
+        //        Content = p.Content,
+        //        Notes = p.Notes,
+        //        NumberOfYums = p.NumberOfYums,
+        //        TimeOfPosting = p.TimeOfPosting,
+        //        Comments = p.Comments.AsQueryable().Select(CommentModelExtensionMethods.MapCommentToCommentModelTest).ToList(),
+        //        Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
+        //    });
+        //}        
+        #endregion
 
         public static PostModel ToPostModel(this Post post)
         {
             return new PostModel
             {
+                Id = post.Id,
                 Comments = post.Comments.ToCommentModel().ToList(),
                 Content = post.Content,
                 Ingredients = post.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList(),
                 Notes = post.Notes,
                 NumberOfYums = post.NumberOfYums,
                 TimeOfPosting = post.TimeOfPosting,
-                User = post.AppUser.ToAppUserModel()
+                User = post.AppUser.ToAppUserModelBaseInfo()
             };
         }
 
-        public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> posts)
-        {
-            return posts.Select(p => new PostModel
-            {
-                User = p.AppUser.ToAppUserModelBaseInfo(),
-                Content = p.Content,
-                Notes = p.Notes,
-                NumberOfYums = p.NumberOfYums,
-                TimeOfPosting = p.TimeOfPosting,
-                Comments = p.Comments.ToCommentModel().ToList(),
-                Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
-            });
-        }
+        //public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> posts)
+        //{
+        //    return posts.Select(p => new PostModel
+        //    {
+        //        User = p.AppUser.ToAppUserModelBaseInfo(),
+        //        Content = p.Content,
+        //        Notes = p.Notes,
+        //        NumberOfYums = p.NumberOfYums,
+        //        TimeOfPosting = p.TimeOfPosting,
+        //        Comments = p.Comments.ToCommentModel().ToList(),
+        //        Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
+        //    });
+        //}
 
         public static IEnumerable<PostModel> ToPostModel(this IEnumerable<Post> posts)
         {
             return posts.Select(p => new PostModel
             {
+                Id = p.Id,
                 User = p.AppUser.ToAppUserModelBaseInfo(),
                 Content = p.Content,
                 Notes = p.Notes,
@@ -67,57 +81,6 @@ namespace YumApp.Models
                 Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
             });
         }
-        #region bad code
-        //public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> entities)
-        //{
-        //    return entities.Select(pe => new PostModel
-        //    {
-        //        User = new AppUserModel
-        //                    {
-        //                        Id = pe.AppUser.Id,
-        //                        FirstName = pe.AppUser.FirstName,
-        //                        LastName = pe.AppUser.LastName,
-        //                        Email = pe.AppUser.Email,
-        //                        Username = pe.AppUser.UserName,
-        //                        About = pe.AppUser.About,                                
-        //                        DateOfBirth = pe.AppUser.DateOfBirth,
-        //                        Gender = pe.AppUser.Gender,
-        //                        PhotoPath = pe.AppUser.PhotoPath,
-        //                        Country = pe.AppUser.Country
-        //                    },
-        //        Content = pe.Content,
-        //        Notes = pe.Notes,
-        //        NumberOfYums = pe.NumberOfYums,
-        //        TimeOfPosting = pe.TimeOfPosting,
-        //        Comments = pe.Comments.Select(c => new CommentModel
-        //                                                {
-        //                                                    Content = c.Content,
-        //                                                    Post = c.Post,
-        //                                                    Commentator = new AppUserModel 
-        //                                                                        {
-        //                                                                            Id = c.Commentator.Id,
-        //                                                                            FirstName = c.Commentator.FirstName,
-        //                                                                            LastName = c.Commentator.LastName,
-        //                                                                            Email = c.Commentator.Email,
-        //                                                                            Username = c.Commentator.Email,
-        //                                                                            About = c.Commentator.About,
-        //                                                                            DateCreated = c.Commentator.DateCreated,
-        //                                                                            DateOfBirth = c.Commentator.DateOfBirth,
-        //                                                                            Gender = c.Commentator.Gender,
-        //                                                                            PhotoPath = c.Commentator.PhotoPath,
-        //                                                                            Country = c.Commentator.Country
-        //                                                                        },
-        //                                                    TimeOfCommenting = c.TimeOfCommenting
-        //                                                }).ToList(),
-        //        Ingredients = pe.Post_Ingredients.Select(pi => pi.Ingredient).Select(i => new IngredientModel
-        //                                                                                        {
-        //                                                                                            Name = i.Name,
-        //                                                                                            Description = i.Description,
-        //                                                                                            PhotoPath = i.PhotoPath
-        //                                                                                        }).ToList()
-        //    });
-        //}
-        #endregion
     }
 
     public class PostModel
@@ -127,6 +90,8 @@ namespace YumApp.Models
             Comments = new List<CommentModel>(); 
             Ingredients = new List<IngredientModel>();
         }
+
+        public int Id { get; set; }
 
         public AppUserModel User { get; set; }
 

@@ -123,6 +123,27 @@
             });
         //END OF AJAX CALL FOR FOLLOWING
 
+
+        $(document).ready(function () {
+
+            var postId = $('#postId').val();
+
+            $('#yum-a-post').click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: `User/YumAPost/${postId}`,
+                    success: function (response) {
+                        $('#yum-a-post').remove();
+                        $('#yum-counter').val(response).addClass('text-white');
+                        $('.number-of-yums').addClass('bg-success');
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+
         //START OF SIGNALR
         //var connection = new signalR.HubConnectionBuilder().withUrl("/User/Profile/{id}").build();
 

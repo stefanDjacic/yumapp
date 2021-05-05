@@ -27,9 +27,9 @@ namespace YumApp.Controllers.HelperAndExtensionMethods
         //Don't know if it's bad practice, I could just cast it every time I use it.
         public AppUserStore MyStore => Store as AppUserStore;
 
-        public AppUserModel GetUserWithNotificationsById(int id)
-        {
-            return MyStore.GetUserWithNotificationsById(id);
-        }        
+        //public AppUserModel GetUserWithNotificationsById(int id)
+        //{
+        //    return MyStore.GetUserWithNotificationsById(id);
+        //}        
     }
 }

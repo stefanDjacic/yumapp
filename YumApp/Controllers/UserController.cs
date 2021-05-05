@@ -28,7 +28,7 @@ namespace YumApp.Controllers
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
         private readonly ICRDRepository<Notification> _notificationRepository;
-        private readonly ICRDRepository<Comment> _commentRepo;
+        //private readonly ICRDRepository<Comment> _commentRepo;
         private readonly IHttpClientFactory _httpClientFactory;
         //private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
@@ -37,7 +37,7 @@ namespace YumApp.Controllers
                               ICRUDRepository<Post> postRepository,
                               ICRDRepository<User_Follows> user_FollowsRepository,
                               ICRDRepository<Notification> notificationRepository,
-                              ICRDRepository<Comment> commentRepo,//obrisi ovo
+                              //ICRDRepository<Comment> commentRepo,//obrisi ovo
                               IHttpClientFactory httpClientFactory,
                               //IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
@@ -46,7 +46,7 @@ namespace YumApp.Controllers
             _postRepository = postRepository;            
             _user_FollowsRepository = user_FollowsRepository;
             _notificationRepository = notificationRepository;
-            _commentRepo = commentRepo;
+            //_commentRepo = commentRepo;
             _httpClientFactory = httpClientFactory;
             //_hubContext = hubContext;
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
@@ -55,10 +55,8 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
-
-            var comments = _commentRepo.GetAll().Where(c => c.AppUserId == id).ToCommentModelTest().ToList();
             //delete this line after testing
-            var postModelTest = _postRepository.GetAll().Where(p => p.AppUserId == id).ToPostModelTest().ToList();
+            //var comments = _commentRepo.GetAll().Where(c => c.AppUserId == id).ToCommentModelTest().ToList();
 
             //Gets currently logged in user from database
             AppUser currentUser = await _appUserManager.GetUserAsync(User);
@@ -79,6 +77,14 @@ namespace YumApp.Controllers
             List<PostModel> userPostsModel = userPosts.ToPostModel()
                                                       .ToList();
 
+            #region Most efficient query for userPostsModel, use it when entity framework core 6.0 gets released!! AsSplitQuery() doesn't work on projections yet!!
+            //Most efficient query for postmodel, use it when entity framework core 6.0 gets released!! Don't forget to chain AsSplitQuery()!!
+            //var userPostsModel = _postRepository.GetAll()
+            //                                    .Where(p => p.AppUserId == id)
+            //                                    .ToPostModelTest()
+            //                                    .ToList();
+            #endregion
+
             //Gets the user (post owner) from List<PostModel>
             AppUserModel userModel = userPostsModel.Select(p => p.User).FirstOrDefault();
 
@@ -90,40 +96,6 @@ namespace YumApp.Controllers
             ViewBag.CurrentUser = currentUser;
 
             return View(userPostsModel);
-
-            #region BadQuery
-            ////Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database using small queries instead of one big,
-            ////because of cartesian explosion
-            //List<PostModel> userPostsModel = await _postRepository.GetAll()
-            //                                             .Include(p => p.Post_Ingredients)
-            //                                             .ThenInclude(pi => pi.)
-            //                                             .Include(p => p.Comments)
-            //                                             .ThenInclude(c => c.Commentator)
-            //                                             .Where(p => p.AppUserId == id)
-            //                                             .ToPostModel()
-            //                                             .ToListAsync();
-            #endregion
-
-            #region TestingQueries
-            /*
-             TESTING QUERY EFFICIENCY
-            */
-            //var userPosts = await _postRepository.GetAll().Select(p => new PostTest
-            //{
-            //    Id = p.Id,
-            //    Content = p.Content,
-            //    Name = p.AppUser.FirstName,
-            //    Comments = p.Comments.Select(c => new TestComment
-            //    {
-            //        Content = c.Content,
-            //        TestAppUser = new TestAppUser { Id = c.Commentator.Id, Name = c.Commentator.FirstName }
-            //    }).ToList()
-            //}).ToListAsync();
-
-            //var userPosts = await _postRepository.GetAll().ToPostTest1().ToListAsync();
-
-            //return View("TestView", userPosts);
-            #endregion
         }
 
         [HttpGet]
@@ -211,9 +183,8 @@ namespace YumApp.Controllers
 
             await _user_FollowsRepository.Add(userFollows);
             
-            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, new FollowNotificationTextBehavoir())
-                                                       .ToNotificationEntity(currentUser.Id, followedUser.Id);
-
+            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, DateTime.Now, new FollowNotificationTextBehavoir())
+                                                                .ToNotificationEntity(currentUser.Id, followedUser.Id);
             await _notificationRepository.Add(newNotification);
 
             return;
@@ -230,6 +201,23 @@ namespace YumApp.Controllers
             await _user_FollowsRepository.Remove(userFollows);
             
             return;
+        }
+
+        public async Task<IActionResult> YumAPost(int id)
+        {
+            MORAS DA DODAS DATA ATRIBUT NA DOGME ZA AJAX CALL KOJI CE IMATI VREDNOST ID-A POSTA!!!!
+            var currentUser = await _appUserManager.GetUserAsync(User);
+            var yummedPost = await _postRepository.GetSingle(id);
+
+            yummedPost.NumberOfYums++;
+
+            await _postRepository.Update(yummedPost);
+
+            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, DateTime.Now, new YumNotificationTextBehavior())
+                                                                .ToNotificationEntity(currentUser.Id, yummedPost.AppUserId);
+            await _notificationRepository.Add(newNotification);
+
+            return Json(yummedPost.NumberOfYums);
         }
 
         // GET: UserController
