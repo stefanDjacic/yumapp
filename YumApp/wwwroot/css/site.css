@@ -102,6 +102,11 @@ body {
     left: 70%;
 }
 
+.notification-link {
+    text-decoration : none!important;
+    color : inherit;
+}
+
 
 /*------------------ PROFILE ------------------*/
 /*.user-profile-background {

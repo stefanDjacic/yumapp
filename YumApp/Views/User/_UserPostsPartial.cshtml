@@ -10,11 +10,11 @@
         @*<input type="hidden" class="postId" value="@p.Id" />*@
         @if (currentUser.Id != p.User.Id)
         {
-            <button id="yum-a-post" class="btn">
+            <button id="@p.Id" class="btn" onclick="YumAPost(this)">
                 <i class="fas fa-chevron-up text-primary"></i>
             </button>
         }
-        <p id="yum-counter" class="mb-0">@p.NumberOfYums</p>
+        <p id="yum-counter-@p.Id" class="mb-0">@p.NumberOfYums</p>
         <p>Yums</p>
     </div>
     <div class="post d-inline-flex flex-column w-100 ml-4 mb-3 p-4">
@@ -104,7 +104,7 @@
 </div>
 }
 
-@section Scripts{
+@*@section Scripts{
     <script>
         //$(document).ready(function () {
 
@@ -126,4 +126,4 @@
         //    });
         //});
     </script>
- }
+ }*@

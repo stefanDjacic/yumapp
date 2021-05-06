@@ -123,26 +123,44 @@
             });
         //END OF AJAX CALL FOR FOLLOWING
 
+        //START OF AJAX CALL FOR LIKING A POST
+        var postId;
+            function YumAPost(btn) {
+                postId = $(btn).attr('id');
 
-        $(document).ready(function () {
-
-            var postId = $('#postId').val();
-
-            $('#yum-a-post').click(function () {
                 $.ajax({
                     type: 'POST',
-                    url: `User/YumAPost/${postId}`,
+                    url: `/User/YumAPost/${postId}`,
                     success: function (response) {
-                        $('#yum-a-post').remove();
-                        $('#yum-counter').val(response).addClass('text-white');
-                        $('.number-of-yums').addClass('bg-success');
+                        $(`#${postId}`).remove();
+                        $(`#yum-counter-${postId}`).text(response).addClass('text-white');
+                        $(`#yum-counter-${postId}`).parent().addClass('bg-success');
                     },
                     error: function (response) {
                         alert(response.responseText);
                     }
                 });
-            });
-        });
+            }
+
+
+            //var postId = $('#postId');
+
+            //$('#yum-a-post').click(function () {
+            //    $.ajax({
+            //        type: 'POST',
+            //        url: `User/YumAPost/${postId}`,
+            //        success: function (response) {
+            //            $('#yum-a-post').remove();
+            //            $('#yum-counter').val(response).addClass('text-white');
+            //            $('.number-of-yums').addClass('bg-success');
+            //        },
+            //        error: function (response) {
+            //            alert(response.responseText);
+            //        }
+            //    });
+            //});
+        //END OF AJAX CALL FOR LIKING A POST
+
 
         //START OF SIGNALR
         //var connection = new signalR.HubConnectionBuilder().withUrl("/User/Profile/{id}").build();

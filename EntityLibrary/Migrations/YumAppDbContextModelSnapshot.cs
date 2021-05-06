@@ -16,7 +16,7 @@ namespace EntityLibrary.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("EntityLibrary.AppUser", b =>
@@ -189,12 +189,18 @@ namespace EntityLibrary.Migrations
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdForRedirecting")
+                        .HasColumnType("int");
+
                     b.Property<int>("InitiatorId")
                         .HasColumnType("int");
 
                     b.Property<string>("NotificationText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeOfNotification")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id", "ReceiverId");
 

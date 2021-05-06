@@ -1,16 +1,50 @@
 ﻿@model List<NotificationModel>
-    
+
 @foreach (var notification in Model)
 {
-    <div class="dropdown-item dropdown-item-notification p-2">
-        <figure class="d-flex mb-1">
-            <img src="@notification.InitiatorPhotoPath" alt="User photo" class="dropdown-item-notification-photo rounded-circle" />
-            <figcaption class="ml-3">
-                @notification.NotificationText
-            </figcaption>
-        </figure>
-        <p class="small mb-0">
-            @notification.TimeOfNotification
-        </p>
-    </div>
+    @if (notification.NotificationText.Contains("followed"))
+    {
+        <div class="dropdown-item dropdown-item-notification p-2">
+            <a asp-action="Profile" asp-controller="User" asp-route-id="@notification.IdForRedirecting" class="notification-link">
+                <figure class="d-flex mb-1">
+                    <img src="@notification.InitiatorPhotoPath" alt="User photo" class="dropdown-item-notification-photo rounded-circle" />
+                    <figcaption class="ml-3">
+                        @notification.NotificationText
+                    </figcaption>
+                </figure>
+                <p class="small mb-0">
+                    @notification.TimeOfNotification
+                </p>
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="dropdown-item dropdown-item-notification p-2">
+            <a asp-action="SinglePost" asp-controller="User" asp-route-id="@notification.IdForRedirecting" class="notification-link">
+                <figure class="d-flex mb-1">
+                    <img src="@notification.InitiatorPhotoPath" alt="User photo" class="dropdown-item-notification-photo rounded-circle" />
+                    <figcaption class="ml-3">
+                        @notification.NotificationText
+                    </figcaption>
+                </figure>
+                <p class="small mb-0">
+                    @notification.TimeOfNotification
+                </p>
+            </a>
+        </div>
+    }
+
+
+    @*<div class="dropdown-item dropdown-item-notification p-2">
+            <figure class="d-flex mb-1">
+                <img src="@notification.InitiatorPhotoPath" alt="User photo" class="dropdown-item-notification-photo rounded-circle" />
+                <figcaption class="ml-3">
+                    @notification.NotificationText
+                </figcaption>
+            </figure>
+            <p class="small mb-0">
+                @notification.TimeOfNotification
+            </p>
+        </div>*@
 }

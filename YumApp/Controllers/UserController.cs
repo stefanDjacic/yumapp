@@ -168,6 +168,28 @@ namespace YumApp.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SinglePost(int id)
+        {
+            var post = await _postRepository.GetAll()
+                                            .Include(p => p.Post_Ingredients)
+                                            .ThenInclude(pi => pi.Ingredient)
+                                            .Include(p => p.AppUser)
+                                            .Include(p => p.Comments)
+                                            .ThenInclude(c => c.Commentator)
+                                            .Where(p => p.Id == id)
+                                            .AsSplitQuery()
+                                            .AsNoTracking()
+                                            .ToListAsync();
+
+            var postModel = post.ToPostModel().ToList();
+
+            var currentUser = await _appUserManager.GetUserAsync(User);
+            ViewBag.CurrentUser = currentUser;
+
+            return View(postModel);
+        }
+
         [HttpPost]
         public async Task FollowUser(int id)
         {
@@ -183,7 +205,7 @@ namespace YumApp.Controllers
 
             await _user_FollowsRepository.Add(userFollows);
             
-            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, DateTime.Now, new FollowNotificationTextBehavoir())
+            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, DateTime.Now, currentUser.Id, new FollowNotificationTextBehavoir())
                                                                 .ToNotificationEntity(currentUser.Id, followedUser.Id);
             await _notificationRepository.Add(newNotification);
 
@@ -205,15 +227,15 @@ namespace YumApp.Controllers
 
         public async Task<IActionResult> YumAPost(int id)
         {
-            MORAS DA DODAS DATA ATRIBUT NA DOGME ZA AJAX CALL KOJI CE IMATI VREDNOST ID-A POSTA!!!!
             var currentUser = await _appUserManager.GetUserAsync(User);
             var yummedPost = await _postRepository.GetSingle(id);
+
 
             yummedPost.NumberOfYums++;
 
             await _postRepository.Update(yummedPost);
 
-            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, DateTime.Now, new YumNotificationTextBehavior())
+            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, DateTime.Now, yummedPost.Id, new YumNotificationTextBehavior())
                                                                 .ToNotificationEntity(currentUser.Id, yummedPost.AppUserId);
             await _notificationRepository.Add(newNotification);
 

@@ -34,20 +34,10 @@ namespace EntityLibrary.Repository
             return _context.Posts;
         }
 
-        //public IQueryable<Post> GetAllWhere()
-        //{
-        //    var posts = _context.Posts/*.Where(p => p.AppUserId == id)*/;
-        //    posts.Include(p => p.Post_Ingredients).ThenInclude(pi => pi.Ingredient).Load();
-        //    posts.Include(p => p.AppUser).Load();
-        //    posts.Include(p => p.Comments).ThenInclude(c => c.Commentator).Load();
-
-
-        //    return posts;
-        //}
-
         public async Task<Post> GetSingle(int id)
         {
-            return await _context.Posts.FindAsync(id);
+            //Find() doesn't work here, because the primary key is composite, so I would need 2 parameters instead of one
+            return await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task Remove(Post instance)

@@ -185,6 +185,8 @@ namespace EntityLibrary.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReceiverId = table.Column<int>(type: "int", nullable: false),
                     NotificationText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeOfNotification = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdForRedirecting = table.Column<int>(type: "int", nullable: false),
                     InitiatorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

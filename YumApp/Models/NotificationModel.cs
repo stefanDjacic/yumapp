@@ -17,7 +17,8 @@ namespace YumApp.Models
                 InitiatorFullName = notification.Initiator.FirstName + " " + notification.Initiator.LastName,
                 InitiatorPhotoPath = notification.Initiator.PhotoPath,
                 NotificationText = notification.NotificationText,
-                TimeOfNotification = notification.TimeOfNotification
+                TimeOfNotification = notification.TimeOfNotification,
+                IdForRedirecting = notification.IdForRedirecting
             };
 
         public static IQueryable<NotificationModel> ToNotificationModel(this IQueryable<Notification> notifications)
@@ -32,7 +33,8 @@ namespace YumApp.Models
                 InitiatorId = initiatorId,
                 ReceiverId = receiverId,
                 NotificationText = notification.NotificationText,
-                TimeOfNotification = notification.TimeOfNotification
+                TimeOfNotification = notification.TimeOfNotification,
+                IdForRedirecting = notification.IdForRedirecting
             };
         }
 
@@ -60,10 +62,11 @@ namespace YumApp.Models
         public NotificationModel()
         {
         }
-        public NotificationModel(string initiatorFirstName, string initiatorLastName, DateTime timeOfNotification, INotificationTextStrategy notificationTextStrategy)
+        public NotificationModel(string initiatorFirstName, string initiatorLastName, DateTime timeOfNotification, int idForRedirecting, INotificationTextStrategy notificationTextStrategy)
         {
             InitiatorFullName = initiatorFirstName + " " + initiatorLastName;
             TimeOfNotification = timeOfNotification;
+            IdForRedirecting = idForRedirecting;
             NotificationText = notificationTextStrategy.GetNotificationText(InitiatorFullName);
         }
 
@@ -74,5 +77,7 @@ namespace YumApp.Models
         public string InitiatorPhotoPath { get; set; }
 
         public string InitiatorFullName { get; set; }
+
+        public int IdForRedirecting { get; set; }
     }
 }
