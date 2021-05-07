@@ -28,27 +28,31 @@ namespace YumApp.Controllers
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
         private readonly ICRDRepository<Notification> _notificationRepository;
+        private readonly ICRDRepository<Yummy_Post> _yummy_PostRepository;
+
         //private readonly ICRDRepository<Comment> _commentRepo;
         private readonly IHttpClientFactory _httpClientFactory;
-        //private readonly IHubContext<NotifyHub> _hubContext;
+        private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
 
         public UserController(AppUserManager appUserManager,
                               ICRUDRepository<Post> postRepository,
                               ICRDRepository<User_Follows> user_FollowsRepository,
                               ICRDRepository<Notification> notificationRepository,
+                              ICRDRepository<Yummy_Post> yummy_PostRepository,
                               //ICRDRepository<Comment> commentRepo,//obrisi ovo
                               IHttpClientFactory httpClientFactory,
-                              //IHubContext<NotifyHub> hubContext,
+                              IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
         {            
             _appUserManager = appUserManager;
             _postRepository = postRepository;            
             _user_FollowsRepository = user_FollowsRepository;
             _notificationRepository = notificationRepository;
+            _yummy_PostRepository = yummy_PostRepository;
             //_commentRepo = commentRepo;
             _httpClientFactory = httpClientFactory;
-            //_hubContext = hubContext;
+            _hubContext = hubContext;
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
         }
 
@@ -87,10 +91,19 @@ namespace YumApp.Controllers
 
             //Gets the user (post owner) from List<PostModel>
             AppUserModel userModel = userPostsModel.Select(p => p.User).FirstOrDefault();
-
             //Checks and sets bool if current user is following the one whose profile is being viewed, from database
             userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
                                                                .Any(u => u.FollowerId == currentUser.Id && u.FollowsId == id);
+
+            //Gets all the posts which current user liked from user whose profile he is visiting
+            var currentUsersYummedPosts = await _yummy_PostRepository.GetAll()
+                                                                     .Where(yp => yp.AppUserId == currentUser.Id && yp.PostAppUserId == id)
+                                                                     .ToListAsync();
+            //Sets IsPostYummed property if current user has already liked the post
+            foreach (var yummedPost in currentUsersYummedPosts)
+            {
+                userPostsModel.SingleOrDefault(p => p.Id == yummedPost.PostId).IsPostYummed = true;
+            }
 
             ViewBag.UserProfile = userModel;
             ViewBag.CurrentUser = currentUser;
@@ -171,23 +184,31 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> SinglePost(int id)
         {
-            var post = await _postRepository.GetAll()
+            var post = _postRepository.GetAll()
                                             .Include(p => p.Post_Ingredients)
                                             .ThenInclude(pi => pi.Ingredient)
                                             .Include(p => p.AppUser)
                                             .Include(p => p.Comments)
                                             .ThenInclude(c => c.Commentator)
-                                            .Where(p => p.Id == id)
+                                            //.Where(p => p.Id == id)
                                             .AsSplitQuery()
                                             .AsNoTracking()
-                                            .ToListAsync();
+                                            .SingleOrDefault(p => p.Id == id);
+                                            //.ToListAsync();
 
-            var postModel = post.ToPostModel().ToList();
+            var postModel = post.ToPostModel();
 
             var currentUser = await _appUserManager.GetUserAsync(User);
+
+            postModel.IsPostYummed = _yummy_PostRepository.GetAll()
+                                                          .Any(yp => yp.PostId == id && yp.AppUserId == currentUser.Id);
+
+            //Have to create new list, because PostPartial view expects one
+            List<PostModel> newPostModel = new() { postModel };
+
             ViewBag.CurrentUser = currentUser;
 
-            return View(postModel);
+            return View(newPostModel);
         }
 
         [HttpPost]
@@ -205,7 +226,11 @@ namespace YumApp.Controllers
 
             await _user_FollowsRepository.Add(userFollows);
             
-            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, DateTime.Now, currentUser.Id, new FollowNotificationTextBehavoir())
+            Notification newNotification = new NotificationModel(currentUser.FirstName,
+                                                                 currentUser.LastName, 
+                                                                 DateTime.Now,
+                                                                 currentUser.Id, 
+                                                                 new FollowNotificationTextBehavoir())
                                                                 .ToNotificationEntity(currentUser.Id, followedUser.Id);
             await _notificationRepository.Add(newNotification);
 
@@ -225,6 +250,7 @@ namespace YumApp.Controllers
             return;
         }
 
+        [HttpPost]
         public async Task<IActionResult> YumAPost(int id)
         {
             var currentUser = await _appUserManager.GetUserAsync(User);
@@ -232,32 +258,39 @@ namespace YumApp.Controllers
 
 
             yummedPost.NumberOfYums++;
-
             await _postRepository.Update(yummedPost);
 
-            Notification newNotification = new NotificationModel(currentUser.FirstName, currentUser.LastName, DateTime.Now, yummedPost.Id, new YumNotificationTextBehavior())
+            Yummy_Post yummy_Post = new()
+            {
+                AppUserId = currentUser.Id,
+                DateYummed = DateTime.Now,
+                PostId = yummedPost.Id,
+                PostAppUserId = yummedPost.AppUserId
+            };
+            await _yummy_PostRepository.Add(yummy_Post);
+
+            Notification newNotification = new NotificationModel(currentUser.FirstName,
+                                                                 currentUser.LastName,
+                                                                 DateTime.Now,
+                                                                 yummedPost.Id, 
+                                                                 new YumNotificationTextBehavior())
                                                                 .ToNotificationEntity(currentUser.Id, yummedPost.AppUserId);
             await _notificationRepository.Add(newNotification);
+
+            //_hubContext.Clients.User(yummedPost.AppUserId.ToString()).SendAsync("AddNewNotification", )
 
             return Json(yummedPost.NumberOfYums);
         }
 
-        // GET: UserController
-        public ActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> GetNotifications(int id)
         {
-            return View();
-        }
+            var notifications = await _notificationRepository.GetAll()
+                                                             .Where(n => n.ReceiverId == id)
+                                                             .ToNotificationModel()
+                                                             .ToListAsync();
 
-        // GET: UserController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: UserController/Create
-        public ActionResult Create()
-        {
-            return View();
+            return Json(notifications);
         }
 
         // POST: UserController/Create

@@ -23,7 +23,7 @@ namespace EntityLibrary
         public DbSet<User_Follows> User_Follows { get; set; }
         public DbSet<User_Feed> User_Feeds { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<YummyPost> YummyPosts { get; set; }
+        public DbSet<Yummy_Post> Yummy_Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -135,15 +135,15 @@ namespace EntityLibrary
                 n.HasKey(n => new { n.Id, n.ReceiverId });                
             });
 
-            modelBuilder.Entity<YummyPost>(yp => 
+            modelBuilder.Entity<Yummy_Post>(yp => 
             {
                 yp.HasOne(yp => yp.AppUser)
-                .WithMany(au => au.YummyPosts)
+                .WithMany(au => au.Yummy_Posts)
                 .HasForeignKey(yp => yp.AppUserId)
                 .IsRequired();
 
                 yp.HasOne(yp => yp.Post)
-                .WithMany(p => p.YummyPosts)
+                .WithMany(p => p.Yummy_Posts)
                 .HasForeignKey(yp => new { yp.PostId, yp.PostAppUserId })
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();

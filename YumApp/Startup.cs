@@ -50,12 +50,13 @@ namespace YumApp
             services.AddTransient<ICRUDRepository<Post>, PostRepository>();            
             services.AddTransient<ICRDRepository<User_Follows>, User_FollowsRepository>();
             services.AddTransient<ICRDRepository<Notification>, NotificationRepository>();
+            services.AddTransient<ICRDRepository<Yummy_Post>, Yummy_PostsRepository>();
 
             services.AddControllersWithViews();
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
-            //services.AddSignalR();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,7 +85,9 @@ namespace YumApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                //endpoints.MapHub<NotifyHub>("/User/{id}");
+                //endpoints.MapHub<NotifyHub>("");
+                endpoints.MapHub<NotifyHub>("/User");
+                //endpoints.MapHub<NotifyHub>("/User/")
                 //endpoints.MapHub<NotifyHub>("/Home");
                 //endpoints.MapHub<NotifyHub>("/User/Settings");
             });

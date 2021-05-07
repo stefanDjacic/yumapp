@@ -22,7 +22,7 @@ namespace EntityLibrary
             User_Feeds = new HashSet<User_Feed>();
             NotificationsReceiver = new HashSet<Notification>();
             NotificationsInitiator = new HashSet<Notification>();
-            YummyPosts = new HashSet<YummyPost>();
+            Yummy_Posts = new HashSet<Yummy_Post>();
         }
 
         [Required]
@@ -72,7 +72,7 @@ namespace EntityLibrary
         [InverseProperty(nameof(Notification.Initiator))]
         public ICollection<Notification> NotificationsInitiator { get; set; }
 
-        public ICollection<YummyPost> YummyPosts { get; set; }
+        public ICollection<Yummy_Post> Yummy_Posts { get; set; }
 
         //Other
         //[NotMapped]

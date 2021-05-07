@@ -107,6 +107,8 @@ namespace YumApp.Models
 
         public DateTime TimeOfPosting { get; set; }
 
+        public bool IsPostYummed { get; set; }
+
         public IEnumerable<CommentModel> Comments { get; set; }        
 
         public IEnumerable<IngredientModel> Ingredients { get; set; }

@@ -15,7 +15,7 @@ namespace EntityLibrary
             Comments = new HashSet<Comment>();
             Post_Ingredients = new HashSet<Post_Ingredient>();
             User_Feeds = new HashSet<User_Feed>();
-            YummyPosts = new HashSet<YummyPost>();
+            Yummy_Posts = new HashSet<Yummy_Post>();
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -43,7 +43,7 @@ namespace EntityLibrary
 
         public ICollection<User_Feed> User_Feeds { get; set; }
 
-        public ICollection<YummyPost> YummyPosts { get; set; }
+        public ICollection<Yummy_Post> Yummy_Posts { get; set; }
 
     }
 }

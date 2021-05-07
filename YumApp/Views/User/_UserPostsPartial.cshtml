@@ -6,17 +6,26 @@
 @foreach (var p in Model)
 {
 <div class="d-flex">
-    <div class="number-of-yums pt-1 d-flex flex-column align-items-center rounded-circle">
-        @*<input type="hidden" class="postId" value="@p.Id" />*@
-        @if (currentUser.Id != p.User.Id)
-        {
-            <button id="@p.Id" class="btn" onclick="YumAPost(this)">
-                <i class="fas fa-chevron-up text-primary"></i>
-            </button>
-        }
-        <p id="yum-counter-@p.Id" class="mb-0">@p.NumberOfYums</p>
-        <p>Yums</p>
-    </div>
+    @if (p.IsPostYummed)
+    {
+        <div class="number-of-yums pt-1 d-flex flex-column align-items-center rounded-circle bg-success">
+            <p id="yum-counter-@p.Id" class="mb-0 text-white">@p.NumberOfYums</p>
+            <p class="text-white">Yums</p>
+        </div>
+    }
+    else
+    {
+        <div class="number-of-yums pt-1 d-flex flex-column align-items-center rounded-circle">
+            @if (currentUser.Id != p.User.Id)
+            {
+                <button id="@p.Id" class="btn" onclick="YumAPost(this)">
+                    <i class="fas fa-chevron-up text-primary"></i>
+                </button>
+            }
+            <p id="yum-counter-@p.Id" class="mb-0">@p.NumberOfYums</p>
+            <p>Yums</p>
+        </div>
+    }
     <div class="post d-inline-flex flex-column w-100 ml-4 mb-3 p-4">
         <div class="user-time-options row d-flex justify-content-between mb-3">
             <div class="media">

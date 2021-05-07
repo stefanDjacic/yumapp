@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary
 {
-    public class YummyPost
+    public class Yummy_Post
     {
         [Column(TypeName = "date")]
         public DateTime DateYummed { get; set; }
