@@ -46,7 +46,7 @@ namespace YumApp
 
             services.AddHttpClient();
 
-            //services.AddTransient<ICRDRepository<Comment>, TestCommentRepository>(); //obrisi ovo
+            services.AddTransient<ICRDRepository<Comment>, CommentRepository>();
             services.AddTransient<ICRUDRepository<Post>, PostRepository>();            
             services.AddTransient<ICRDRepository<User_Follows>, User_FollowsRepository>();
             services.AddTransient<ICRDRepository<Notification>, NotificationRepository>();
@@ -85,11 +85,7 @@ namespace YumApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                //endpoints.MapHub<NotifyHub>("");
                 endpoints.MapHub<NotifyHub>("/User");
-                //endpoints.MapHub<NotifyHub>("/User/")
-                //endpoints.MapHub<NotifyHub>("/Home");
-                //endpoints.MapHub<NotifyHub>("/User/Settings");
             });
 
             //AppDbInitializer.Seed(app);

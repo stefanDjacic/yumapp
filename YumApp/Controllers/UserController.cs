@@ -29,10 +29,9 @@ namespace YumApp.Controllers
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
         private readonly ICRDRepository<Notification> _notificationRepository;
         private readonly ICRDRepository<Yummy_Post> _yummy_PostRepository;
-
-        //private readonly ICRDRepository<Comment> _commentRepo;
+        private readonly ICRDRepository<Comment> _commentRepository;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IHubContext<NotifyHub> _hubContext;
+        //private readonly IHubContext<NotifyHub> _hubContext;
         private readonly string _userPhotoFolderPath;
 
         public UserController(AppUserManager appUserManager,
@@ -40,9 +39,9 @@ namespace YumApp.Controllers
                               ICRDRepository<User_Follows> user_FollowsRepository,
                               ICRDRepository<Notification> notificationRepository,
                               ICRDRepository<Yummy_Post> yummy_PostRepository,
-                              //ICRDRepository<Comment> commentRepo,//obrisi ovo
+                              ICRDRepository<Comment> commentRepository,
                               IHttpClientFactory httpClientFactory,
-                              IHubContext<NotifyHub> hubContext,
+                              //IHubContext<NotifyHub> hubContext,
                               IWebHostEnvironment webHostEnvironment)
         {            
             _appUserManager = appUserManager;
@@ -50,9 +49,9 @@ namespace YumApp.Controllers
             _user_FollowsRepository = user_FollowsRepository;
             _notificationRepository = notificationRepository;
             _yummy_PostRepository = yummy_PostRepository;
-            //_commentRepo = commentRepo;
+            _commentRepository = commentRepository;
             _httpClientFactory = httpClientFactory;
-            _hubContext = hubContext;
+            //_hubContext = hubContext;
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
         }
 
@@ -277,8 +276,6 @@ namespace YumApp.Controllers
                                                                 .ToNotificationEntity(currentUser.Id, yummedPost.AppUserId);
             await _notificationRepository.Add(newNotification);
 
-            //_hubContext.Clients.User(yummedPost.AppUserId.ToString()).SendAsync("AddNewNotification", )
-
             return Json(yummedPost.NumberOfYums);
         }
 
@@ -286,11 +283,18 @@ namespace YumApp.Controllers
         public async Task<IActionResult> GetNotifications(int id)
         {
             var notifications = await _notificationRepository.GetAll()
-                                                             .Where(n => n.ReceiverId == id)
+                                                             .Where(n => n.ReceiverId == id)                                                             
                                                              .ToNotificationModel()
+                                                             .OrderByDescending(n => n.TimeOfNotification)
                                                              .ToListAsync();
 
             return Json(notifications);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostAComment() 
+        {
+
         }
 
         // POST: UserController/Create
