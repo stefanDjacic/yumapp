@@ -111,9 +111,28 @@ namespace YumApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Feed()
+        public async Task<IActionResult> Feed()
         {
-            return View();
+            NE RADI KAKO TREBA!!!!!!!!
+            var currentUser = await _appUserManager.GetUserAsync(User);
+
+            //var followingUsers = await _user_FollowsRepository.GetAll().Where(fu => fu.FollowerId == currentUserId)/*.Select(fu => fu.FollowsId)*/.ToListAsync();
+
+            var posts = await _postRepository.GetAll()
+                                                        .Include(p => p.Post_Ingredients)
+                                                        .ThenInclude(pi => pi.Ingredient)
+                                                        .Include(p => p.AppUser.Followers.Where(uf => uf.FollowerId == currentUser.Id))
+                                                        .Include(p => p.Comments)
+                                                        .ThenInclude(c => c.Commentator)
+                                                        .Where(p => p.AppUserId != currentUser.Id)
+                                                        .AsSplitQuery()
+                                                        .AsNoTracking()
+                                                        .ToListAsync();
+            var postsModel = posts.ToPostModel().ToList();
+
+            ViewBag.CurrentUser = currentUser;
+
+            return View(postsModel);
         }
 
         [HttpGet]
@@ -292,9 +311,42 @@ namespace YumApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAComment() 
+        public async Task<IActionResult> PostAComment(int id, string commentText) 
         {
+            var currentUser = await _appUserManager.GetUserAsync(User);
+            var commentedPost = await _postRepository.GetSingle(id);
 
+            var currentDateTime = DateTime.Now;
+
+            var newCommentModel = new CommentModel
+            {
+                Commentator = currentUser.ToAppUserModelBaseInfo(),
+                Content = commentText,
+                TimeOfCommenting = currentDateTime,
+                AppUserId = commentedPost.AppUserId,
+                PostId = id
+                //PostId = postId,
+                //AppUserId = commentedPost.AppUserId,
+                //CommentatorId = currentUser.Id,
+                //Content = commentText,
+                //TimeOfCommenting = currentDateTime
+            };
+            await _commentRepository.Add(newCommentModel.ToCommentEntity());
+
+            Notification newNotification = new NotificationModel(currentUser.FirstName,
+                                                                 currentUser.LastName,
+                                                                 currentDateTime,
+                                                                 id,
+                                                                 new CommentNotificationTextBehavior())
+                                                                 .ToNotificationEntity(currentUser.Id, commentedPost.AppUserId);
+            await _notificationRepository.Add(newNotification);
+
+            return Json(newCommentModel);
+
+            //return Json(new { comment = newComment,
+            //                  commentatorFirstName = currentUser.FirstName,
+            //                  commentatorLastName = currentUser.LastName,
+            //                  commentatorPhotoPath = currentUser.PhotoPath });
         }
 
         // POST: UserController/Create

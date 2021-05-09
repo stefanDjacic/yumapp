@@ -9,14 +9,14 @@ namespace YumApp.Hubs
 {
     public class NotifyHub : Hub
     {
-        public async Task AddNewNotificationsBE(int userId)
+        public async Task AddNewNotificationsBE(string userId)
         {
-            await Clients.User(userId.ToString()).SendAsync("AddNewNotificationsFE");
+            await Clients.User(userId).SendAsync("AddNewNotificationsFE", userId);
         }
 
-        //public async Task FollowNotification(AppUserModel receiver, AppUserModel initator)
-        //{
-        //    await Clients.User(receiver.Id.ToString()).SendAsync("receiveNotification", initator, $"{ initator.FirstName } { initator.LastName } has followed you!");
-        //}        
+        public async Task AddCommentToPostBE(CommentModel commentModel)
+        {
+            await Clients.All.SendAsync("AddCommentToPostFE", commentModel);
+        }  
     }
 }

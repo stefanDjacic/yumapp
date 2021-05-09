@@ -60,10 +60,24 @@ namespace YumApp.Models
                 Commentator = c.Commentator.ToAppUserModelBaseInfo()
             });
         }
+
+        public static Comment ToCommentEntity(this CommentModel commentsModel)
+        {
+            return new Comment
+            {
+                PostId = commentsModel.PostId,
+                AppUserId = commentsModel.AppUserId,
+                CommentatorId = commentsModel.Commentator.Id,
+                Content = commentsModel.Content,
+                TimeOfCommenting = commentsModel.TimeOfCommenting,                
+            };
+        }
     }
 
     public class CommentModel
     {
+        public int PostId { get; set; }
+        public int AppUserId { get; set; }
         [Required]
         [MinLength(1, ErrorMessage = "Minimum lenght is 1 character.")]
         [MaxLength(500, ErrorMessage = "Maximum lenght is 500 characters.")]

@@ -18,7 +18,7 @@
         <div class="number-of-yums pt-1 d-flex flex-column align-items-center rounded-circle">
             @if (currentUser.Id != p.User.Id)
             {
-                <button id="@p.Id" class="btn" onclick="YumAPost(this)">
+                <button id="@p.Id" data-userid="@p.User.Id" class="btn" onclick="YumAPost(this)">
                     <i class="fas fa-chevron-up text-primary"></i>
                 </button>
             }
@@ -95,44 +95,21 @@
                     <img src="@currentUser.PhotoPath" class="comment-user-photo" alt="User photo" />
                 </div>
                 <div class="w-100 ml-2">
-                    <form action="" method="post">
+                    @*<form asp-action="PostAComment" asp-controller="User" asp-route-postId="@p.Id" method="post">*@
                         <div class="form-group d-flex flex-column">
-                            <textarea class="form-control rounded-pill non-resizable-textarea mb-2 pt-2 pb-2 respo" id="FormControlTextarea1" rows="3" required placeholder="Write a comment..."></textarea>
-                            <button type="submit" class="btn btn-primary align-self-end">Comment</button>
+                            <textarea class="form-control rounded-pill non-resizable-textarea mb-2 pt-2 pb-2 respo" id="textarea-comment-@p.Id" rows="3" required placeholder="Write a comment..."></textarea>
+                            <button id="post-a-comment-btn-@p.Id" @*type="submit"*@ data-postid="@p.Id" onclick="PostAComment(this)" class="btn btn-primary align-self-end">Comment</button>
                         </div>
-                    </form>
+                    @*</form>*@
                 </div>
             </div>
-
-            @if (p.Comments.Any())
-            {
-                <partial name="_CommentsPartial" for="@p.Comments" />
-            }
+            <div id="all-comments-@p.Id">
+                @if (p.Comments.Any())
+                {
+                    <partial name="_CommentsPartial" for="@p.Comments" />
+                }
+            </div>
         </div>
     </div>
 </div>
 }
-
-@*@section Scripts{
-    <script>
-        //$(document).ready(function () {
-
-        //    var postId = $('#postId').val();
-
-        //    $('#yum-a-post').click(function () {
-        //        $.ajax({
-        //            type : 'POST',
-        //            url : `User/YumAPost/${postId}`,
-        //            success: function (response) {
-        //                $('#yum-a-post').remove();
-        //                $('#yum-counter').val(response).addClass('text-white');
-        //                $('.number-of-yums').addClass('bg-success');
-        //            },
-        //            error: function (response) {
-        //                alert(response.responseText);
-        //            }
-        //        });
-        //    });
-        //});
-    </script>
- }*@
