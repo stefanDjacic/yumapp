@@ -19,6 +19,16 @@ namespace YumApp.Models
                 PhotoPath = i.PhotoPath
             });
         }
+
+        public static IQueryable<IngredientModel> ToIngredientModel(this IQueryable<Ingredient> ingredients)
+        {
+            return ingredients.Select(i => new IngredientModel
+            {
+                Name = i.Name,
+                Description = i.Description,
+                PhotoPath = i.PhotoPath
+            });
+        }
     }
 
 

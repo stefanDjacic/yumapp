@@ -30,8 +30,8 @@ namespace YumApp.Controllers
         private readonly ICRDRepository<Notification> _notificationRepository;
         private readonly ICRDRepository<Yummy_Post> _yummy_PostRepository;
         private readonly ICRDRepository<Comment> _commentRepository;
-        private readonly IHttpClientFactory _httpClientFactory;
-        //private readonly IHubContext<NotifyHub> _hubContext;
+        private readonly ICRDRepository<Ingredient> _ingredientRepository;
+        private readonly IHttpClientFactory _httpClientFactory;        
         private readonly string _userPhotoFolderPath;
 
         public UserController(AppUserManager appUserManager,
@@ -40,8 +40,8 @@ namespace YumApp.Controllers
                               ICRDRepository<Notification> notificationRepository,
                               ICRDRepository<Yummy_Post> yummy_PostRepository,
                               ICRDRepository<Comment> commentRepository,
-                              IHttpClientFactory httpClientFactory,
-                              //IHubContext<NotifyHub> hubContext,
+                              ICRDRepository<Ingredient> ingredientRepository,
+                              IHttpClientFactory httpClientFactory,                              
                               IWebHostEnvironment webHostEnvironment)
         {            
             _appUserManager = appUserManager;
@@ -50,29 +50,26 @@ namespace YumApp.Controllers
             _notificationRepository = notificationRepository;
             _yummy_PostRepository = yummy_PostRepository;
             _commentRepository = commentRepository;
-            _httpClientFactory = httpClientFactory;
-            //_hubContext = hubContext;
+            _ingredientRepository = ingredientRepository;
+            _httpClientFactory = httpClientFactory;            
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
         }
 
         [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
-            //delete this line after testing
-            //var comments = _commentRepo.GetAll().Where(c => c.AppUserId == id).ToCommentModelTest().ToList();
-
             //Gets currently logged in user from database
             AppUser currentUser = await _appUserManager.GetUserAsync(User);
 
             //Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database with split query,
             //because of cartesian explosion
             List<Post> userPosts = await _postRepository.GetAll()
+                                                        .Where(p => p.AppUserId == id)
                                                         .Include(p => p.Post_Ingredients)
                                                         .ThenInclude(pi => pi.Ingredient)
                                                         .Include(p => p.AppUser)
                                                         .Include(p => p.Comments)
-                                                        .ThenInclude(c => c.Commentator)
-                                                        .Where(p => p.AppUserId == id)
+                                                        .ThenInclude(c => c.Commentator)                                                        
                                                         .AsSplitQuery()
                                                         .AsNoTracking()
                                                         .ToListAsync();
@@ -112,25 +109,23 @@ namespace YumApp.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Feed()
-        {
-            NE RADI KAKO TREBA!!!!!!!!
+        {            
             var currentUser = await _appUserManager.GetUserAsync(User);
 
-            //var followingUsers = await _user_FollowsRepository.GetAll().Where(fu => fu.FollowerId == currentUserId)/*.Select(fu => fu.FollowsId)*/.ToListAsync();
-
             var posts = await _postRepository.GetAll()
-                                                        .Include(p => p.Post_Ingredients)
-                                                        .ThenInclude(pi => pi.Ingredient)
-                                                        .Include(p => p.AppUser.Followers.Where(uf => uf.FollowerId == currentUser.Id))
-                                                        .Include(p => p.Comments)
-                                                        .ThenInclude(c => c.Commentator)
-                                                        .Where(p => p.AppUserId != currentUser.Id)
-                                                        .AsSplitQuery()
-                                                        .AsNoTracking()
-                                                        .ToListAsync();
+                                             .Where(p => p.AppUser.Follow.Any(uf => uf.FollowerId == currentUser.Id))
+                                             .Include(p => p.AppUser)
+                                             .Include(p => p.Post_Ingredients)
+                                             .ThenInclude(pi => pi.Ingredient)
+                                             .Include(p => p.Comments)
+                                             .ThenInclude(c => c.Commentator)
+                                             .AsSplitQuery()
+                                             .AsNoTracking()
+                                             .ToListAsync();
+
             var postsModel = posts.ToPostModel().ToList();
 
-            ViewBag.CurrentUser = currentUser;
+            ViewBag.CurrentUser = currentUser;            
 
             return View(postsModel);
         }
@@ -208,7 +203,7 @@ namespace YumApp.Controllers
                                             .Include(p => p.AppUser)
                                             .Include(p => p.Comments)
                                             .ThenInclude(c => c.Commentator)
-                                            //.Where(p => p.Id == id)
+                                            .Where(p => p.Id == id)
                                             .AsSplitQuery()
                                             .AsNoTracking()
                                             .SingleOrDefault(p => p.Id == id);
@@ -221,7 +216,7 @@ namespace YumApp.Controllers
             postModel.IsPostYummed = _yummy_PostRepository.GetAll()
                                                           .Any(yp => yp.PostId == id && yp.AppUserId == currentUser.Id);
 
-            //Have to create new list, because PostPartial view expects one
+            //Need a List<PostModel> type for partial view
             List<PostModel> newPostModel = new() { postModel };
 
             ViewBag.CurrentUser = currentUser;
@@ -342,68 +337,16 @@ namespace YumApp.Controllers
             await _notificationRepository.Add(newNotification);
 
             return Json(newCommentModel);
-
-            //return Json(new { comment = newComment,
-            //                  commentatorFirstName = currentUser.FirstName,
-            //                  commentatorLastName = currentUser.LastName,
-            //                  commentatorPhotoPath = currentUser.PhotoPath });
         }
 
-        // POST: UserController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpGet]
+        public async Task<IActionResult> GetIngredients()
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var ingredients = await _ingredientRepository.GetAll()
+                                                         .ToIngredientModel()
+                                                         .ToListAsync();
 
-        // GET: UserController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: UserController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: UserController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Json(ingredients);
         }
     }
 }

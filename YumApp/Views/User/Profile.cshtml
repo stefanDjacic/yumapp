@@ -83,6 +83,7 @@
         </div>
 
         <div class="userposts col-8">
+            <partial name="_AddNewPostPartial" />
             <partial name="_UserPostsPartial" />
         </div>
     </div>
@@ -291,6 +292,23 @@
             });
             });
         //End of ajax call for following
+
+        //Start of ajax call for ingredients
+        $(document).ready(function () {
+            $('#add-new-post-btn').click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/User/GetIngredients',
+                    success: function () {
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            });
+        });
+        //End of ajax call for ingredients
 
         //For removing indicator for new received notifications
         $(document).ready(function () {

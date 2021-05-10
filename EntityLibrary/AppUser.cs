@@ -41,7 +41,7 @@ namespace EntityLibrary
         public DateTime DateOfBirth { get; set; }
 
         [Column(TypeName = "date")]
-        public DateTime DateCreated { get; set; } /*= DateTime.UtcNow;*/
+        public DateTime DateCreated { get; set; }
         
         [MaxLength(100)]
         public string Country { get; set; }
@@ -53,7 +53,7 @@ namespace EntityLibrary
         public string About { get; set; }
 
         [Required]
-        public string PhotoPath { get; set; } /*= @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";*/
+        public string PhotoPath { get; set; }
 
         //Navigation properties
         [InverseProperty(nameof(User_Follows.Follower))]
@@ -73,9 +73,5 @@ namespace EntityLibrary
         public ICollection<Notification> NotificationsInitiator { get; set; }
 
         public ICollection<Yummy_Post> Yummy_Posts { get; set; }
-
-        //Other
-        //[NotMapped]
-        //public IFormFile Photo { get; set; }
     }
 }

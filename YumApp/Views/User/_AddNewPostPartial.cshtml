@@ -1,0 +1,41 @@
+﻿@model List<PostModel>
+@{ 
+    var postModel = Model.FirstOrDefault();
+}
+<div class="text-center mb-4">
+    <button id="add-new-post-btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-new-post">
+        Add New Post
+    </button>
+
+    <div class="modal fade text-left" id="add-new-post" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add-new-post-title">New Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="ingredients" class="">
+
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@postModel.Content" class="control-label"></label>
+                        <textarea class="form-control non-resizable-textarea" id="add-new-post-textarea-content" rows="8"></textarea>
+                        <span asp-validation-for="@postModel.Content" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="@postModel.Notes" class="control-label"></label>
+                        <textarea class="form-control non-resizable-textarea" id="add-new-post-textarea-notes" rows="2"></textarea>
+                        <span asp-validation-for="@postModel.Notes" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

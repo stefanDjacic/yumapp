@@ -46,6 +46,7 @@ namespace YumApp
 
             services.AddHttpClient();
 
+            services.AddTransient<ICRDRepository<Ingredient>, IngredientRepository>();
             services.AddTransient<ICRDRepository<Comment>, CommentRepository>();
             services.AddTransient<ICRUDRepository<Post>, PostRepository>();            
             services.AddTransient<ICRDRepository<User_Follows>, User_FollowsRepository>();
