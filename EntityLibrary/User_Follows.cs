@@ -10,7 +10,7 @@ namespace EntityLibrary
     public class User_Follows
     {
         [Column(TypeName = "date")]
-        public DateTime DateOfFollowing { get; set; } = DateTime.UtcNow;
+        public DateTime DateOfFollowing { get; set; }
 
         //Navigation properties
         public int FollowerId { get; set; }        

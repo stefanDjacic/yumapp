@@ -53,20 +53,6 @@ namespace YumApp.Models
             };
         }
 
-        //public static IQueryable<PostModel> ToPostModel(this IQueryable<Post> posts)
-        //{
-        //    return posts.Select(p => new PostModel
-        //    {
-        //        User = p.AppUser.ToAppUserModelBaseInfo(),
-        //        Content = p.Content,
-        //        Notes = p.Notes,
-        //        NumberOfYums = p.NumberOfYums,
-        //        TimeOfPosting = p.TimeOfPosting,
-        //        Comments = p.Comments.ToCommentModel().ToList(),
-        //        Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
-        //    });
-        //}
-
         public static IEnumerable<PostModel> ToPostModel(this IEnumerable<Post> posts)
         {
             return posts.Select(p => new PostModel
@@ -80,6 +66,18 @@ namespace YumApp.Models
                 Comments = p.Comments.ToCommentModel().ToList(),
                 Ingredients = p.Post_Ingredients.Select(pi => pi.Ingredient).ToIngredientModel().ToList()
             });
+        }
+
+        public static Post ToPostEntity(this PostModel postModel)
+        {
+            return new Post
+            {
+                AppUserId = postModel.User.Id,
+                Content = postModel.Content,
+                Notes = postModel.Notes,
+                NumberOfYums = postModel.NumberOfYums,
+                TimeOfPosting = postModel.TimeOfPosting
+            };
         }
     }
 

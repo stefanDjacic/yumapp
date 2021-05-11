@@ -9,15 +9,11 @@ namespace EntityLibrary
 {
     public class Post_Ingredient
     {
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int Id { get; set; }
-
         //Navigation properties
         public int PostId { get; set; }
         public int AppUserId { get; set; }        
         public Post Post { get; set; }
-        public int IngredientId { get; set; }
-        //[ForeignKey("IngredientId")]
+        public int IngredientId { get; set; }        
         public Ingredient Ingredient { get; set; }
 
     }

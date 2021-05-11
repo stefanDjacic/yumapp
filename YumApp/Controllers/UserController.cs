@@ -23,7 +23,7 @@ namespace YumApp.Controllers
 {
     [Authorize]
     public class UserController : Controller
-    {        
+    {
         private readonly AppUserManager _appUserManager;
         private readonly ICRUDRepository<Post> _postRepository;
         private readonly ICRDRepository<User_Follows> _user_FollowsRepository;
@@ -31,6 +31,7 @@ namespace YumApp.Controllers
         private readonly ICRDRepository<Yummy_Post> _yummy_PostRepository;
         private readonly ICRDRepository<Comment> _commentRepository;
         private readonly ICRDRepository<Ingredient> _ingredientRepository;
+        private readonly ICRDRepository<Post_Ingredient> _post_IngredientRepository;
         private readonly IHttpClientFactory _httpClientFactory;        
         private readonly string _userPhotoFolderPath;
 
@@ -41,6 +42,7 @@ namespace YumApp.Controllers
                               ICRDRepository<Yummy_Post> yummy_PostRepository,
                               ICRDRepository<Comment> commentRepository,
                               ICRDRepository<Ingredient> ingredientRepository,
+                              ICRDRepository<Post_Ingredient> post_IngredientRepository,
                               IHttpClientFactory httpClientFactory,                              
                               IWebHostEnvironment webHostEnvironment)
         {            
@@ -51,6 +53,7 @@ namespace YumApp.Controllers
             _yummy_PostRepository = yummy_PostRepository;
             _commentRepository = commentRepository;
             _ingredientRepository = ingredientRepository;
+            _post_IngredientRepository = post_IngredientRepository;
             _httpClientFactory = httpClientFactory;            
             _userPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\UserPhotos\";
         }
@@ -58,10 +61,10 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile(int id)
         {
-            //Gets currently logged in user from database
+            //Gets currently logged in user
             AppUser currentUser = await _appUserManager.GetUserAsync(User);
 
-            //Returns List<Post> and loads List<PostModel> of user whose profile is being viewed, from database with split query,
+            //Returns List<Post> of user whose profile is being viewed, as split query,
             //because of cartesian explosion
             List<Post> userPosts = await _postRepository.GetAll()
                                                         .Where(p => p.AppUserId == id)
@@ -69,11 +72,12 @@ namespace YumApp.Controllers
                                                         .ThenInclude(pi => pi.Ingredient)
                                                         .Include(p => p.AppUser)
                                                         .Include(p => p.Comments)
-                                                        .ThenInclude(c => c.Commentator)                                                        
+                                                        .ThenInclude(c => c.Commentator)
+                                                        .OrderByDescending(p => p.TimeOfPosting)
                                                         .AsSplitQuery()
                                                         .AsNoTracking()
                                                         .ToListAsync();
-
+            //Convers Posts to PostsModel type
             List<PostModel> userPostsModel = userPosts.ToPostModel()
                                                       .ToList();
 
@@ -85,22 +89,23 @@ namespace YumApp.Controllers
             //                                    .ToList();
             #endregion
 
-            //Gets the user (post owner) from List<PostModel>
+            //Gets the user (post owner) from List<PostModel>, FirstOrDefault() since posts are from same user
             AppUserModel userModel = userPostsModel.Select(p => p.User).FirstOrDefault();
-            //Checks and sets bool if current user is following the one whose profile is being viewed, from database
+            //Checks and sets bool if current user is following the one whose profile is being viewed
             userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
                                                                .Any(u => u.FollowerId == currentUser.Id && u.FollowsId == id);
 
             //Gets all the posts which current user liked from user whose profile he is visiting
-            var currentUsersYummedPosts = await _yummy_PostRepository.GetAll()
+            List<Yummy_Post> currentUsersYummedPosts = await _yummy_PostRepository.GetAll()
                                                                      .Where(yp => yp.AppUserId == currentUser.Id && yp.PostAppUserId == id)
                                                                      .ToListAsync();
-            //Sets IsPostYummed property if current user has already liked the post
+            //Sets IsPostYummed property if current user has already liked the post, would probably be the best to denormalize database instead of doing this
             foreach (var yummedPost in currentUsersYummedPosts)
             {
                 userPostsModel.SingleOrDefault(p => p.Id == yummedPost.PostId).IsPostYummed = true;
             }
 
+            //To pass necessary data for view
             ViewBag.UserProfile = userModel;
             ViewBag.CurrentUser = currentUser;
 
@@ -109,22 +114,27 @@ namespace YumApp.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Feed()
-        {            
-            var currentUser = await _appUserManager.GetUserAsync(User);
+        {
+            //Gets currently logged in user
+            AppUser currentUser = await _appUserManager.GetUserAsync(User);
 
-            var posts = await _postRepository.GetAll()
+            //Returns List<Post> of user whose profile is being viewed, as split query,
+            //because of cartesian explosion
+            List<Post> posts = await _postRepository.GetAll()
                                              .Where(p => p.AppUser.Follow.Any(uf => uf.FollowerId == currentUser.Id))
                                              .Include(p => p.AppUser)
                                              .Include(p => p.Post_Ingredients)
                                              .ThenInclude(pi => pi.Ingredient)
                                              .Include(p => p.Comments)
                                              .ThenInclude(c => c.Commentator)
+                                             .OrderByDescending(p => p.TimeOfPosting)
                                              .AsSplitQuery()
                                              .AsNoTracking()
                                              .ToListAsync();
+            //Convers Posts to PostsModel type
+            List<PostModel> postsModel = posts.ToPostModel().ToList();
 
-            var postsModel = posts.ToPostModel().ToList();
-
+            //To pass necessary data for view
             ViewBag.CurrentUser = currentUser;            
 
             return View(postsModel);
@@ -143,10 +153,12 @@ namespace YumApp.Controllers
             }
             else
             {
+                //In case API call fails, notify the user
                 ModelState.AddModelError("Country", "Problem with loading countries, please try again later.");
             }
 
-            var currentUser = await _appUserManager.GetUserAsync(User)
+            //Gets currently logged in user as AppUserModel type
+            AppUserModel currentUser = await _appUserManager.GetUserAsync(User)
                                                    .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());            
 
             return View(currentUser);
@@ -158,20 +170,23 @@ namespace YumApp.Controllers
         {
             try
             {
+                //Checks ModelState
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
 
+                //Checks if user changed profile photo, if so, it changes photo path from the model
                 if (model.Photo != null)
                 {
                     model.PhotoPath = ControllerHelperMethods.UpdatePhotoPath(_userPhotoFolderPath, model.Photo.FileName, model.Id);
                 }
                 
-                AppUser user = model.ToAppUserEntity();
-                
+                //Converts AppUserModel to entity type, so it can be updated
+                AppUser user = model.ToAppUserEntity();                
                 IdentityResult result = await _appUserManager.UpdateUserAsync(user);
-
+                
+                //Checks if update has succeeded
                 if (!result.Succeeded)
                 {
                     foreach (var error in result.Errors)
@@ -182,12 +197,14 @@ namespace YumApp.Controllers
                     return View(model);
                 }
 
+                //Deletes old photo from server, saves new photo, if no photos were supplied, returns
                 await ControllerHelperMethods.SavePhoto(model.Photo, _userPhotoFolderPath, model.Id );
 
                 return RedirectToAction("Profile", "User", new { id = model.Id });
             }
             catch (Exception ex)
             {
+                //In case of exception, returns the View with model and errors
                 ModelState.AddModelError("", ex.Message);
 
                 return View(model);
@@ -197,22 +214,23 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> SinglePost(int id)
         {
-            var post = _postRepository.GetAll()
-                                            .Include(p => p.Post_Ingredients)
-                                            .ThenInclude(pi => pi.Ingredient)
-                                            .Include(p => p.AppUser)
-                                            .Include(p => p.Comments)
-                                            .ThenInclude(c => c.Commentator)
-                                            .Where(p => p.Id == id)
-                                            .AsSplitQuery()
-                                            .AsNoTracking()
-                                            .SingleOrDefault(p => p.Id == id);
-                                            //.ToListAsync();
+            //Gets the post
+            Post post = _postRepository.GetAll()
+                                      .Include(p => p.Post_Ingredients)
+                                      .ThenInclude(pi => pi.Ingredient)
+                                      .Include(p => p.AppUser)
+                                      .Include(p => p.Comments)
+                                      .ThenInclude(c => c.Commentator)
+                                      .Where(p => p.Id == id)
+                                      .AsSplitQuery()
+                                      .AsNoTracking()
+                                      .SingleOrDefault(p => p.Id == id);                                            
+            //Converts to PostModel
+            PostModel postModel = post.ToPostModel();
 
-            var postModel = post.ToPostModel();
-
-            var currentUser = await _appUserManager.GetUserAsync(User);
-
+            //Gets currently logged in user
+            AppUser currentUser = await _appUserManager.GetUserAsync(User);
+            //Changes bool of post depending if current user has already liked the post
             postModel.IsPostYummed = _yummy_PostRepository.GetAll()
                                                           .Any(yp => yp.PostId == id && yp.AppUserId == currentUser.Id);
 
@@ -227,24 +245,31 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task FollowUser(int id)
         {
-            var currentUser = await _appUserManager.GetUserAsync(User);
-            var followedUser = await _appUserManager.FindByIdAsync(id.ToString());
+            //Gets current user and the one who is followed
+            AppUser currentUser = await _appUserManager.GetUserAsync(User);
+            AppUser followedUser = await _appUserManager.FindByIdAsync(id.ToString());
 
-            var userFollows = new User_Follows
+            //So time matches in different tables
+            var currentDateTime = DateTime.Now;
+
+            //Creates new instance for following
+            User_Follows userFollows = new ()
             {
                 FollowerId = currentUser.Id,
                 FollowsId = id,
-                DateOfFollowing = DateTime.UtcNow
+                DateOfFollowing = currentDateTime
             };
-
+            //Adds new row to database
             await _user_FollowsRepository.Add(userFollows);
             
+            //Creates new NotificationModel instance (to take advantage of strategy pattern) and converts it to Notification entity
             Notification newNotification = new NotificationModel(currentUser.FirstName,
                                                                  currentUser.LastName, 
-                                                                 DateTime.Now,
+                                                                 currentDateTime,
                                                                  currentUser.Id, 
                                                                  new FollowNotificationTextBehavoir())
                                                                 .ToNotificationEntity(currentUser.Id, followedUser.Id);
+            //Adds new notification to the database
             await _notificationRepository.Add(newNotification);
 
             return;
@@ -253,11 +278,13 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task UnfollowUser(int id)
         {
+            //Gets Id of currently logged in user
             int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User); /*int.Parse(Request.Cookies["MyCookie"]);*/
 
-            var userFollows = await _user_FollowsRepository.GetAll()
+            //Gets the row of current user following the specified one
+            User_Follows userFollows = await _user_FollowsRepository.GetAll()
                                                            .SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
-
+            //Deletes the row
             await _user_FollowsRepository.Remove(userFollows);
             
             return;
@@ -266,37 +293,48 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task<IActionResult> YumAPost(int id)
         {
-            var currentUser = await _appUserManager.GetUserAsync(User);
-            var yummedPost = await _postRepository.GetSingle(id);
+            //Gets the current user
+            AppUser currentUser = await _appUserManager.GetUserAsync(User);
+            //Gets the post which current user liked
+            Post yummedPost = await _postRepository.GetSingle(id);
 
-
+            //Increments the number of likes and updates the instance
             yummedPost.NumberOfYums++;
             await _postRepository.Update(yummedPost);
 
+            //So time matches in different tables
+            var currentDateTime = DateTime.Now;
+
+            //Liked post instance
             Yummy_Post yummy_Post = new()
             {
                 AppUserId = currentUser.Id,
-                DateYummed = DateTime.Now,
+                DateYummed = currentDateTime,
                 PostId = yummedPost.Id,
                 PostAppUserId = yummedPost.AppUserId
             };
+            //Adding liked post to database
             await _yummy_PostRepository.Add(yummy_Post);
 
+            //Creates new NotificationModel instance (to take advantage of strategy pattern) and converts it to Notification entity
             Notification newNotification = new NotificationModel(currentUser.FirstName,
                                                                  currentUser.LastName,
-                                                                 DateTime.Now,
+                                                                 currentDateTime,
                                                                  yummedPost.Id, 
                                                                  new YumNotificationTextBehavior())
                                                                 .ToNotificationEntity(currentUser.Id, yummedPost.AppUserId);
+            //Adds new notification to the database
             await _notificationRepository.Add(newNotification);
 
+            //Returns the incremented number of likes
             return Json(yummedPost.NumberOfYums);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetNotifications(int id)
         {
-            var notifications = await _notificationRepository.GetAll()
+            //Gets notifications of specified user
+            List<NotificationModel> notifications = await _notificationRepository.GetAll()
                                                              .Where(n => n.ReceiverId == id)                                                             
                                                              .ToNotificationModel()
                                                              .OrderByDescending(n => n.TimeOfNotification)
@@ -308,11 +346,15 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAComment(int id, string commentText) 
         {
-            var currentUser = await _appUserManager.GetUserAsync(User);
-            var commentedPost = await _postRepository.GetSingle(id);
+            //Gets the current user
+            AppUser currentUser = await _appUserManager.GetUserAsync(User);
+            //Gets specified post
+            Post commentedPost = await _postRepository.GetSingle(id);
 
+            //So time matches in different tables
             var currentDateTime = DateTime.Now;
 
+            //Creates new CommentModel instance
             var newCommentModel = new CommentModel
             {
                 Commentator = currentUser.ToAppUserModelBaseInfo(),
@@ -320,20 +362,18 @@ namespace YumApp.Controllers
                 TimeOfCommenting = currentDateTime,
                 AppUserId = commentedPost.AppUserId,
                 PostId = id
-                //PostId = postId,
-                //AppUserId = commentedPost.AppUserId,
-                //CommentatorId = currentUser.Id,
-                //Content = commentText,
-                //TimeOfCommenting = currentDateTime
             };
+            //Adds Comment entity to database
             await _commentRepository.Add(newCommentModel.ToCommentEntity());
 
+            //Creates new NotificationModel instance (to take advantage of strategy pattern) and converts it to Notification entity
             Notification newNotification = new NotificationModel(currentUser.FirstName,
                                                                  currentUser.LastName,
                                                                  currentDateTime,
                                                                  id,
                                                                  new CommentNotificationTextBehavior())
                                                                  .ToNotificationEntity(currentUser.Id, commentedPost.AppUserId);
+            //Adds new notification to the database
             await _notificationRepository.Add(newNotification);
 
             return Json(newCommentModel);
@@ -342,11 +382,67 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetIngredients()
         {
+            //Gets all ingredients from database
             var ingredients = await _ingredientRepository.GetAll()
                                                          .ToIngredientModel()
+                                                         .OrderBy(i => i.Name)
                                                          .ToListAsync();
 
             return Json(ingredients);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostAPost(string postContent, string postNotes, string[] postIngredientIds)
+        {
+            //Gets the current user
+            AppUser currentUser = await _appUserManager.GetUserAsync(User);
+
+            //Checks if Comment.Content is null
+            if (string.IsNullOrWhiteSpace(postContent))
+            {
+                ModelState.AddModelError("Content", "Content is required.");
+                return RedirectToAction("Profile", new { id = currentUser.Id });
+            }            
+
+            //Creates new Post instance
+            Post newPost = new()
+            {
+                Content = postContent,
+                Notes = postNotes,
+                AppUserId = currentUser.Id,
+                NumberOfYums = 0,
+                TimeOfPosting = DateTime.Now
+            };
+            //Adds newPost instance to database
+            Post addedPost = await _postRepository.Add(newPost);            
+
+            //Creates and adds post_Ingredient instances to database
+            //Very bad performace due to constantly SaveChanges() for each object, should AddRange() instead
+            foreach (var ingredientId in postIngredientIds)
+            {
+                var post_Ingredient = new Post_Ingredient
+                {
+                    PostId = addedPost.Id,
+                    AppUserId = addedPost.AppUserId,
+                    IngredientId = int.Parse(ingredientId)
+                };
+
+                await _post_IngredientRepository.Add(post_Ingredient);
+            }
+
+            return Json(new { redirectToUrl = Url.Action("SinglePost", "User", new { id = addedPost.Id }) });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFollowingUsers(int id)
+        {
+            //Get all users that are followed by specified user
+            List<AppUserModel> followingUsers = await _user_FollowsRepository.GetAll()
+                                                              .Where(uf => uf.Follower.Id == id)
+                                                              .Select(uf => uf.Follows)
+                                                              .ToAppUserModelBaseInfo()
+                                                              .ToListAsync();
+            return Json(followingUsers);
         }
     }
 }

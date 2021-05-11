@@ -3,113 +3,110 @@
     AppUser currentUser = ViewBag.CurrentUser;
 }
 
-@foreach (var p in Model)
-{
-<div class="d-flex">
-    @if (p.IsPostYummed)
+<div id="all-user-posts">
+    @foreach (var p in Model)
     {
-        <div class="number-of-yums pt-1 d-flex flex-column align-items-center rounded-circle bg-success">
-            <p id="yum-counter-@p.Id" class="mb-0 text-white">@p.NumberOfYums</p>
-            <p class="text-white">Yums</p>
-        </div>
-    }
-    else
-    {
-        <div class="number-of-yums pt-1 d-flex flex-column align-items-center rounded-circle">
-            @if (currentUser.Id != p.User.Id)
+        <div class="d-flex">
+            @if (p.IsPostYummed)
             {
-                <button id="@p.Id" data-userid="@p.User.Id" class="btn" onclick="YumAPost(this)">
-                    <i class="fas fa-chevron-up text-primary"></i>
-                </button>
+                <div class="number-of-yums pt-1 d-flex flex-column align-items-center rounded-circle bg-success">
+                    <p id="yum-counter-@p.Id" class="mb-0 text-white">@p.NumberOfYums</p>
+                    <p class="text-white">Yums</p>
+                </div>
             }
-            <p id="yum-counter-@p.Id" class="mb-0">@p.NumberOfYums</p>
-            <p>Yums</p>
-        </div>
-    }
-    <div class="post d-inline-flex flex-column w-100 ml-4 mb-3 p-4">
-        <div class="user-time-options row d-flex justify-content-between mb-3">
-            <div class="media">
-                <div class="d-flex flex-column flex-sm-row">
-                    <a asp-action="Profile" asp-controller="User" asp-route-id="@p.User.Id">
-                        <img src="@p.User.PhotoPath" class="post-profile-photo img-fluid rounded-circle" alt="User photo">
-                    </a>
-                    <div class="media-body d-flex flex-column justify-content-between ml-2">
-                        <a asp-action="Profile" asp-controller="User" asp-route-id="@p.User.Id">
-                            <p class="post-username text-nowrap mb-0 font-weight-bold">
-                                @p.User.FirstName @p.User.LastName
-                            </p>
-                        </a>
-                        <p class="post-time text-nowrap mb-0">
-                            @p.TimeOfPosting
+            else
+            {
+                <div class="number-of-yums pt-1 d-flex flex-column align-items-center rounded-circle">
+                    @if (currentUser.Id != p.User.Id)
+                    {
+                        <button id="@p.Id" data-userid="@p.User.Id" class="btn" onclick="YumAPost(this)">
+                            <i class="fas fa-chevron-up text-primary"></i>
+                        </button>
+                    }
+                    <p id="yum-counter-@p.Id" class="mb-0">@p.NumberOfYums</p>
+                    <p>Yums</p>
+                </div>
+            }
+            <div class="post d-inline-flex flex-column w-100 ml-4 mb-3 p-4">
+                <div class="user-time-options row d-flex justify-content-between mb-3">
+                    <div class="media">
+                        <div class="d-flex flex-column flex-sm-row">
+                            <a asp-action="Profile" asp-controller="User" asp-route-id="@p.User.Id">
+                                <img src="@p.User.PhotoPath" class="post-profile-photo img-fluid rounded-circle" alt="User photo">
+                            </a>
+                            <div class="media-body d-flex flex-column justify-content-between ml-2">
+                                <a asp-action="Profile" asp-controller="User" asp-route-id="@p.User.Id">
+                                    <p class="post-username text-nowrap mb-0 font-weight-bold">
+                                        @p.User.FirstName @p.User.LastName
+                                    </p>
+                                </a>
+                                <p class="post-time text-nowrap mb-0">
+                                    @p.TimeOfPosting
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="dropdown mr-3">
+                            <button class="btn bg-transparent dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">                                
+                                <button class="dropdown-item" type="button">Report</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (p.Ingredients.Any())
+                {
+                    <div class="ingredients mb-3">
+                        <p class="mb-2">
+                            Necessary ingredients:
+                        </p>
+                        <partial name="_IngredientsButtonPartial" for="@p.Ingredients" />
+                    </div>
+                }
+
+                <div class="content">
+                    <p class="mb-0">
+                        @p.Content
+                    </p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(p.Notes))
+                {                   
+                    <div class="notes mt-4">
+                        <p>
+                            NOTES: @p.Notes
                         </p>
                     </div>
-                </div>
-            </div>
+                }
 
-            <div>
-                <div class="dropdown mr-3">
-                    <button class="btn bg-transparent dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button">Save</button>
-                        <button class="dropdown-item" type="button">Report</button>
+                <hr class="horizontal-line w-100 mt-4 mb-0" />
+                <hr class="horizontal-line w-100 mt-4 mb-3" />
+
+                <div class="comments">
+                    <div class="d-flex">
+                        <div>
+                            <img src="@currentUser.PhotoPath" class="comment-user-photo" alt="User photo" />
+                        </div>
+                        <div class="w-100 ml-2">                            
+                            <div class="form-group d-flex flex-column">
+                                <textarea class="form-control rounded-pill non-resizable-textarea mb-2 pt-2 pb-2 respo" id="textarea-comment-@p.Id" rows="3" required placeholder="Write a comment..."></textarea>
+                                <button id="post-a-comment-btn-@p.Id" data-postid="@p.Id" onclick="PostAComment(this)" class="btn btn-primary align-self-end">Comment</button>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div id="all-comments-@p.Id">
+                        @if (p.Comments.Any())
+                        {
+                            <partial name="_CommentsPartial" for="@p.Comments" />
+                        }
                     </div>
                 </div>
             </div>
         </div>
-
-        @if (p.Ingredients.Any())
-        {
-            <div class="ingredients mb-3">
-                <p class="mb-2">
-                    Necessary ingredients:
-                </p>
-                <partial name="_IngredientsButtonPartial" for="@p.Ingredients" />
-            </div>
-        }
-
-        <div class="content">
-            <p class="mb-0">
-                @p.Content
-            </p>
-        </div>
-
-        @if (!string.IsNullOrEmpty(p.Notes))
-        {
-            @*<hr class="horizontal-line w-100 mt-4 mb-2" />*@
-
-            <div class="notes mt-4">
-                <p>
-                    NOTES: @p.Notes
-                </p>
-            </div>
-        }
-
-        <hr class="horizontal-line w-100 mt-4 mb-0" />
-        <hr class="horizontal-line w-100 mt-4 mb-3" />
-
-        <div class="comments">
-            <div class="d-flex">
-                <div>
-                    <img src="@currentUser.PhotoPath" class="comment-user-photo" alt="User photo" />
-                </div>
-                <div class="w-100 ml-2">
-                    @*<form asp-action="PostAComment" asp-controller="User" asp-route-postId="@p.Id" method="post">*@
-                        <div class="form-group d-flex flex-column">
-                            <textarea class="form-control rounded-pill non-resizable-textarea mb-2 pt-2 pb-2 respo" id="textarea-comment-@p.Id" rows="3" required placeholder="Write a comment..."></textarea>
-                            <button id="post-a-comment-btn-@p.Id" @*type="submit"*@ data-postid="@p.Id" onclick="PostAComment(this)" class="btn btn-primary align-self-end">Comment</button>
-                        </div>
-                    @*</form>*@
-                </div>
-            </div>
-            <div id="all-comments-@p.Id">
-                @if (p.Comments.Any())
-                {
-                    <partial name="_CommentsPartial" for="@p.Comments" />
-                }
-            </div>
-        </div>
-    </div>
+    }
 </div>
-}

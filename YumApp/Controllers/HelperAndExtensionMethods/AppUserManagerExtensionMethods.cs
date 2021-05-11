@@ -28,13 +28,6 @@ namespace YumApp.Controllers
             return currentUserId;
         }
 
-        //public static async Task<AppUserModel> GetCurrentUserToAppUserModelBaseInfo(this AppUserManager appUserManager, ClaimsPrincipal claimsPrincipal)
-        //{
-        //    var currentUser = await appUserManager.GetUserAsync(claimsPrincipal);
-
-        //    return currentUser.ToAppUserModelBaseInfo();
-        //}
-
         public static async Task<IdentityResult> UpdateUserAsync(this AppUserManager appUserManager, AppUser model)
         {
             var userToBeUpdated = await appUserManager.FindByIdAsync(model.Id.ToString());

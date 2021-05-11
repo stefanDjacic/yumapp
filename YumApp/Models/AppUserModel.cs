@@ -11,52 +11,7 @@ using System.Threading.Tasks;
 namespace YumApp.Models
 {
     public static class AppUserModelExtensionMethods
-    {
-        #region bad code, check later if needed and fix it
-        //public static readonly Expression<Func<AppUser, AppUserModel>> MapAppUserToAppUserModelBaseInfo =
-        //    appUser => new AppUserModel
-        //    {
-        //        About = appUser.About,
-        //        Country = appUser.Country,
-        //        DateCreated = appUser.DateCreated, //Probably dont need
-        //        DateOfBirth = appUser.DateOfBirth,
-        //        Email = appUser.Email,
-        //        FirstName = appUser.FirstName,
-        //        Gender = appUser.Gender,
-        //        Id = appUser.Id,
-        //        LastName = appUser.LastName,
-        //        PhotoPath = appUser.PhotoPath,
-        //        Username = appUser.UserName                
-        //    };
-
-        //public static readonly Expression<Func<AppUser, AppUserModel>> MapAppUserToAppUserModel =
-        //    appUser => new AppUserModel
-        //    {
-        //        About = appUser.About,
-        //        Country = appUser.Country,
-        //        DateCreated = appUser.DateCreated, //Probably dont need
-        //        DateOfBirth = appUser.DateOfBirth,
-        //        Email = appUser.Email,
-        //        FirstName = appUser.FirstName,
-        //        Gender = appUser.Gender,
-        //        Id = appUser.Id,
-        //        LastName = appUser.LastName,
-        //        PhotoPath = appUser.PhotoPath,
-        //        Username = appUser.UserName,
-        //        Notifications = appUser.NotificationsReceiver.AsQueryable().Select(NotificationModelExtensionMethods.MapNotificationToNotificationModel).ToList()
-        //    };
-
-        //public static IQueryable<AppUserModel> ToAppUserModelTest(this IQueryable<AppUser> appUsers)
-        //{
-        //    return appUsers.Select(MapAppUserToAppUserModelBaseInfo);
-        //}
-
-        //public static IQueryable<AppUserModel> ToAppUserModel(this IQueryable<AppUser> appUsers)
-        //{
-        //    return appUsers.Select(au => au.ToAppUserModel());
-        //}
-        #endregion
-
+    {        
         public static AppUserModel ToAppUserModel(this AppUser appUser)
         {
             var appUserModel = appUser.ToAppUserModelBaseInfo();
@@ -66,6 +21,23 @@ namespace YumApp.Models
                                                 .ToList();
 
             return appUserModel;
+        }
+
+        public static IQueryable<AppUserModel> ToAppUserModelBaseInfo(this IQueryable<AppUser> appUsers)
+        {
+            return appUsers.Select(appUser => new AppUserModel
+            {
+                Id = appUser.Id,
+                FirstName = appUser.FirstName,
+                LastName = appUser.LastName,
+                Email = appUser.Email,
+                Username = appUser.UserName,
+                DateOfBirth = appUser.DateOfBirth,
+                Country = appUser.Country,
+                Gender = appUser.Gender,
+                About = appUser.About,
+                PhotoPath = appUser.PhotoPath
+            });
         }
 
         public static AppUserModel ToAppUserModelBaseInfo(this AppUser appUser)
@@ -151,7 +123,7 @@ namespace YumApp.Models
         public DateTime DateOfBirth { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime DateCreated { get; set; } /*= DateTime.UtcNow;*/
+        public DateTime DateCreated { get; set; }
 
         [MaxLength(100)]
         public string Country { get; set; }
@@ -164,7 +136,7 @@ namespace YumApp.Models
         public string About { get; set; }
 
         [Required]
-        public string PhotoPath { get; set; } /*= @"C:\Users\Korisnik\Desktop\YumApp Photos\DefaultUserPhoto";*/
+        public string PhotoPath { get; set; }
 
         public IEnumerable<NotificationModel> Notifications { get; set; }
 
@@ -172,4 +144,49 @@ namespace YumApp.Models
 
         public IFormFile Photo { get; set; }
     }
+
+    #region bad code, check later if needed and fix it
+    //public static readonly Expression<Func<AppUser, AppUserModel>> MapAppUserToAppUserModelBaseInfo =
+    //    appUser => new AppUserModel
+    //    {
+    //        About = appUser.About,
+    //        Country = appUser.Country,
+    //        DateCreated = appUser.DateCreated, //Probably dont need
+    //        DateOfBirth = appUser.DateOfBirth,
+    //        Email = appUser.Email,
+    //        FirstName = appUser.FirstName,
+    //        Gender = appUser.Gender,
+    //        Id = appUser.Id,
+    //        LastName = appUser.LastName,
+    //        PhotoPath = appUser.PhotoPath,
+    //        Username = appUser.UserName                
+    //    };
+
+    //public static readonly Expression<Func<AppUser, AppUserModel>> MapAppUserToAppUserModel =
+    //    appUser => new AppUserModel
+    //    {
+    //        About = appUser.About,
+    //        Country = appUser.Country,
+    //        DateCreated = appUser.DateCreated, //Probably dont need
+    //        DateOfBirth = appUser.DateOfBirth,
+    //        Email = appUser.Email,
+    //        FirstName = appUser.FirstName,
+    //        Gender = appUser.Gender,
+    //        Id = appUser.Id,
+    //        LastName = appUser.LastName,
+    //        PhotoPath = appUser.PhotoPath,
+    //        Username = appUser.UserName,
+    //        Notifications = appUser.NotificationsReceiver.AsQueryable().Select(NotificationModelExtensionMethods.MapNotificationToNotificationModel).ToList()
+    //    };
+
+    //public static IQueryable<AppUserModel> ToAppUserModelTest(this IQueryable<AppUser> appUsers)
+    //{
+    //    return appUsers.Select(MapAppUserToAppUserModelBaseInfo);
+    //}
+
+    //public static IQueryable<AppUserModel> ToAppUserModel(this IQueryable<AppUser> appUsers)
+    //{
+    //    return appUsers.Select(au => au.ToAppUserModel());
+    //}
+    #endregion
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary.Repository
 {
-    public class PostRepository : ICRUDRepository<Post>  /*IPostRepository */
+    public class PostRepository : ICRUDRepository<Post>
     {
         private readonly YumAppDbContext _context;
 

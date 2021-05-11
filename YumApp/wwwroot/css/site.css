@@ -117,9 +117,6 @@ body {
 
 
 /*------------------ PROFILE ------------------*/
-/*.user-profile-background {
-    background-color: #2f9f2f;
-}*/
 .user-profile-photo {
     width: 200px;
     height: 200px;
@@ -139,7 +136,18 @@ div .verical-line {
     width: 1px;
 }
 
+/*-------------------- New Post --------------------*/
+.ingredients-area {
+    border: 1px solid #ced4da;
+    height: 125px;
+    overflow-y: scroll;
+}
 
+/*-------------------- Follow users --------------------*/
+.follow-photo {
+    width: 100px;
+    height: 100px;
+}
 /*------------------ POST model ------------------*/
 .number-of-yums {
     height: max-content;
@@ -182,7 +190,6 @@ div .verical-line {
     .modal-body-photo {
         width: 200px;
         height: auto;
-/*        object-fit: contain;*/
     }
 
     /*------------------ COMMENT ------------------*/

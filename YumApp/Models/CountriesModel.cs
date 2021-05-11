@@ -13,7 +13,7 @@ namespace YumApp.Models
         public class Country
         {
             public string Name { get; set; }
-    }
+        }
     //    public string[] topLevelDomain { get; set; }
     //    public string alpha2Code { get; set; }
     //    public string alpha3Code { get; set; }

@@ -18,7 +18,6 @@ namespace YumApp.Controllers
 {
     public static class ControllerHelperMethods
     {
-
         #region Cookie Methods
         public static void CreateUserIdCookie(this Controller controller, int userId)
         {
@@ -40,6 +39,7 @@ namespace YumApp.Controllers
             return currentUserId;
         }
         #endregion
+
 
         public static async Task<HttpResponseMessage> CallApi(HttpMethod httpMethod, string uri, IHttpClientFactory httpClientFactory)
         {
@@ -87,9 +87,7 @@ namespace YumApp.Controllers
         }
 
         private static void DeletePhoto(int userId, string filePath)
-        {
-            //var photoId = filePath.Substring(filePath.LastIndexOf('\\') + 1, userId.ToString().Length);
-
+        {            
             //Gets user photo path with the same id value as user's who is updating profile photo if it exists
             var photoPathWithSameIdAsUser = Directory.GetFiles(filePath.Substring(0, filePath.LastIndexOf('\\')))
                                                  .SingleOrDefault(f => f.Substring(filePath.LastIndexOf('\\') + 1, userId.ToString().Length) == userId.ToString());

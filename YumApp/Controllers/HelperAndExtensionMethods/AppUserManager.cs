@@ -8,6 +8,7 @@ using YumApp.Models;
 
 namespace YumApp.Controllers.HelperAndExtensionMethods
 {
+    //Didn't use
     public class AppUserManager : UserManager<AppUser>
     {
         public AppUserManager(AppUserStore store,

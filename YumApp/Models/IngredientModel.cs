@@ -14,6 +14,7 @@ namespace YumApp.Models
         {
             return ingredients.Select(i => new IngredientModel
             {
+                Id = i.Id,
                 Name = i.Name,
                 Description = i.Description,
                 PhotoPath = i.PhotoPath
@@ -24,6 +25,7 @@ namespace YumApp.Models
         {
             return ingredients.Select(i => new IngredientModel
             {
+                Id = i.Id,
                 Name = i.Name,
                 Description = i.Description,
                 PhotoPath = i.PhotoPath
@@ -34,6 +36,8 @@ namespace YumApp.Models
 
     public class IngredientModel
     {
+        public int Id { get; set; }
+
         [Required]
         [MinLength(2, ErrorMessage = "Minimum lengt is 2 characters.")]
         [MaxLength(50, ErrorMessage = "Maximum lengt is 50 characters.")]

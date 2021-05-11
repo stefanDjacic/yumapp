@@ -34,7 +34,7 @@ namespace YumApp.Controllers
             //Checkes if current user is logged in to redirect him to his profile
             if (_signInManager.IsSignedIn(User))
             {
-                var currentUserId = /*this.GetCurrentUserIdFromCookie();*/ await _appUserManager.GetCurrentUserIdAsync(User);
+                var currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
 
                 return RedirectToAction("Profile", "User", new { id = currentUserId });                 //OVO MENJAJ
             }
@@ -48,17 +48,21 @@ namespace YumApp.Controllers
         {
             try
             {
+                //Checks if model is valid
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
                 
-                //
+                //Converts RegisterModel to AppUser type
                 AppUser newUser = model.ToAppUserEntity();
+                //Sets default properties for new user
                 newUser.SetDefaultPhotoPathAndUserName();
 
+                //Creates new user
                 var result = await _appUserManager.CreateAsync(newUser, newUser.PasswordHash);
 
+                //Checks if user is created and returns model with errors if it didn't
                 if (!result.Succeeded)
                 {
                     foreach (var error in result.Errors)
@@ -68,11 +72,14 @@ namespace YumApp.Controllers
 
                     return View("Index", model);
                 }
-
+                
+                //Adds new user to role
                 await _appUserManager.AddToRoleAsync(newUser, "normaluser");     
                 
+                //Signs in new user
                 await _signInManager.SignInAsync(newUser, false);
                 
+                //Gets id of new user to redirect him to his profile
                 int currentUserId = await _appUserManager.GetCurrentUserIdAsync(newUser.Email);
 
                 return RedirectToAction("Profile", "User", new { id = currentUserId });
@@ -94,20 +101,24 @@ namespace YumApp.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             try
-            {                
+            {
+                //Checks if modelState is valid
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
 
+                //Tries to sign in user
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
+                //Checks if signing in failed
                 if (!result.Succeeded)
                 {
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
                 }
 
+                //Gets current user's id
                 int currentUserId = await _appUserManager.GetCurrentUserIdAsync(model.Email);
 
 
@@ -126,18 +137,13 @@ namespace YumApp.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
+            //Signs out the user
             await _signInManager.SignOutAsync();
 
-            //Response.Cookies.Delete("MyCookie");
+            //Deletes user id cookie
             this.RemoveUserIdCookie();
 
             return RedirectToAction("Index", "Home");
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

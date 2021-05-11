@@ -9,12 +9,8 @@ namespace EntityLibrary
 {
     public class User_Feed
     {
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int Id { get; set; }
-
         //Navigation properties
-        public int AppUserId { get; set; }
-        //[ForeignKey("AppUserId")]
+        public int AppUserId { get; set; }        
         public AppUser AppUser { get; set; }
 
         public int PostId { get; set; }

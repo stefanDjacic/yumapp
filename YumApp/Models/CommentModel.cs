@@ -41,16 +41,6 @@ namespace YumApp.Models
         //}
         #endregion
 
-        //public static IQueryable<CommentModel> ToCommentModel(this IQueryable<Comment> comments)
-        //{
-        //    return comments.Select(c => new CommentModel
-        //    {
-        //        Content = c.Content,
-        //        TimeOfCommenting = c.TimeOfCommenting,                
-        //        Commentator = c.Commentator.ToAppUserModelBaseInfo()
-        //    });
-        //}
-
         public static IEnumerable<CommentModel> ToCommentModel(this IEnumerable<Comment> comments)
         {
             return comments.Select(c => new CommentModel

@@ -1,4 +1,4 @@
-﻿@inject Microsoft.AspNetCore.Identity.SignInManager<AppUser> _signInManager;
+﻿@inject SignInManager<AppUser> _signInManager;
 @{ 
     var isUserSignedIn = _signInManager.IsSignedIn(User);
 }

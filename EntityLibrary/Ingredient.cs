@@ -35,10 +35,5 @@ namespace EntityLibrary
 
         //Navigation properties
         public ICollection<Post_Ingredient> Post_Ingredients { get; set; }
-
-
-        //Other
-        [NotMapped]
-        public IFormFile Photo { get; set; }
     }
 }

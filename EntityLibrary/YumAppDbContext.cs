@@ -49,9 +49,7 @@ namespace EntityLibrary
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-                c.HasKey(c => new { c.Id, c.PostId, c.AppUserId });
-                
-                //c.Navigation(c => c.Commentator).AutoInclude();
+                c.HasKey(c => new { c.Id, c.PostId, c.AppUserId });                               
             });
 
             modelBuilder.Entity<User_Follows>(uf =>
@@ -106,13 +104,6 @@ namespace EntityLibrary
             {
                 au.Property(au => au.Gender)
                 .HasConversion<int>();               
-
-                //au.Ignore(au => au.AccessFailedCount);
-                //au.Ignore(au => au.LockoutEnabled);
-                //au.Ignore(au => au.LockoutEnd);
-                //au.Ignore(au => au.PhoneNumber);
-                //au.Ignore(au => au.PhoneNumberConfirmed);
-                //au.Ignore(au => au.TwoFactorEnabled);
 
                 au.Property(p =>p.Email).IsRequired();
                 au.Property(p => p.PasswordHash).IsRequired();

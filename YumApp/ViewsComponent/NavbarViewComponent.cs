@@ -14,12 +14,10 @@ namespace YumApp.ViewsComponent
 {
     public class NavbarViewComponent : ViewComponent
     {        
-        //private readonly AppUserManager _appUserManager;
         private readonly ICRDRepository<Notification> _notificationRepository;
 
-        public NavbarViewComponent(/*AppUserManager appUserManager,*/ ICRDRepository<Notification> notificationRepository)
-        {            
-            //_appUserManager = appUserManager;
+        public NavbarViewComponent(ICRDRepository<Notification> notificationRepository)
+        {                        
             _notificationRepository = notificationRepository;
         }
 

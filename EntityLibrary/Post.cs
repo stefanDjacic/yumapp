@@ -29,9 +29,9 @@ namespace EntityLibrary
         [MaxLength(100, ErrorMessage = "Maximum lengt is 100 characters.")]
         public string Notes { get; set; }
 
-        public int NumberOfYums { get; set; } = 0;
+        public int NumberOfYums { get; set; }
 
-        public DateTime TimeOfPosting { get; set; } /*= DateTime.Now.ToLocalTime();*/
+        public DateTime TimeOfPosting { get; set; }
 
         //Navigation properties
         public int AppUserId { get; set; }
