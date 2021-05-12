@@ -66,11 +66,11 @@
                     <i class="fas fa-user"></i>
                     Following
                 </button>
-                <button type="button" class="list-group-item list-group-item-action">
+                <button id="followers-btn" type="button" class="list-group-item list-group-item-action">
                     <i class="fas fa-users"></i>
                     Followers
                 </button>
-                <button type="button" class="list-group-item list-group-item-action">
+                <button id="yummed-posts-btn" type="button" class="list-group-item list-group-item-action">
                     <i class="fas fa-thumbs-up"></i>
                     Liked posts
                 </button>                
@@ -99,7 +99,333 @@
     <script src="~/js/PostRelatedScript.js"></script>
     <script src="~/js/NewPostScripts.js"></script>
     <script>
-        ////signalR connection
+        //Start of ajax call for getting liked posts of specified user
+        $(document).ready(function () {
+            $('#yummed-posts-btn').click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/User/GetYummedPosts/@userProfile.Id',
+                    success: function (yummedPosts) {
+                        $('#all-user-posts').hide();
+                        $('#add-new-post-btn').hide();
+
+                        if ($('#follow-div').length) {
+                            $('#follow-div').remove();
+                        }
+
+                        var hideAndSeekDiv = document.getElementById('hide-and-seek');
+                        var followDiv = document.createElement('div');
+                        followDiv.setAttribute('id', 'follow-div');
+                        followDiv.classList.add('d-flex', 'flex-wrap', 'flex-column');
+
+                        var backButton = `
+                            <div class="following-div-btn">
+                                <button class="btn bg-transparent" onclick="GoBack()">
+                                    <i class="fas fa-chevron-left mr-3"></i>Back
+                                </button>
+                            </div>
+                        `;
+                        followDiv.innerHTML += backButton;
+
+                        var allUserPosts = document.getElementById('all-user-posts');
+
+                        yummedPosts.forEach((post) => {
+                            var mainDiv = document.createElement('div');
+                            mainDiv.classList.add('d-flex');
+                            followDiv.appendChild(mainDiv);//
+
+                            var yumCounterDiv = document.createElement('div');
+                            yumCounterDiv.classList.add('number-of-yums', 'pt-1', 'd-flex', 'flex-column', 'align-items-center', 'rounded-circle', 'bg-success');
+                            yumCounterDiv.innerHTML = `
+                                <p id="yum-counter-${post.id}" class="mb-0 text-white">${post.numberOfYums}</p>
+                                <p class="text-white">Yums</p>
+                            `;
+                            mainDiv.appendChild(yumCounterDiv);
+
+                            var bigDiv = document.createElement('div');
+                            bigDiv.classList.add('post', 'd-inline-flex', 'flex-column', 'w-100', 'ml-4', 'mb-3', 'p-4');
+                            mainDiv.appendChild(bigDiv);
+
+                            var postInfoDiv = document.createElement('div');
+                            postInfoDiv.classList.add('user-time-options', 'row', 'd-flex', 'justify-content-between', 'mb-3');
+                            postInfoDiv.innerHTML = `
+                                <div class="media">
+                                    <div class="d-flex flex-column flex-sm-row">
+                                        <a href="/User/Profile/${post.user.id}" @*asp-action="Profile" asp-controller="User" asp-route-id="${post.user.id}"*@>
+                                            <img src="${post.user.photoPath}" class="post-profile-photo img-fluid rounded-circle" alt="User photo">
+                                        </a>
+                                        <div class="media-body d-flex flex-column justify-content-between ml-2">
+                                            <a href="/User/Profile/${post.user.id}" @*asp-action="Profile" asp-controller="User" asp-route-id="${post.user.id}"*@>
+                                                <p class="post-username text-nowrap mb-0 font-weight-bold">
+                                                    ${post.user.firstName} ${post.user.lastName}
+                                                </p>
+                                            </a>
+                                            <p class="post-time text-nowrap mb-0">
+                                                ${post.timeOfPosting}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="dropdown mr-3">
+                                        <button class="btn bg-transparent dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                            <button class="dropdown-item" type="button">Report</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            bigDiv.appendChild(postInfoDiv);
+
+                            if (post.ingredients.length) {
+                                var allIngredientsDiv = document.createElement('div');
+                                allIngredientsDiv.classList.add('ingredients', 'mb-3');
+                                allIngredientsDiv.innerHTML = `
+                                     <p class="mb-2">
+                                        Necessary ingredients:
+                                    </p>
+                                `;
+
+                                post.ingredients.forEach((ingredient) => {
+                                    var ingredientDiv = document.createElement('div');
+                                    ingredientDiv.classList.add('mb-2');
+
+                                    var ingredientHtml = `
+                                        <button type="button" class="ingredient-btn btn btn-outline-success d-flex rounded-pill p-0 align-items-center" data-toggle="modal" data-target="#ModalCenter-ingredient1">
+                                            <img class="ingredient-photo rounded-pill" src="${ingredient.photoPath}"@*~/Photos/DefaultIngredientPhoto.jpg*@ alt="${ingredient.name}" />
+                                            <p class="mb-0 ml-3 mr-3">
+                                                ${ingredient.name}
+                                            </p>
+                                        </button>
+
+                                        <div class="modal fade" id="ModalCenter-ingredient1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="ModalCenterTitle-ingredient">${ingredient.name}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body d-flex">
+                                                        <div>
+                                                            <img class="modal-body-photo rounded" src="${ingredient.photoPath}" alt="${ingredient.name} photo" />
+                                                        </div>
+
+                                                        <div class="verical-line h-auto bg-secondary ml-3 mr-3">
+
+                                                        </div>
+
+                                                        <div class="modal-body-info">
+                                                            ${ingredient.description}
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+
+                                    ingredientDiv.innerHTML = ingredientHtml;
+                                    allIngredientsDiv.appendChild(ingredientDiv)
+                                });
+
+                                bigDiv.appendChild(allIngredientsDiv);
+                            }
+
+                            var contentDiv = document.createElement('div');
+                            contentDiv.classList.add('content');
+                            contentDiv.innerHTML = `
+                                <p class="mb-0">
+                                    ${post.content}
+                                </p>
+                            `;
+                            bigDiv.appendChild(contentDiv);
+
+                            if (post.notes) {
+                                var notesDiv = document.createElement('div');
+                                notesDiv.classList.add('notes', 'mt-4');
+                                notesDiv.innerHTML = `
+                                     <p>
+                                        NOTES: ${post.notes}
+                                    </p>
+                                `;
+                                bigDiv.appendChild(notesDiv);    
+                            }
+
+                        });
+                        hideAndSeekDiv.appendChild(followDiv);
+                        $('#follow-div').show();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+        //End of ajax call for getting liked posts of specified user
+
+        //Start of ajax call for getting followers of specified user
+        $(document).ready(function () {
+            $('#followers-btn').click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/User/GetFollowers/@userProfile.Id',
+                    success: function (users) {
+                        $('#all-user-posts').hide();
+                        $('#add-new-post-btn').hide();
+
+                        if ($('#follow-div').length) {
+                            $('#follow-div').remove();
+                        }
+
+                        var hideAndSeekDiv = document.getElementById('hide-and-seek');
+                        var followDiv = document.createElement('div');
+                        followDiv.setAttribute('id', 'follow-div');
+                        followDiv.classList.add('d-flex', 'flex-wrap');
+
+                        var backButton = `
+                            <div class="following-div-btn">
+                                <button class="btn bg-transparent" onclick="GoBack()">
+                                    <i class="fas fa-chevron-left mr-3"></i>Back
+                                </button>
+                            </div>
+                        `;
+                        followDiv.innerHTML += backButton;
+
+                        users.forEach((user) => {
+                            var usersHtml = `
+                                <div class="ml-3 mt-2 mr-3 bg-dark">
+                                    <figure class="figure">
+                                        <a href="/User/Profile/${user.id}">
+                                            <img src="${user.photoPath}" class="figure-img img-fluid rounded-circle follow-photo" alt="User photo" >
+                                            <figcaption class="figure-caption text-center">
+                                                ${user.firstName} ${user.lastName}
+                                            </figcaption>
+                                        </a>
+                                    </figure>
+                                </div>
+                            `;
+
+                            followDiv.innerHTML += usersHtml;
+                        });
+                        hideAndSeekDiv.appendChild(followDiv);
+                        $('#follow-div').show();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+        //End of ajax call for getting followers of specified user
+
+
+        //Start of ajax call for getting users that are followed by specified user
+        $(document).ready(function () {
+            $('#following-btn').click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/User/GetFollowingUsers/@userProfile.Id',
+                    success: function (users) {
+                        $('#all-user-posts').hide();
+                        $('#add-new-post-btn').hide();
+
+                        if ($('#follow-div').length) {
+                            $('#follow-div').remove();
+                        }
+
+                        var hideAndSeekDiv = document.getElementById('hide-and-seek');
+                        var followDiv = document.createElement('div');
+                        followDiv.setAttribute('id', 'follow-div');
+                        followDiv.classList.add('d-flex','flex-wrap');
+
+                        var backButton = `
+                            <div class="following-div-btn">
+                                <button class="btn bg-transparent" onclick="GoBack()">
+                                    <i class="fas fa-chevron-left mr-3"></i>Back
+                                </button>
+                            </div>
+                        `;
+                        followDiv.innerHTML += backButton;
+
+                        users.forEach((user) => {
+                            var usersHtml = `
+                                <div class="ml-3 mt-2 mr-3 bg-dark">
+                                    <figure class="figure">
+                                        <a href="/User/Profile/${user.id}">
+                                            <img src="${user.photoPath}" class="figure-img img-fluid rounded-circle follow-photo" alt="User photo" >
+                                            <figcaption class="figure-caption text-center">
+                                                ${user.firstName} ${user.lastName}
+                                            </figcaption>
+                                        </a>
+                                    </figure>
+                                </div>
+                            `;
+
+                            followDiv.innerHTML += usersHtml;
+                        });
+                        hideAndSeekDiv.appendChild(followDiv);
+                        $('#follow-div').show();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+        ////End of ajax call for getting users that are followed by specified user
+
+        //Shows user posts and hides users
+        function GoBack() {
+            $('#all-user-posts').show();
+            $('#add-new-post-btn').show();
+            $('#follow-div').remove();
+        }
+        //
+
+        //Start of ajax call for following
+        var doesFollow = '@userProfile.IsBeingFollowed.ToString()'.toLowerCase();
+        $(document).ready(function () {
+            $('#followButton').click(function () {
+                if (doesFollow) {
+                    $.ajax({
+                    type : 'POST',
+                    url : '/User/UnfollowUser/@userProfile.Id.ToString()',
+                    success: function () {
+                        $('#followButton').removeClass('btn-danger').addClass('btn-primary').text('Follow');
+                        doesFollow = !doesFollow;
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        }
+                })
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/User/FollowUser/@userProfile.Id.ToString()',
+                        success: function () {
+                            $('#followButton').removeClass('btn-primary').addClass('btn-danger').text('Unfollow');
+                            doesFollow = !doesFollow;
+
+                            connection.invoke('AddNewNotificationsBE', @userProfile.Id.ToString()).catch(function (err) {
+                                return console.log(err.toString());
+                            });
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    })
+                }
+            });
+        });
+
+                ////signalR connection
         //var connection = new signalR.HubConnectionBuilder()
         //    .configureLogging(signalR.LogLevel.Debug)
         //    .withUrl('/User')
@@ -135,7 +461,7 @@
         //                            <figure class="d-flex mb-1">
         //                                <img src="${element.initiatorPhotoPath}" alt="User photo" class="dropdown-item-notification-photo rounded-circle">
         //                                <figcaption class="ml-3">
-        //                                ${element.notificationText}
+        //            userProfile                   ${element.notificationText}
         //                                </figcaption>
         //                            </figure>
         //                            <p class="small mb-0">
@@ -187,7 +513,7 @@
         //                <img src="${commentModel.commentator.photoPath}" class="comment-user-photo" alt="User photo" />
         //            </a>
         //        </div>
-        //        <div class="comment-user bg-light ml-2 p-2 d-flex align-items-center flex-column">
+        //        <div class="comment-user bg-light ml-2 p-2 d-flex align-items-center flex-coluserIdProfilemn">
         //            <a href="/User/Profile/${commentModel.commentator.id}" class="align-self-start">
         //                <p class="mb-1 font-weight-bold">
         //                    ${commentModel.commentator.firstName} ${commentModel.commentator.lastName}
@@ -263,80 +589,7 @@
         //    });
         //}
         ////End of ajax call for posting a new comment
-        
-        $(document).ready(function () {
-            $('#following-btn').click(function () {
-                $.ajax({
-                    type: 'GET',
-                    url: '/User/GetFollowingUsers/@userProfile.Id',
-                    success: function (users) {
-                        $('#all-user-posts').hide();
 
-                        var hideAndSeekDiv = document.getElementById('hide-and-seek');
-                        var followDiv = document.createElement('div');
-                        followDiv.setAttribute('id', 'follow-div');
-                        followDiv.classList.add('d-flex');
-
-                        users.forEach((user) => {
-                            var usersHtml = `
-                                <div class="ml-3 mt-2 mr-3 bg-dark">
-                                    <figure class="figure">
-                                        <a href="/User/Profile/${user.id}">
-                                            <img src="${user.photoPath}" class="figure-img img-fluid rounded-circle follow-photo" alt="User photo" >
-                                            <figcaption class="figure-caption text-center">
-                                                ${user.firstName} ${user.lastName}
-                                            </figcaption>
-                                        </a>
-                                    </figure>
-                                </div>
-                            `;
-
-                            followDiv.innerHTML += usersHtml;
-                        });
-                        hideAndSeekDiv.appendChild(followDiv);
-                        $('#follow-div').show();
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                    }
-                });
-            });
-        });
-
-        //Start of ajax call for following
-        var doesFollow = '@userProfile.IsBeingFollowed.ToString()'.toLowerCase();
-        $(document).ready(function () {
-            $('#followButton').click(function () {
-                if (doesFollow) {
-                    $.ajax({
-                    type : 'POST',
-                    url : '/User/UnfollowUser/@userProfile.Id.ToString()',
-                    success: function () {
-                        $('#followButton').removeClass('btn-danger').addClass('btn-primary').text('Follow');
-                        doesFollow = !doesFollow;
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                        }
-                })
-                } else {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/User/FollowUser/@userProfile.Id.ToString()',
-                        success: function () {
-                            $('#followButton').removeClass('btn-primary').addClass('btn-danger').text('Unfollow');
-                            doesFollow = !doesFollow;
-                            connection.invoke('AddNewNotificationsBE', @userProfile.Id.ToString()).catch(function (err) {
-                                return console.log(err.toString());
-                            });
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        }
-                    })
-                }
-            });
-            });
         //End of ajax call for following
 
         ////Start of ajax call for ingredients

@@ -148,6 +148,11 @@ div .verical-line {
     width: 100px;
     height: 100px;
 }
+
+.following-div-btn {
+    flex-basis: 100%;
+}
+
 /*------------------ POST model ------------------*/
 .number-of-yums {
     height: max-content;

@@ -438,11 +438,48 @@ namespace YumApp.Controllers
         {
             //Get all users that are followed by specified user
             List<AppUserModel> followingUsers = await _user_FollowsRepository.GetAll()
-                                                              .Where(uf => uf.Follower.Id == id)
-                                                              .Select(uf => uf.Follows)
-                                                              .ToAppUserModelBaseInfo()
-                                                              .ToListAsync();
+                                                                             .Where(uf => uf.Follower.Id == id)
+                                                                             .Select(uf => uf.Follows)
+                                                                             .ToAppUserModelBaseInfo()
+                                                                             .ToListAsync();
             return Json(followingUsers);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFollowers(int id)
+        {
+            //Gets all followers of specified user
+            List<AppUserModel> followers = await _user_FollowsRepository.GetAll()
+                                                                        .Where(uf => uf.Follows.Id == id)
+                                                                        .Select(uf => uf.Follower)
+                                                                        .ToAppUserModelBaseInfo()
+                                                                        .ToListAsync();
+            return Json(followers);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetYummedPosts(int id)
+        {
+            //Gets pots liked by specified user
+            List<Post> yummedPosts = await _postRepository.GetAll()
+                                                    .Where(p => p.Yummy_Posts.Any(yp => yp.AppUserId == id))
+                                                    .Include(p => p.AppUser)
+                                                    .Include(p => p.Post_Ingredients)
+                                                    .ThenInclude(pi => pi.Ingredient)
+                                                    //.Include(p => p.Comments)
+                                                    //.ThenInclude(c => c.Commentator)
+                                                    .OrderByDescending(p => p.TimeOfPosting)
+                                                    .AsSplitQuery()
+                                                    .AsNoTracking()
+                                                    .ToListAsync();
+            List<PostModel> yummedPostsModel = yummedPosts.ToPostModel().ToList();
+
+            foreach (var yummedPost in yummedPostsModel)
+            {
+                yummedPost.IsPostYummed = true;
+            }
+
+            return Json(yummedPostsModel);
         }
     }
 }
