@@ -61,16 +61,5 @@ namespace EntityLibrary.Repository
 
             return null;
         }
-
-        //Additional methods
-        //public IQueryable<Ingredient> GetIngredienstFromPost(int postId)
-        //{
-        //    return (IQueryable<Ingredient>)_context.Posts
-        //                    .Include(p => p.Post_Ingredients
-        //                                .Where(pi => pi.PostId == postId))
-        //                    .ThenInclude(pi => pi.Ingredient)
-        //                    /*.Select(i => new Ingredient())*/;
-        //}
-
     }
 }

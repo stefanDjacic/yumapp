@@ -36,7 +36,7 @@ namespace YumApp.Controllers
             {
                 var currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
 
-                return RedirectToAction("Profile", "User", new { id = currentUserId });                 //OVO MENJAJ
+                return RedirectToAction("Profile", "User", new { id = currentUserId });
             }
 
             return View();
@@ -123,7 +123,7 @@ namespace YumApp.Controllers
 
 
                 //Creates new cookie with currently logged in user id
-                this.CreateUserIdCookie(currentUserId);
+                this.CreateUserIdCookie(currentUserId, "/User", "MyCookie");
 
                 return RedirectToAction("Profile", "User", new { id = currentUserId });
             }

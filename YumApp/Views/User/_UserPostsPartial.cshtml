@@ -1,4 +1,5 @@
 ﻿@model List<PostModel>
+@inject AppUserManager _appUserManager;
 @{
     AppUser currentUser = ViewBag.CurrentUser;
 }
@@ -52,8 +53,12 @@
                             <button class="btn bg-transparent dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">                                
-                                <button class="dropdown-item" type="button">Report</button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <button @*id="report-a-post-btn-@p.Id"*@ data-postid="@p.Id" onclick="RepostAPost(this)" class="dropdown-item" type="button">Report</button>
+                                @if (await _appUserManager.IsInRoleAsync(currentUser, "admin"))
+                                {
+                                    <button class="dropdown-item" type="button" data-postid="@p.Id" onclick="RemoveAPost(this)">Remove</button>
+                                }
                             </div>
                         </div>
                     </div>

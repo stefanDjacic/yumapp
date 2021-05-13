@@ -434,7 +434,6 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\S
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\SinglePost.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_CommentsPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_IngredientsButtonPartial.cshtml.g.cs
-C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_IngredientsPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_UserNotificationPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_UserPostsPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\_ViewImports.cshtml.g.cs
@@ -449,3 +448,8 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.pdb
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.genruntimeconfig.cache
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\Feed.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_AddNewPostPartial.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Shared\NotFound.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\SearchUsers.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Admin\CreateIngredient.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Shared\_UserNotificationPartial.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Admin\IngredientInfo.cshtml.g.cs

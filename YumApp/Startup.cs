@@ -55,7 +55,8 @@ namespace YumApp
             services.AddTransient<ICRDRepository<Yummy_Post>, Yummy_PostsRepository>();
 
             services.AddControllersWithViews();
-
+            
+            //So I don't have to restart whole app after css change
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddSignalR();

@@ -13,8 +13,7 @@ namespace EntityLibrary
         public Post()
         {
             Comments = new HashSet<Comment>();
-            Post_Ingredients = new HashSet<Post_Ingredient>();
-            User_Feeds = new HashSet<User_Feed>();
+            Post_Ingredients = new HashSet<Post_Ingredient>();            
             Yummy_Posts = new HashSet<Yummy_Post>();
         }
 
@@ -39,9 +38,7 @@ namespace EntityLibrary
 
         public ICollection<Comment> Comments { get; set; }        
 
-        public ICollection<Post_Ingredient> Post_Ingredients { get; set; }
-
-        public ICollection<User_Feed> User_Feeds { get; set; }
+        public ICollection<Post_Ingredient> Post_Ingredients { get; set; }        
 
         public ICollection<Yummy_Post> Yummy_Posts { get; set; }
 

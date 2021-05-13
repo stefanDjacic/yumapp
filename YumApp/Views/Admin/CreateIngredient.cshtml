@@ -1,0 +1,77 @@
+﻿@model IngredientModel
+@{
+    ViewData["Title"] = "New Ingredient";
+}
+
+<h4>Ingredient</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateIngredient" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label"></label>
+                <br />
+                <input id="imgInp" type="file" asp-for="Photo" />
+                <input id="imgName" type="hidden" asp-for="PhotoPath" />
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+            <div>
+                <img id="slika" @*src="@Model.PhotoPath"*@ alt="User photo" class="img-fluid ml-5 user-settings-photo" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Profile" asp-controller="User">Cancel</a>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/SignalR.js"></script>
+
+    <script>
+        //For changing the user photo in UI
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                var imgName = document.getElementById('#imgName');
+
+                reader.onload = function (e) {
+                    $('#slika').attr('src', e.target.result);
+
+                    $('#imgName').val(input.files[0].name);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function () {
+            readURL(this);
+
+        });
+
+        //For changing the username
+        function updateUsername(emailValue) {
+            var inputUsername = document.getElementById('inputUsername');
+            inputUsername.value = emailValue;
+        }
+    </script>
+}

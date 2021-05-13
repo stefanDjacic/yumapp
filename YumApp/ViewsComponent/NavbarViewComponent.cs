@@ -28,10 +28,12 @@ namespace YumApp.ViewsComponent
                 return Content(string.Empty);
             }
 
-            //var currentUser = _appUserManager.FindByNameAsync(User.Identity.Name).Result;
-
-            //Gets id of currently logged in user from cookie
-            int currentUserId = int.Parse(Request.Cookies["MyCookie"]);
+            //Gets id of currently logged in user from cookie, if it can't parse it, admin is the logged in user and is on ~/Admin path
+            int currentUserId;
+            if (!int.TryParse(Request.Cookies["MyCookie"], out currentUserId))
+            {
+                currentUserId = 1;
+            }
 
             //Gets notifications of current user
             List<NotificationModel> notificationsModel = _notificationRepository.GetAll()

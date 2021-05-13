@@ -309,32 +309,7 @@ namespace EntityLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User_Feeds",
-                columns: table => new
-                {
-                    AppUserId = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    PostAppUserId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User_Feeds", x => new { x.AppUserId, x.PostId, x.PostAppUserId });
-                    table.ForeignKey(
-                        name: "FK_User_Feeds_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_User_Feeds_Posts_PostId_PostAppUserId",
-                        columns: x => new { x.PostId, x.PostAppUserId },
-                        principalTable: "Posts",
-                        principalColumns: new[] { "Id", "AppUserId" },
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "YummyPosts",
+                name: "Yummy_Posts",
                 columns: table => new
                 {
                     AppUserId = table.Column<int>(type: "int", nullable: false),
@@ -344,15 +319,15 @@ namespace EntityLibrary.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_YummyPosts", x => new { x.AppUserId, x.PostId });
+                    table.PrimaryKey("PK_Yummy_Posts", x => new { x.AppUserId, x.PostId });
                     table.ForeignKey(
-                        name: "FK_YummyPosts_AspNetUsers_AppUserId",
+                        name: "FK_Yummy_Posts_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_YummyPosts_Posts_PostId_PostAppUserId",
+                        name: "FK_Yummy_Posts_Posts_PostId_PostAppUserId",
                         columns: x => new { x.PostId, x.PostAppUserId },
                         principalTable: "Posts",
                         principalColumns: new[] { "Id", "AppUserId" },
@@ -429,18 +404,13 @@ namespace EntityLibrary.Migrations
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_Feeds_PostId_PostAppUserId",
-                table: "User_Feeds",
-                columns: new[] { "PostId", "PostAppUserId" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_User_Follows_FollowsId",
                 table: "User_Follows",
                 column: "FollowsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_YummyPosts_PostId_PostAppUserId",
-                table: "YummyPosts",
+                name: "IX_Yummy_Posts_PostId_PostAppUserId",
+                table: "Yummy_Posts",
                 columns: new[] { "PostId", "PostAppUserId" });
         }
 
@@ -471,13 +441,10 @@ namespace EntityLibrary.Migrations
                 name: "Post_Ingredients");
 
             migrationBuilder.DropTable(
-                name: "User_Feeds");
-
-            migrationBuilder.DropTable(
                 name: "User_Follows");
 
             migrationBuilder.DropTable(
-                name: "YummyPosts");
+                name: "Yummy_Posts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

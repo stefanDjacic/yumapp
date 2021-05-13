@@ -1,0 +1,21 @@
+﻿@model List<AppUserModel>
+@{
+    ViewData["Title"] = "Search";
+}
+
+@foreach (var user in Model)
+{
+    <div class="search-users-photo-div">
+        <a asp-action="Profile" asp-controller="User" asp-route-id="@user.Id" class="d-flex align-items-center">
+            <img src="@user.PhotoPath" class="search-users-photo img-fluid rounded-circle" alt="User photo" />
+            <p class="text-nowrap ml-3">
+                @user.FirstName @user.LastName
+            </p>
+        </a>
+    </div>
+}
+
+@section Scripts{
+    <script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/SignalR.js"></script>
+}

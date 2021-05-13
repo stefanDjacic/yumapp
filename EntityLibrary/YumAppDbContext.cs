@@ -20,8 +20,7 @@ namespace EntityLibrary
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Post_Ingredient> Post_Ingredients { get; set; }
-        public DbSet<User_Follows> User_Follows { get; set; }
-        public DbSet<User_Feed> User_Feeds { get; set; }
+        public DbSet<User_Follows> User_Follows { get; set; }        
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Yummy_Post> Yummy_Posts { get; set; }
 
@@ -81,23 +80,6 @@ namespace EntityLibrary
                 .IsRequired();
 
                 pi.HasKey(pi => new { pi.PostId, pi.AppUserId, pi.IngredientId });
-            });
-
-
-            modelBuilder.Entity<User_Feed>(uf =>
-            {
-                uf.HasOne(uf => uf.AppUser)
-                .WithMany(au => au.User_Feeds)
-                .HasForeignKey(uf => uf.AppUserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-
-                uf.HasOne(uf => uf.Post)
-                .WithMany(p => p.User_Feeds)
-                .HasForeignKey(uf => new { uf.PostId, uf.PostAppUserId })
-                .IsRequired();
-
-                uf.HasKey(uf => new { uf.AppUserId, uf.PostId, uf.PostAppUserId });
             });
 
             modelBuilder.Entity<AppUser>(au =>

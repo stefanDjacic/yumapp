@@ -261,24 +261,6 @@ namespace EntityLibrary.Migrations
                     b.ToTable("Post_Ingredients");
                 });
 
-            modelBuilder.Entity("EntityLibrary.User_Feed", b =>
-                {
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostAppUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AppUserId", "PostId", "PostAppUserId");
-
-                    b.HasIndex("PostId", "PostAppUserId");
-
-                    b.ToTable("User_Feeds");
-                });
-
             modelBuilder.Entity("EntityLibrary.User_Follows", b =>
                 {
                     b.Property<int>("FollowerId")
@@ -297,7 +279,7 @@ namespace EntityLibrary.Migrations
                     b.ToTable("User_Follows");
                 });
 
-            modelBuilder.Entity("EntityLibrary.YummyPost", b =>
+            modelBuilder.Entity("EntityLibrary.Yummy_Post", b =>
                 {
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
@@ -315,7 +297,7 @@ namespace EntityLibrary.Migrations
 
                     b.HasIndex("PostId", "PostAppUserId");
 
-                    b.ToTable("YummyPosts");
+                    b.ToTable("Yummy_Posts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -516,25 +498,6 @@ namespace EntityLibrary.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("EntityLibrary.User_Feed", b =>
-                {
-                    b.HasOne("EntityLibrary.AppUser", "AppUser")
-                        .WithMany("User_Feeds")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EntityLibrary.Post", "Post")
-                        .WithMany("User_Feeds")
-                        .HasForeignKey("PostId", "PostAppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("EntityLibrary.User_Follows", b =>
                 {
                     b.HasOne("EntityLibrary.AppUser", "Follower")
@@ -554,16 +517,16 @@ namespace EntityLibrary.Migrations
                     b.Navigation("Follows");
                 });
 
-            modelBuilder.Entity("EntityLibrary.YummyPost", b =>
+            modelBuilder.Entity("EntityLibrary.Yummy_Post", b =>
                 {
                     b.HasOne("EntityLibrary.AppUser", "AppUser")
-                        .WithMany("YummyPosts")
+                        .WithMany("Yummy_Posts")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EntityLibrary.Post", "Post")
-                        .WithMany("YummyPosts")
+                        .WithMany("Yummy_Posts")
                         .HasForeignKey("PostId", "PostAppUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -638,9 +601,7 @@ namespace EntityLibrary.Migrations
 
                     b.Navigation("Posts");
 
-                    b.Navigation("User_Feeds");
-
-                    b.Navigation("YummyPosts");
+                    b.Navigation("Yummy_Posts");
                 });
 
             modelBuilder.Entity("EntityLibrary.Ingredient", b =>
@@ -654,9 +615,7 @@ namespace EntityLibrary.Migrations
 
                     b.Navigation("Post_Ingredients");
 
-                    b.Navigation("User_Feeds");
-
-                    b.Navigation("YummyPosts");
+                    b.Navigation("Yummy_Posts");
                 });
 #pragma warning restore 612, 618
         }

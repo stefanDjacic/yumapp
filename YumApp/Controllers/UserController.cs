@@ -89,16 +89,17 @@ namespace YumApp.Controllers
             //                                    .ToList();
             #endregion
 
-            //Gets the user (post owner) from List<PostModel>, FirstOrDefault() since posts are from same user
-            AppUserModel userModel = userPostsModel.Select(p => p.User).FirstOrDefault();
+            //Gets the user whose profile is being viewed
+            AppUserModel userModelProfile = await _appUserManager.FindByIdAsync(id.ToString())
+                                                          .ContinueWith(au => au.Result.ToAppUserModelBaseInfo());
             //Checks and sets bool if current user is following the one whose profile is being viewed
-            userModel.IsBeingFollowed = _user_FollowsRepository.GetAll()
+            userModelProfile.IsBeingFollowed = _user_FollowsRepository.GetAll()
                                                                .Any(u => u.FollowerId == currentUser.Id && u.FollowsId == id);
 
             //Gets all the posts which current user liked from user whose profile he is visiting
             List<Yummy_Post> currentUsersYummedPosts = await _yummy_PostRepository.GetAll()
-                                                                     .Where(yp => yp.AppUserId == currentUser.Id && yp.PostAppUserId == id)
-                                                                     .ToListAsync();
+                                                                                  .Where(yp => yp.AppUserId == currentUser.Id && yp.PostAppUserId == id)
+                                                                                  .ToListAsync();
             //Sets IsPostYummed property if current user has already liked the post, would probably be the best to denormalize database instead of doing this
             foreach (var yummedPost in currentUsersYummedPosts)
             {
@@ -106,7 +107,7 @@ namespace YumApp.Controllers
             }
 
             //To pass necessary data for view
-            ViewBag.UserProfile = userModel;
+            ViewBag.UserProfile = userModelProfile;
             ViewBag.CurrentUser = currentUser;
 
             return View(userPostsModel);
@@ -224,7 +225,13 @@ namespace YumApp.Controllers
                                       .Where(p => p.Id == id)
                                       .AsSplitQuery()
                                       .AsNoTracking()
-                                      .SingleOrDefault(p => p.Id == id);                                            
+                                      .SingleOrDefault(p => p.Id == id);
+            //In case the post has been deleted
+            if (post == null)
+            {
+                return View("NotFound");
+            }
+
             //Converts to PostModel
             PostModel postModel = post.ToPostModel();
 
@@ -466,20 +473,43 @@ namespace YumApp.Controllers
                                                     .Include(p => p.AppUser)
                                                     .Include(p => p.Post_Ingredients)
                                                     .ThenInclude(pi => pi.Ingredient)
-                                                    //.Include(p => p.Comments)
-                                                    //.ThenInclude(c => c.Commentator)
                                                     .OrderByDescending(p => p.TimeOfPosting)
                                                     .AsSplitQuery()
                                                     .AsNoTracking()
                                                     .ToListAsync();
             List<PostModel> yummedPostsModel = yummedPosts.ToPostModel().ToList();
 
-            foreach (var yummedPost in yummedPostsModel)
-            {
-                yummedPost.IsPostYummed = true;
-            }
-
             return Json(yummedPostsModel);
+        }
+
+        [HttpPost]
+        public async Task ReportAPost(int id)
+        {
+            //Gets the current user
+            AppUser currentUser = await _appUserManager.GetUserAsync(User);
+
+            //Creates new NotificationModel instance (to take advantage of strategy pattern) and converts it to Notification entity, user with id 1 is administrator
+            Notification newNotification = new NotificationModel(currentUser.FirstName,
+                                                                 currentUser.LastName,
+                                                                 DateTime.Now,
+                                                                 id,
+                                                                 new PostReportTextBehavior())
+                                                                 .ToNotificationEntity(currentUser.Id, 1);
+            //Adds new notification to the database
+            await _notificationRepository.Add(newNotification);
+
+            return;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchUsers(string userName)
+        {
+            List<AppUserModel> usersModel = await _appUserManager.Users
+                                                       .Where(au => EF.Functions.Like(au.FirstName.ToUpper() + " " + au.LastName.ToUpper(),
+                                                                                      $"%{userName.Trim().ToUpper()}%"))
+                                                       .ToAppUserModelBaseInfo()
+                                                       .ToListAsync();
+            return View(usersModel);
         }
     }
 }

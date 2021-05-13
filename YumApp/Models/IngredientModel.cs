@@ -10,6 +10,17 @@ namespace YumApp.Models
 {
     public static class IngredientModelExtensionMethods
     {
+        public static IngredientModel ToIngredientModel(this Ingredient ingredient)
+        {
+            return new IngredientModel
+            {
+                Id = ingredient.Id,
+                Name = ingredient.Name,
+                Description = ingredient.Description,
+                PhotoPath = ingredient.PhotoPath
+            };
+        }
+
         public static IEnumerable<IngredientModel> ToIngredientModel(this IEnumerable<Ingredient> ingredients)
         {
             return ingredients.Select(i => new IngredientModel
@@ -30,6 +41,16 @@ namespace YumApp.Models
                 Description = i.Description,
                 PhotoPath = i.PhotoPath
             });
+        }
+
+        public static Ingredient ToIngredientEntity(this IngredientModel ingredientModel)
+        {
+            return new Ingredient
+            {
+                Name = ingredientModel.Name,
+                Description = ingredientModel.Description,
+                PhotoPath = ingredientModel.PhotoPath
+            };
         }
     }
 

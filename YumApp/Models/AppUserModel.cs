@@ -144,49 +144,4 @@ namespace YumApp.Models
 
         public IFormFile Photo { get; set; }
     }
-
-    #region bad code, check later if needed and fix it
-    //public static readonly Expression<Func<AppUser, AppUserModel>> MapAppUserToAppUserModelBaseInfo =
-    //    appUser => new AppUserModel
-    //    {
-    //        About = appUser.About,
-    //        Country = appUser.Country,
-    //        DateCreated = appUser.DateCreated, //Probably dont need
-    //        DateOfBirth = appUser.DateOfBirth,
-    //        Email = appUser.Email,
-    //        FirstName = appUser.FirstName,
-    //        Gender = appUser.Gender,
-    //        Id = appUser.Id,
-    //        LastName = appUser.LastName,
-    //        PhotoPath = appUser.PhotoPath,
-    //        Username = appUser.UserName                
-    //    };
-
-    //public static readonly Expression<Func<AppUser, AppUserModel>> MapAppUserToAppUserModel =
-    //    appUser => new AppUserModel
-    //    {
-    //        About = appUser.About,
-    //        Country = appUser.Country,
-    //        DateCreated = appUser.DateCreated, //Probably dont need
-    //        DateOfBirth = appUser.DateOfBirth,
-    //        Email = appUser.Email,
-    //        FirstName = appUser.FirstName,
-    //        Gender = appUser.Gender,
-    //        Id = appUser.Id,
-    //        LastName = appUser.LastName,
-    //        PhotoPath = appUser.PhotoPath,
-    //        Username = appUser.UserName,
-    //        Notifications = appUser.NotificationsReceiver.AsQueryable().Select(NotificationModelExtensionMethods.MapNotificationToNotificationModel).ToList()
-    //    };
-
-    //public static IQueryable<AppUserModel> ToAppUserModelTest(this IQueryable<AppUser> appUsers)
-    //{
-    //    return appUsers.Select(MapAppUserToAppUserModelBaseInfo);
-    //}
-
-    //public static IQueryable<AppUserModel> ToAppUserModel(this IQueryable<AppUser> appUsers)
-    //{
-    //    return appUsers.Select(au => au.ToAppUserModel());
-    //}
-    #endregion
 }

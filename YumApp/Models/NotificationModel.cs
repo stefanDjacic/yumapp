@@ -37,24 +37,6 @@ namespace YumApp.Models
                 IdForRedirecting = notification.IdForRedirecting
             };
         }
-
-        #region Doesn't work because of IQueryable
-        //private static NotificationModel CreateNewNotificationModel(this Notification notification)
-        //{
-        //    return new NotificationModel
-        //    {
-        //        InitiatorFullName = notification.Initiator.FirstName + " " + notification.Initiator.LastName,
-        //        InitiatorPhotoPath = notification.Initiator.PhotoPath,
-        //        NotificationText = notification.NotificationText,
-        //        TimeOfNotification = notification.TimeOfNotification
-        //    };
-        //}
-
-        //public static IEnumerable<NotificationModel> ToNotificationModel(this IEnumerable<Notification> notifications)
-        //{
-        //    return notifications.Select(n => n.CreateNewNotificationModel());
-        //}
-        #endregion
     }
 
     public class NotificationModel

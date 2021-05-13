@@ -42,10 +42,5 @@ namespace EntityLibrary.Repository
                 await _context.SaveChangesAsync();
             }
         }
-
-        //public IQueryable<User_Follows> GetAll()
-        //{
-        //    return _context.User_Follows.Include(uf => uf.Follower).Include(uf => uf.Follows);
-        //}
     }
 }

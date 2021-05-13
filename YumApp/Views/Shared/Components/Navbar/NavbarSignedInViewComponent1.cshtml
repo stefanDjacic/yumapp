@@ -3,11 +3,24 @@
     int currentUserId = ViewBag.CurrentUserId;
 }
 
-<nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-success d-flex justify-content-between">    
-        <a class="navbar-brand align-self-start" asp-action="Feed" asp-controller="User">
+<nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-success d-flex justify-content-between">
+    <div class="d-flex">
+        <a class="navbar-brand align-self-start text-nowrap" asp-action="Feed" asp-controller="User">
             <img src="~/Photos/Chef hat icon.jpg" width="30" height="30" class="d-inline-block align-top rounded-pill" alt="Chef hat icon">
             YumApp
         </a>
+
+        <form asp-action="SearchUsers" asp-controller="User" method="get">
+            <div class="input-group">
+                <input name="userName" id="userName" type="text" class="form-control" placeholder="Find other users" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit" id="button-addon2">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
         <div class="mr-5">
             <button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

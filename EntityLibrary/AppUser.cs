@@ -18,8 +18,7 @@ namespace EntityLibrary
             Followers = new HashSet<User_Follows>();
             Follow = new HashSet<User_Follows>();
             Posts = new HashSet<Post>();
-            Comments = new HashSet<Comment>();
-            User_Feeds = new HashSet<User_Feed>();
+            Comments = new HashSet<Comment>();            
             NotificationsReceiver = new HashSet<Notification>();
             NotificationsInitiator = new HashSet<Notification>();
             Yummy_Posts = new HashSet<Yummy_Post>();
@@ -63,9 +62,7 @@ namespace EntityLibrary
 
         public ICollection<Post> Posts { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
-
-        public ICollection<User_Feed> User_Feeds { get; set; }
+        public ICollection<Comment> Comments { get; set; }        
 
         [InverseProperty(nameof(Notification.Receiver))]
         public ICollection<Notification> NotificationsReceiver { get; set; }
