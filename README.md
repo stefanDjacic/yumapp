@@ -1,4 +1,4 @@
-# YumApp    
+# YumApp (work-in-progress)    
 Social network for chefs all over the world.  
 Share your favourite meals with others.  
   
