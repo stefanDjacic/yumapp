@@ -16,3 +16,6 @@ Yummy_Post(<ins>AppUserId, PostAppUserId, PostId</ins>, DateYummed)
 Comment(<ins>AppUserId, PostId</ins>, Content, TimeOfCommenting, CommentatorId)  
 Ingredient(<ins>Id</ins>, Name, Description, PhotoPath)  
 Post_Ingredient(<ins>AppUserId, PostId, IngredientId</ins>)  
+  
+## Technologies  
+C#, ASP.NET Core MVC, Entity Framework Core, MS SQL Server, HTML5, CSS3, Bootstrap, JavaScript, jQuery, SignalR
