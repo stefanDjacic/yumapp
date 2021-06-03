@@ -160,8 +160,9 @@ namespace YumApp.Controllers
 
             //Gets currently logged in user as AppUserModel type
             AppUserModel currentUser = await _appUserManager.GetUserAsync(User)
-                                                   .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());            
+                                                   .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());
 
+            ViewBag.CurrentUser = currentUser.ToAppUserEntity();
             return View(currentUser);
         }
 
@@ -346,7 +347,7 @@ namespace YumApp.Controllers
                                                              .ToNotificationModel()
                                                              .OrderByDescending(n => n.TimeOfNotification)
                                                              .ToListAsync();
-
+            
             return Json(notifications);
         }
 

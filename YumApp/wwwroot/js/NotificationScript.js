@@ -1,16 +1,8 @@
-﻿//signalR connection
-    var connection = new signalR.HubConnectionBuilder()
-        .configureLogging(signalR.LogLevel.Debug)
-        .withUrl('/User')
-        .withAutomaticReconnect()
-        .build();
+﻿//Start of method called by server for group notifications
+connection.on('AddNewGroupNotificationsBE', function () {
 
-    connection.start().then(function () {
-        console.log("SignalR connected!")
-    }).catch(function (err) {
-        console.log(err.toString())
-    });
-//signalR conneciton
+});
+//End of method called by server for group notifications
 
 //Start of method called by server for notifications
     connection.on('AddNewNotificationsFE', function (userId) {
@@ -77,4 +69,4 @@ $(document).ready(function () {
         $('#notification-alarm').text('').removeClass('bg-danger').addClass('bg-transparent');
     });
 });
-        //End of new notifications indicator
+//End of new notifications indicator

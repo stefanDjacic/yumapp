@@ -98,7 +98,7 @@ function RepostAPost(btn) {
         type: 'POST',
         url: `/User/ReportAPost/${postId}`,
         success: function () {
-            connection.invoke('AddNewNotificationsBE', '1').catch(function (err) {
+            connection.invoke('AddNewGroupNotificationsBE').catch(function (err) {
                 return console.log(err.toString());
             });
             alert('Post reported!');

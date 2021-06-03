@@ -88,7 +88,7 @@ namespace YumApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                endpoints.MapHub<NotifyHub>("/User");
+                endpoints.MapHub<MainHub>("/User");
             });
 
             //AppDbInitializer.Seed(app);
