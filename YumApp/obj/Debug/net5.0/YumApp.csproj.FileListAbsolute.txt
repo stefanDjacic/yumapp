@@ -36,7 +36,6 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_CommentsPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_IngredientsButtonPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_UserNotificationPartial.cshtml.g.cs
-C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\User\_UserPostsPartial.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\_ViewStart.cshtml.g.cs
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.RazorTargetAssemblyInfo.cache
@@ -453,3 +452,5 @@ C:\Users\Korisnik\source\repos\YumApp\YumApp\bin\Debug\net5.0\EntityLibrary.pdb
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.Views.pdb
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.csproj.CopyComplete
 C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\YumApp.genruntimeconfig.cache
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Admin\ReportedPosts.cshtml.g.cs
+C:\Users\Korisnik\source\repos\YumApp\YumApp\obj\Debug\net5.0\Razor\Views\Shared\_UserPostsPartial.cshtml.g.cs

@@ -54,10 +54,13 @@
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                <button @*id="report-a-post-btn-@p.Id"*@ data-postid="@p.Id" onclick="RepostAPost(this)" class="dropdown-item" type="button">Report</button>
+                                <button data-postid="@p.Id" onclick="ReportAPost(this)" class="dropdown-item" type="button">Report</button>
                                 @if (await _appUserManager.IsInRoleAsync(currentUser, "admin"))
                                 {
-                                    <button class="dropdown-item" type="button" data-postid="@p.Id" onclick="RemoveAPost(this)">Remove</button>
+                                    <button class="dropdown-item" type="button" asp-action="PermitAPost" asp-controller="Admin" asp-route-id="@p.Id">Permit</button>
+                                    <button class="dropdown-item" type="button" asp-action="RemoveAPost" asp-controller="Admin" asp-route-id="@p.Id">Remove</button>
+                                    @*<button class="dropdown-item" type="button" data-postid="@p.Id" onclick="PermitAPost(this)">Permit</button>
+                                    <button class="dropdown-item" type="button" data-postid="@p.Id" onclick="RemoveAPost(this)">Remove</button>*@
                                 }
                             </div>
                         </div>

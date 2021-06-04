@@ -91,39 +91,56 @@
 //End of ajax call for posting a new comment
 
 //Start of ajax call for reporting a post
-function RepostAPost(btn) {
-    var postId = $(btn).attr('data-postid');
+    function ReportAPost(btn) {
+        var postId = $(btn).attr('data-postid');
 
-    $.ajax({
-        type: 'POST',
-        url: `/User/ReportAPost/${postId}`,
-        success: function () {
-            connection.invoke('AddNewGroupNotificationsBE').catch(function (err) {
-                return console.log(err.toString());
-            });
-            alert('Post reported!');
-        },
-        error: function () {
-            alert('There was a problem with reportiing a post, please try again later.');
-        }
-    });
-}
+        $.ajax({
+            type: 'POST',
+            url: `/User/ReportAPost/${postId}`,
+            success: function () {            
+                alert('Post reported!');
+            },
+            error: function () {
+                alert('There was a problem with reportiing a post, please try again later.');
+            }
+        });
+    }
 //End of ajax call for reporting a post
 
-//Start of ajax call for removing a post
-function RemoveAPost(btn) {
-    var postId = $(btn).attr('data-postid');
+////Start of ajax call for reporting a post
+//function RepostAPost(btn) {                  //CHANGE WHOLE FUNCTION
+//    var postId = $(btn).attr('data-postid');
 
-    $.ajax({
-        type: 'POST',
-        url: `/Admin/RemoveAPost/${postId}`,
-        success: function (response) {
-            window.location.href = response.redirectToUrl;
-            alert('Post removed!');
-        },
-        error: function (response) {
-            alert(response.responseText);
-        }
-    });
-}
-//End of ajax call for removing a post
+//    $.ajax({
+//        type: 'POST',
+//        url: `/User/ReportAPost/${postId}`,
+//        success: function () {
+//            connection.invoke('AddNewGroupNotificationsBE').catch(function (err) {
+//                return console.log(err.toString());
+//            });
+//            alert('Post reported!');
+//        },
+//        error: function () {
+//            alert('There was a problem with reportiing a post, please try again later.');
+//        }
+//    });
+//}
+////End of ajax call for reporting a post
+
+////Start of ajax call for removing a post
+//function RemoveAPost(btn) {
+//    var postId = $(btn).attr('data-postid');
+
+//    $.ajax({
+//        type: 'POST',
+//        url: `/Admin/RemoveAPost/${postId}`,
+//        success: function (response) {
+//            window.location.href = response.redirectToUrl;
+//            alert('Post removed!');
+//        },
+//        error: function (response) {
+//            alert(response.responseText);
+//        }
+//    });
+//}
+////End of ajax call for removing a post

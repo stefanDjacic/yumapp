@@ -26,11 +26,13 @@ namespace EntityLibrary
         public string Content { get; set; }
         
         [MaxLength(100, ErrorMessage = "Maximum lengt is 100 characters.")]
-        public string Notes { get; set; }
+        public string Notes { get; set; }       
 
         public int NumberOfYums { get; set; }
 
         public DateTime TimeOfPosting { get; set; }
+
+        public bool IsReported { get; set; }
 
         //Navigation properties
         public int AppUserId { get; set; }
@@ -41,6 +43,5 @@ namespace EntityLibrary
         public ICollection<Post_Ingredient> Post_Ingredients { get; set; }        
 
         public ICollection<Yummy_Post> Yummy_Posts { get; set; }
-
     }
 }

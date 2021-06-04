@@ -1,0 +1,10 @@
+﻿@model List<PostModel>
+@{ 
+    ViewData["Title"] = "Reported posts";
+
+    AppUser currenUser = ViewBag.CurrentUser;
+}
+
+<div>
+    <partial name="_UserPostsPartial" />
+</div>

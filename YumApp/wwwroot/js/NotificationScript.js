@@ -1,10 +1,4 @@
-﻿//Start of method called by server for group notifications
-connection.on('AddNewGroupNotificationsBE', function () {
-
-});
-//End of method called by server for group notifications
-
-//Start of method called by server for notifications
+﻿//Start of method called by server for notifications
     connection.on('AddNewNotificationsFE', function (userId) {
         $.ajax({
             type: 'GET',

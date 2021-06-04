@@ -62,7 +62,7 @@ namespace YumApp.Controllers
                 //Creates new user
                 var result = await _appUserManager.CreateAsync(newUser, newUser.PasswordHash);
 
-                //Checks if user is created and returns model with errors if it didn't
+                //Checks if user is created and returns model with errors if it isn't
                 if (!result.Succeeded)
                 {
                     foreach (var error in result.Errors)

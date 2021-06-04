@@ -1,16 +1,5 @@
-﻿@inject SignInManager<AppUser> _signInManager;
-@{ 
-    bool isUserSignedIn = _signInManager.IsSignedIn(User);
-    AppUser currentUser = ViewBag.CurrentUser;
-    bool isInAdminRole;
-    if (currentUser != null)
-    {
-        isInAdminRole = await _signInManager.UserManager.IsInRoleAsync(currentUser, "admin");
-    }
-    else
-    {
-        isInAdminRole = false;
-    }
+﻿@{
+    bool isUserSignedIn = Context.User.Identity.IsAuthenticated;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -40,29 +29,7 @@
     @if (isUserSignedIn)
     {
         <script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
-        <script>
-            //signalR connection
-            var connection = new signalR.HubConnectionBuilder()
-                .configureLogging(signalR.LogLevel.Debug)
-                .withUrl('/User')
-                .withAutomaticReconnect()
-                .build();
-
-            connection.start().then(function () {                
-                if (@isInAdminRole.ToString().ToLower()) {
-                    try {
-                        connection.invoke('AddToGroup', 'admin');
-                        console.log('Added to admin group!');
-                    } catch (err) {
-                        console.log(err.message);
-                    }
-                }
-                console.log("SignalR connected!")
-            }).catch(function (err) {
-                console.log(err.toString())
-            });
-            //signalR conneciton
-        </script>
+        <script src="~/js/SignalRConnectionScript.js"></script>
         <script src="~/js/NotificationScript.js"></script>
     }
     @await RenderSectionAsync("Scripts", required: false)

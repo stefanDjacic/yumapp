@@ -226,6 +226,9 @@ namespace EntityLibrary.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<bool>("IsReported")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Notes")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");

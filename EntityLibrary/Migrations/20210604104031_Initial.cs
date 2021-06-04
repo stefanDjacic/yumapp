@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EntityLibrary.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -216,7 +216,8 @@ namespace EntityLibrary.Migrations
                     Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     NumberOfYums = table.Column<int>(type: "int", nullable: false),
-                    TimeOfPosting = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TimeOfPosting = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsReported = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

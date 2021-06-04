@@ -91,10 +91,10 @@ body {
     position : relative;
 }
 
-.dropdown-menu-right {
-    width : auto;
-    height : 315px;
-    overflow-y : scroll;
+.ddm-notifications {
+    width: auto;
+    height: 315px;
+    overflow-y: scroll;
 }
 
 .dropdown-item-notification-photo {

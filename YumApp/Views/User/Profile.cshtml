@@ -149,11 +149,11 @@
                             postInfoDiv.innerHTML = `
                                 <div class="media">
                                     <div class="d-flex flex-column flex-sm-row">
-                                        <a href="/User/Profile/${post.user.id}" @*asp-action="Profile" asp-controller="User" asp-route-id="${post.user.id}"*@>
+                                        <a href="/User/Profile/${post.user.id}">
                                             <img src="${post.user.photoPath}" class="post-profile-photo img-fluid rounded-circle" alt="User photo">
                                         </a>
                                         <div class="media-body d-flex flex-column justify-content-between ml-2">
-                                            <a href="/User/Profile/${post.user.id}" @*asp-action="Profile" asp-controller="User" asp-route-id="${post.user.id}"*@>
+                                            <a href="/User/Profile/${post.user.id}">
                                                 <p class="post-username text-nowrap mb-0 font-weight-bold">
                                                     ${post.user.firstName} ${post.user.lastName}
                                                 </p>
@@ -193,7 +193,7 @@
 
                                     var ingredientHtml = `
                                         <button type="button" class="ingredient-btn btn btn-outline-success d-flex rounded-pill p-0 align-items-center" data-toggle="modal" data-target="#ModalCenter-ingredient1">
-                                            <img class="ingredient-photo rounded-pill" src="${ingredient.photoPath}"@*~/Photos/DefaultIngredientPhoto.jpg*@ alt="${ingredient.name}" />
+                                            <img class="ingredient-photo rounded-pill" src="${ingredient.photoPath}" alt="${ingredient.name}" />
                                             <p class="mb-0 ml-3 mr-3">
                                                 ${ingredient.name}
                                             </p>
@@ -298,7 +298,7 @@
 
                         users.forEach((user) => {
                             var usersHtml = `
-                                <div class="ml-3 mt-2 mr-3 bg-dark">
+                                <div class="ml-3 mt-2 mr-3">
                                     <figure class="figure">
                                         <a href="/User/Profile/${user.id}">
                                             <img src="${user.photoPath}" class="figure-img img-fluid rounded-circle follow-photo" alt="User photo" >
@@ -354,7 +354,7 @@
 
                         users.forEach((user) => {
                             var usersHtml = `
-                                <div class="ml-3 mt-2 mr-3 bg-dark">
+                                <div class="ml-3 mt-2 mr-3">
                                     <figure class="figure">
                                         <a href="/User/Profile/${user.id}">
                                             <img src="${user.photoPath}" class="figure-img img-fluid rounded-circle follow-photo" alt="User photo" >

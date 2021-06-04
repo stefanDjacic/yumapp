@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityLibrary.Migrations
 {
     [DbContext(typeof(YumAppDbContext))]
-    [Migration("20210513182856_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20210604104031_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -227,6 +227,9 @@ namespace EntityLibrary.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsReported")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(100)

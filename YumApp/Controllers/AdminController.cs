@@ -35,18 +35,44 @@ namespace YumApp.Controllers
             _ingredientPhotoFolderPath = webHostEnvironment.ContentRootPath + @"\wwwroot\Photos\IngredientPhotos\";
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ReportedPosts()
+        {
+            //Gets all reported posts and converts them to postmodel
+            List<Post> reportedPosts = await _postRepository.GetAll()
+                                                            .Where(p => p.IsReported == true)
+                                                            .Include(p => p.AppUser)
+                                                            .Include(p => p.Post_Ingredients)
+                                                            .ThenInclude(pi => pi.Ingredient)
+                                                            .OrderByDescending(p => p.TimeOfPosting)
+                                                            .AsSplitQuery()
+                                                            .AsNoTracking()
+                                                            .ToListAsync();
+            List<PostModel> reportedPostsModel = reportedPosts.ToPostModel().ToList();
+
+            ViewBag.CurrentUser = await _appUserManager.GetUserAsync(User);
+
+            return View(reportedPostsModel);
+        }
+
         [HttpPost]
         public async Task<IActionResult> RemoveAPost(int id)
         {
             //Gets reported post
             Post reportedPost = await _postRepository.GetSingle(id);
 
+            //If another admin has already deleted the reported post or it has been permitted, reload page
+            if (reportedPost == null || reportedPost.IsReported == false)
+            {
+                return RedirectToAction(nameof(ReportedPosts));
+            }
+
             //Gets list of yummy_Post instances with users that have liked it
-            List<Yummy_Post> samePostLikedByOthers = await _yummy_PostRepository.GetAll()
+            List<Yummy_Post> reportedPostLikedByOthers = await _yummy_PostRepository.GetAll()
                                                                                 .Where(yp => yp.PostId == id)
                                                                                 .ToListAsync();
             //Removes the instances from intermediary table (not very efficient, because of constantly SaveChanges(), RemoveRange() would be much better)
-            foreach (var post in samePostLikedByOthers)
+            foreach (var post in reportedPostLikedByOthers)
             {
                 await _yummy_PostRepository.Remove(post);
             }
@@ -54,7 +80,13 @@ namespace YumApp.Controllers
             //Removes the reported post
             await _postRepository.Remove(reportedPost);
 
-            return Json(new { redirectToUrl = Url.Action("Profile", "User", new { id = 1 }) });
+            return RedirectToAction(nameof(ReportedPosts));
+            //return Json(new { redirectToUrl = Url.Action("Profile", "User", new { id = 1 }) });
+        }
+
+        public async Task<IActionResult> PermitAPost(int id)
+        {
+
         }
 
         [HttpGet]

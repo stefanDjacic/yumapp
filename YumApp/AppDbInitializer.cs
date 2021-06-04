@@ -34,20 +34,35 @@ namespace YumApp
 
             if (!context.Users.Any())
             {
-                var adminUser = new AppUser()
+                var adminUser1 = new AppUser()
                 {
-                    UserName = "admin@gmail.com",
-                    FirstName = "admin",
-                    LastName = "admin",
-                    Email = "admin@gmail.com",
+                    UserName = "admin1@gmail.com",
+                    FirstName = "admin1",
+                    LastName = "admin1",
+                    Email = "admin1@gmail.com",
                     DateOfBirth = DateTime.UtcNow,
                     Gender = GenderEnum.Male,
                     PhotoPath = @"/Photos/DefaultUserPhoto.png"
                 };
 
-                await userManager.CreateAsync(adminUser, "admin123");
+                await userManager.CreateAsync(adminUser1, "admin123");
 
-                await userManager.AddToRoleAsync(adminUser, "admin");
+                await userManager.AddToRoleAsync(adminUser1, "admin");
+
+                var adminUser2 = new AppUser()
+                {
+                    UserName = "admin2@gmail.com",
+                    FirstName = "admin2",
+                    LastName = "admin2",
+                    Email = "admin2@gmail.com",
+                    DateOfBirth = DateTime.UtcNow,
+                    Gender = GenderEnum.Male,
+                    PhotoPath = @"/Photos/DefaultUserPhoto.png"
+                };
+
+                await userManager.CreateAsync(adminUser2, "admin123");
+
+                await userManager.AddToRoleAsync(adminUser2, "admin");
 
                 var testUser1 = new AppUser()
                 {
@@ -106,7 +121,7 @@ namespace YumApp
             {
                 var post1 = new Post
                 {
-                    AppUserId = 2,
+                    AppUserId = 3,
                     Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
                     " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
                     Notes = "Obavezno uzivati"
@@ -114,7 +129,7 @@ namespace YumApp
 
                 var post2 = new Post
                 {
-                    AppUserId = 2,
+                    AppUserId = 3,
                     Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
                     " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
                     NumberOfYums = 11
@@ -122,7 +137,7 @@ namespace YumApp
 
                 var post3 = new Post
                 {
-                    AppUserId = 3,
+                    AppUserId = 4,
                     Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
     " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
                     NumberOfYums = 9,
@@ -131,7 +146,7 @@ namespace YumApp
 
                 var post4 = new Post
                 {
-                    AppUserId = 3,
+                    AppUserId = 4,
                     Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
 " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
                     NumberOfYums = 2,                                   
@@ -139,7 +154,7 @@ namespace YumApp
 
                 var post5 = new Post
                 {
-                    AppUserId = 4,
+                    AppUserId = 5,
                     Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
 " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
                     NumberOfYums = 99,
@@ -155,43 +170,43 @@ namespace YumApp
             {
                 var comment1 = new Comment
                 {
-                    AppUserId = 2,
+                    AppUserId = 3,
                     PostId = 1,
                     Content = "mmmmmmmmm",
-                    CommentatorId = 2
+                    CommentatorId = 3
                 };
 
                 var comment2 = new Comment
                 {
-                    AppUserId = 2,
+                    AppUserId = 3,
                     PostId = 1,
                     Content = "Donec ut nibh leo. Ut venenatis sapien sed eros fermentum suscipit. Donec in eleifend sem. Fusce iaculis euismod eros eu placerat. Nunc eu efficitur enim, vel luctus elit. Vivamus posuere nisl risus," +
                     " nec venenatis velit mollis egestas. Donec sagittis in purus sit amet eleifend. Fusce a turpis eu elit ullamcorper hendrerit. Quisque faucibus vestibulum sapien et lobortis.",
-                    CommentatorId = 3
+                    CommentatorId = 4
                 };
 
                 var comment3 = new Comment
                 {
-                    AppUserId = 2,
+                    AppUserId = 3,
                     PostId = 2,
                     Content = "good job",
-                    CommentatorId = 4
+                    CommentatorId = 5
                 };
 
                 var comment4 = new Comment
                 {
-                    AppUserId = 4,
+                    AppUserId = 5,
                     PostId = 5,
                     Content = "yumyum",
-                    CommentatorId = 3
+                    CommentatorId = 4
                 };
 
                 var comment5 = new Comment
                 {
-                    AppUserId = 4,
+                    AppUserId = 5,
                     PostId = 5,
                     Content = "yeayea",
-                    CommentatorId = 2
+                    CommentatorId = 3
                 };
 
                 await context.Comments.AddRangeAsync(new Comment[] { comment1, comment2, comment3, comment4, comment5 });
@@ -231,21 +246,21 @@ namespace YumApp
                 var pi1 = new Post_Ingredient
                 {
                     PostId = 1,
-                    AppUserId = 2,
+                    AppUserId = 3,
                     IngredientId = 1
                 };
 
                 var pi2 = new Post_Ingredient
                 {
                     PostId = 1,
-                    AppUserId = 2,
+                    AppUserId = 3,
                     IngredientId = 2
                 };
 
                 var pi3 = new Post_Ingredient
                 {
                     PostId = 1,
-                    AppUserId = 2,
+                    AppUserId = 3,
                     IngredientId = 3
                 };
 

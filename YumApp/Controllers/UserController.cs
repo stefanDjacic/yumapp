@@ -160,7 +160,7 @@ namespace YumApp.Controllers
 
             //Gets currently logged in user as AppUserModel type
             AppUserModel currentUser = await _appUserManager.GetUserAsync(User)
-                                                   .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());
+                                                            .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());
 
             ViewBag.CurrentUser = currentUser.ToAppUserEntity();
             return View(currentUser);
@@ -218,15 +218,15 @@ namespace YumApp.Controllers
         {
             //Gets the post
             Post post = _postRepository.GetAll()
-                                      .Include(p => p.Post_Ingredients)
-                                      .ThenInclude(pi => pi.Ingredient)
-                                      .Include(p => p.AppUser)
-                                      .Include(p => p.Comments)
-                                      .ThenInclude(c => c.Commentator)
-                                      .Where(p => p.Id == id)
-                                      .AsSplitQuery()
-                                      .AsNoTracking()
-                                      .SingleOrDefault(p => p.Id == id);
+                                       .Include(p => p.Post_Ingredients)
+                                       .ThenInclude(pi => pi.Ingredient)
+                                       .Include(p => p.AppUser)
+                                       .Include(p => p.Comments)
+                                       .ThenInclude(c => c.Commentator)
+                                       .Where(p => p.Id == id)
+                                       .AsSplitQuery()
+                                       .AsNoTracking()
+                                       .SingleOrDefault(p => p.Id == id);
             //In case the post has been deleted
             if (post == null)
             {
@@ -258,7 +258,7 @@ namespace YumApp.Controllers
             AppUser followedUser = await _appUserManager.FindByIdAsync(id.ToString());
 
             //So time matches in different tables
-            var currentDateTime = DateTime.Now;
+            DateTime currentDateTime = DateTime.Now;
 
             //Creates new instance for following
             User_Follows userFollows = new ()
@@ -287,11 +287,11 @@ namespace YumApp.Controllers
         public async Task UnfollowUser(int id)
         {
             //Gets Id of currently logged in user
-            int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User); /*int.Parse(Request.Cookies["MyCookie"]);*/
+            int currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);
 
             //Gets the row of current user following the specified one
             User_Follows userFollows = await _user_FollowsRepository.GetAll()
-                                                           .SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
+                                                                    .SingleOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowsId == id);
             //Deletes the row
             await _user_FollowsRepository.Remove(userFollows);
             
@@ -486,18 +486,32 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task ReportAPost(int id)
         {
-            //Gets the current user
-            AppUser currentUser = await _appUserManager.GetUserAsync(User);
+            ////Gets the current user
+            //AppUser currentUser = await _appUserManager.GetUserAsync(User);
 
-            //Creates new NotificationModel instance (to take advantage of strategy pattern) and converts it to Notification entity, user with id 1 is administrator
-            Notification newNotification = new NotificationModel(currentUser.FirstName,
-                                                                 currentUser.LastName,
-                                                                 DateTime.Now,
-                                                                 id,
-                                                                 new PostReportTextBehavior())
-                                                                 .ToNotificationEntity(currentUser.Id, 1);
-            //Adds new notification to the database
-            await _notificationRepository.Add(newNotification);
+            ////Creates new NotificationModel instance (to take advantage of strategy pattern) and converts it to Notification entity, user with id 1 is administrator
+            //Notification newNotification = new NotificationModel(currentUser.FirstName,
+            //                                                     currentUser.LastName,
+            //                                                     DateTime.Now,
+            //                                                     id,
+            //                                                     new PostReportTextBehavior())
+            //                                                     .ToNotificationEntity(currentUser.Id, 1);
+            ////Adds new notification to the database
+            //await _notificationRepository.Add(newNotification);
+
+            //return;
+
+            //Gets a post
+            Post reportedPost = await _postRepository.GetSingle(id);
+            //Checks if post has already been reported
+            if (!reportedPost.IsReported)
+            {
+                //Marks it as reported
+                reportedPost.IsReported = true;
+                //Updates the change
+                await _postRepository.Update(reportedPost);
+            }
+
 
             return;
         }

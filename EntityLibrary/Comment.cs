@@ -18,7 +18,7 @@ namespace EntityLibrary
         [MaxLength(500, ErrorMessage = "Maximum lenght is 500 characters.")]
         public string Content { get; set; }
 
-        public DateTime TimeOfCommenting { get; set; } = DateTime.Now.ToLocalTime();
+        public DateTime TimeOfCommenting { get; set; }
 
         //Navigation properties
         public int PostId { get; set; }
