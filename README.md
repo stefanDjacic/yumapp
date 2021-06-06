@@ -11,7 +11,7 @@ Share your favourite meals with others.
 AppUser(<ins>Id</ins>, FirstName, LastName, DateOfBirth, DateCreated, Country, Gender, About, PhotoPath, Password, Email, UserName)  
 User_Follows(<ins>FollowerId, FollowsId</ins>, DateOfFollowing)  
 Notification(<ins>ReceiverId, Id</ins>, NotificationText, TimeOfNotification, IdForRedirecting, InitiatorId)  
-Post(<ins>AppUserId, Id</ins>, Content, Notes, NumberOfYums, TimeOfPosting)  
+Post(<ins>AppUserId, Id</ins>, Content, Notes, NumberOfYums, TimeOfPosting, IsReported)  
 Yummy_Post(<ins>AppUserId, PostAppUserId, PostId</ins>, DateYummed)  
 Comment(<ins>AppUserId, PostId</ins>, Content, TimeOfCommenting, CommentatorId)  
 Ingredient(<ins>Id</ins>, Name, Description, PhotoPath)  
