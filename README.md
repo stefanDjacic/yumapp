@@ -4,7 +4,7 @@ Share your favourite meals with others.
   
   
 ## Entity–relationship model
-![model photo](./YumApp_MOV_Photo.png)  
+![model photo](./YumApp_MOV.png)  
   
     
 ## Relational model
