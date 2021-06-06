@@ -31,7 +31,7 @@ namespace YumApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //Checkes if current user is logged in to redirect him to his profile
+            //Checks if current user is logged in to redirect him to his profile
             if (_signInManager.IsSignedIn(User))
             {
                 var currentUserId = await _appUserManager.GetCurrentUserIdAsync(User);

@@ -1,0 +1,23 @@
+﻿@model List<PostModel>
+@{ 
+    ViewData["Title"] = "Reported posts";
+
+    AppUser currenUser = ViewBag.CurrentUser;
+}
+
+@if (!Model.Any())
+{
+    <div>
+        <p>
+            Yay! There are no more reported posts!
+        </p>
+    </div>
+}
+
+<div>
+    <partial name="_UserPostsPartial" />
+</div>
+
+@section Scripts{ 
+    <script src="~/js/PostRelatedScript.js"></script>
+}

@@ -36,7 +36,7 @@ namespace YumApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ReportedPosts()
+        public async Task<IActionResult> GetReportedPosts()
         {
             //Gets all reported posts and converts them to postmodel
             List<Post> reportedPosts = await _postRepository.GetAll()
@@ -50,6 +50,7 @@ namespace YumApp.Controllers
                                                             .ToListAsync();
             List<PostModel> reportedPostsModel = reportedPosts.ToPostModel().ToList();
 
+            //Gets necessary data for view
             ViewBag.CurrentUser = await _appUserManager.GetUserAsync(User);
 
             return View(reportedPostsModel);
@@ -61,10 +62,11 @@ namespace YumApp.Controllers
             //Gets reported post
             Post reportedPost = await _postRepository.GetSingle(id);
 
-            //If another admin has already deleted the reported post or it has been permitted, reload page
+            //If another admin has already deleted the reported post or it has been permitted, reload the page
             if (reportedPost == null || reportedPost.IsReported == false)
             {
-                return RedirectToAction(nameof(ReportedPosts));
+                return Json(new { redirectToUrl = Url.Action(nameof(GetReportedPosts)) });
+                //return RedirectToAction(nameof(ReportedPosts));
             }
 
             //Gets list of yummy_Post instances with users that have liked it
@@ -80,13 +82,41 @@ namespace YumApp.Controllers
             //Removes the reported post
             await _postRepository.Remove(reportedPost);
 
-            return RedirectToAction(nameof(ReportedPosts));
-            //return Json(new { redirectToUrl = Url.Action("Profile", "User", new { id = 1 }) });
+            //return RedirectToAction(nameof(ReportedPosts));
+            return Json(new { redirectToUrl = Url.Action(nameof(GetReportedPosts)) });
         }
 
-        public async Task<IActionResult> PermitAPost(int id)
+        [HttpPost]
+        public async Task<IActionResult> PermitToPost(int id)
         {
+            //Gets reported post
+            Post reportedPost = await _postRepository.GetSingle(id);
 
+            //If another admin has already deleted the reported post or it has been permitted, reload the page
+            if (reportedPost == null || reportedPost.IsReported == false)
+            {
+                return Json(new { redirectToUrl = Url.Action(nameof(GetReportedPosts)) });
+                //return RedirectToAction(nameof(ReportedPosts));
+            }
+
+            //Changes IsReported value to false
+            reportedPost.IsReported = false;
+            //Updates the change
+            await _postRepository.Update(reportedPost);
+
+            return Json(new { redirectToUrl = Url.Action(nameof(GetReportedPosts)) });
+            //return RedirectToAction(nameof(ReportedPosts));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetIngredients()
+        {
+            //Gets all ingredients as ingredientModel type
+            List<IngredientModel> ingredientsModel = await _ingredientRepository.GetAll()
+                                                                                .ToIngredientModel()
+                                                                                .ToListAsync();
+
+            return View(ingredientsModel);
         }
 
         [HttpGet]

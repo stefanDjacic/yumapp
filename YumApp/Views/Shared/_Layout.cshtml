@@ -1,5 +1,6 @@
-﻿@{
-    bool isUserSignedIn = Context.User.Identity.IsAuthenticated;
+﻿@inject SignInManager<AppUser> _signInManager;
+@{
+    bool isUserSignedIn = _signInManager.IsSignedIn(User);
 }
 <!DOCTYPE html>
 <html lang="en">

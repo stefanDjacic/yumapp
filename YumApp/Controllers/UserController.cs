@@ -162,6 +162,7 @@ namespace YumApp.Controllers
             AppUserModel currentUser = await _appUserManager.GetUserAsync(User)
                                                             .ContinueWith(u => u.Result.ToAppUserModelBaseInfo());
 
+            //To pass necessary data for view
             ViewBag.CurrentUser = currentUser.ToAppUserEntity();
             return View(currentUser);
         }
@@ -245,6 +246,7 @@ namespace YumApp.Controllers
             //Need a List<PostModel> type for partial view
             List<PostModel> newPostModel = new() { postModel };
 
+            //To pass necessary data for view
             ViewBag.CurrentUser = currentUser;
 
             return View(newPostModel);
@@ -486,21 +488,6 @@ namespace YumApp.Controllers
         [HttpPost]
         public async Task ReportAPost(int id)
         {
-            ////Gets the current user
-            //AppUser currentUser = await _appUserManager.GetUserAsync(User);
-
-            ////Creates new NotificationModel instance (to take advantage of strategy pattern) and converts it to Notification entity, user with id 1 is administrator
-            //Notification newNotification = new NotificationModel(currentUser.FirstName,
-            //                                                     currentUser.LastName,
-            //                                                     DateTime.Now,
-            //                                                     id,
-            //                                                     new PostReportTextBehavior())
-            //                                                     .ToNotificationEntity(currentUser.Id, 1);
-            ////Adds new notification to the database
-            //await _notificationRepository.Add(newNotification);
-
-            //return;
-
             //Gets a post
             Post reportedPost = await _postRepository.GetSingle(id);
             //Checks if post has already been reported
@@ -512,13 +499,13 @@ namespace YumApp.Controllers
                 await _postRepository.Update(reportedPost);
             }
 
-
             return;
         }
 
         [HttpGet]
         public async Task<IActionResult> SearchUsers(string userName)
         {
+            //Gets users as userModel types
             List<AppUserModel> usersModel = await _appUserManager.Users
                                                        .Where(au => EF.Functions.Like(au.FirstName.ToUpper() + " " + au.LastName.ToUpper(),
                                                                                       $"%{userName.Trim().ToUpper()}%"))

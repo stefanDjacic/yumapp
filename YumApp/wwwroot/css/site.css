@@ -223,8 +223,15 @@ div .verical-line {
     object-fit : contain;
 }
 
-/*------------------ Search ------------------*/
+/*------------------ SEARCH ------------------*/
 .search-users-photo-div {
     width: 100px;
     height: 100px;
+}
+
+/*------------------ INGREDIENTS LIST ------------------*/
+.ingredients-list-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
 }

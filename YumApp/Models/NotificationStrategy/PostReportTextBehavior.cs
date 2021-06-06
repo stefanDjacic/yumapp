@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 
 namespace YumApp.Models.NotificationStrategy
 {
-    public class PostReportTextBehavior : INotificationTextStrategy
-    {
-        public string GetNotificationText(string initiatorName)
-        {
-            return $"{ initiatorName } has reported a post.";
-        }
-    }
+    //Didn't need in the end
+
+    //public class PostReportTextBehavior : INotificationTextStrategy
+    //{
+    //    public string GetNotificationText(string initiatorName)
+    //    {
+    //        return $"{ initiatorName } has reported a post.";
+    //    }
+    //}
 }

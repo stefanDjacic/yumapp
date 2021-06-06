@@ -8,7 +8,7 @@ using YumApp.Models;
 
 namespace YumApp.Controllers.HelperAndExtensionMethods
 {
-    //Didn't use
+    //Didn't need in the end
     public class AppUserManager : UserManager<AppUser>
     {
         public AppUserManager(AppUserStore store,
@@ -27,10 +27,5 @@ namespace YumApp.Controllers.HelperAndExtensionMethods
         //Hiding Store property of parent class because of needed type.
         //Don't know if it's bad practice, I could just cast it every time I use it.
         public AppUserStore MyStore => Store as AppUserStore;
-
-        //public AppUserModel GetUserWithNotificationsById(int id)
-        //{
-        //    return MyStore.GetUserWithNotificationsById(id);
-        //}        
     }
 }

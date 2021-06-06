@@ -57,10 +57,8 @@
                                 <button data-postid="@p.Id" onclick="ReportAPost(this)" class="dropdown-item" type="button">Report</button>
                                 @if (await _appUserManager.IsInRoleAsync(currentUser, "admin"))
                                 {
-                                    <button class="dropdown-item" type="button" asp-action="PermitAPost" asp-controller="Admin" asp-route-id="@p.Id">Permit</button>
-                                    <button class="dropdown-item" type="button" asp-action="RemoveAPost" asp-controller="Admin" asp-route-id="@p.Id">Remove</button>
-                                    @*<button class="dropdown-item" type="button" data-postid="@p.Id" onclick="PermitAPost(this)">Permit</button>
-                                    <button class="dropdown-item" type="button" data-postid="@p.Id" onclick="RemoveAPost(this)">Remove</button>*@
+                                    <button class="dropdown-item" type="button" data-postid="@p.Id" onclick="PermitToPost(this)">Permit</button>
+                                    <button class="dropdown-item" type="button" data-postid="@p.Id" onclick="RemoveAPost(this)">Remove</button>
                                 }
                             </div>
                         </div>

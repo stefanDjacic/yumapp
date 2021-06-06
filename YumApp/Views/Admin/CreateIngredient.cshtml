@@ -27,17 +27,17 @@
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div>
-                <img id="slika" @*src="@Model.PhotoPath"*@ alt="User photo" class="img-fluid ml-5 user-settings-photo" />
+                <img id="slika" alt="Ingredient photo" class="img-fluid ml-5 mb-3 user-settings-photo" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Profile" asp-controller="User">Cancel</a>
+    <a class="btn btn-danger" asp-action="GetIngredients" asp-controller="Admin">Cancel</a>
 </div>
 
 @section Scripts{
