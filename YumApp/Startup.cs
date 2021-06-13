@@ -69,7 +69,7 @@ namespace YumApp
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<YumAppDbContext>();
                 
-                //Creates and seeds database if it exists
+                //Creates and seeds database if it doesn't exist
                 if (!context.Database.CanConnect())
                 {
                     context.Database.Migrate();
