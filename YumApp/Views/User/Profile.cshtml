@@ -8,10 +8,10 @@
 }
 
 <div class="d-flex flex-column">
-    <div class="user-profile-background bg-success mb-4 mt-3 rounded-circle w-100 d-flex">
+    <div class="user-profile-background bg-success mb-4 mt-3 rounded-circle w-100 d-flex flex-column flex-sm-row align-items-center">
         <img src="@userProfile.PhotoPath" alt="User photo" class="user-profile-photo img-fluid img-thumbnail" />
-        <div class="user-profile-info ml-5 align-self-center font-weight-light d-flex justify-content-between w-100 align-items-center">
-            <div>
+        <div class="user-profile-info ml-0 ml-sm-5 align-self-center font-weight-light d-flex flex-sm-row flex-column justify-content-sm-between justify-content-center w-100 align-items-center">
+            <div class="mb-3 mb-sm-0">
                 <p class="mb-2 text-white">
                     Name: @userProfile.FirstName @userProfile.LastName
                 </p>
@@ -36,13 +36,13 @@
             {
                 @if (userProfile.IsBeingFollowed)
                 {
-                    <div class="mr-5 p-5">
+                    <div class="mr-0 mr-sm-5 pl-3 p-sm-5 pr-3 pb-3">
                         <button id="followButton" class="btn btn-danger">Unfollow</button>
                     </div>
                 }
                 else
                 {
-                    <div class="mr-5 p-5">
+                    <div class="mr-0 mr-sm-5 pl-3 p-sm-5 pr-3 pb-3">
                         <button id="followButton" class="btn btn-primary">Follow</button>
                     </div>
                 }
@@ -53,14 +53,13 @@
     @if (!string.IsNullOrWhiteSpace(userProfile.About))
     {
         <div class="user-profile-about pl-5 pr-5 align-self-center font-weight-light">
-            <p class="mr-5 text-break">
+            <p class="text-break text-center">
                 @userProfile.About
             </p>
         </div>
     }
-
-    <div class="d-flex row mt-3">
-        <div class="friends-and-yums col-3">
+    <div class="d-flex row mt-3 flex-sm-row flex-column">
+        <div class="friends-and-yums col-sm-3 col-12 mb-5 pl-4 pr-4">
             <div class="list-group">
                 <button id="following-btn" type="button" class="list-group-item list-group-item-action">
                     <i class="fas fa-user"></i>
@@ -81,7 +80,7 @@
 
         </div>
 
-        <div class="userposts col-8">
+        <div class="userposts col-sm-8 col-12">
             @if (currentLoggedInUser.Id == userProfile.Id)
             {
                 <partial name="_AddNewPostPartial" />
@@ -90,7 +89,7 @@
                 <partial name="_UserPostsPartial" />
             </div>
         </div>
-    </div>
+</div>
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

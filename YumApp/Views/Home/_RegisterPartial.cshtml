@@ -1,45 +1,45 @@
 ﻿@model RegisterModel
 
-<form asp-action="Register" asp-controller="Home" method="post">
+<form asp-action="Register" asp-controller="Home" method="post" class="register-form">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row justify-content-between">
-        <div class="form-group col-6 mb-0">
+        <div class="form-group col-lg-6 mb-0">
             <label asp-for="FirstName"></label>
             <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName" class="text-danger h-25 d-inline-block text-nowrap"></span>
+            <span asp-validation-for="FirstName" class="register-validation text-danger h-25 d-inline-block text-nowrap"></span>
         </div>
-        <div class="form-group col-6 mb-0">
+        <div class="form-group col-lg-6 mb-0">
             <label asp-for="LastName"></label>
             <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName" class="text-danger h-25 d-inline-block text-nowrap"></span>
+            <span asp-validation-for="LastName" class="register-validation text-danger h-25 d-inline-block text-nowrap"></span>
         </div>
     </div>
     <div class="form-group mb-0">
         <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" id="inputEmail" onkeyup="updateUsername(this.value)" />
-        <span asp-validation-for="Email" class="text-danger h-25 d-inline-block"></span>
+        <span asp-validation-for="Email" class="register-validation text-danger h-25 d-inline-block"></span>
     </div>
     <div class="form-group mb-0">
         <label asp-for="DateOfBirth"></label>
         <input asp-for="DateOfBirth" class="form-control" />
-        <span asp-validation-for="DateOfBirth" class="text-danger h-25 d-inline-block"></span>
+        <span asp-validation-for="DateOfBirth" class="register-validation text-danger h-25 d-inline-block"></span>
     </div>
     <div class="form-group mb-0">
         <label asp-for="Gender"></label>
         <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-control">
             <option selected="selected" value="">Please select</option>
         </select>
-        <span asp-validation-for="Gender" class="text-danger h-25 d-inline-block"></span>
+        <span asp-validation-for="Gender" class="register-validation text-danger h-25 d-inline-block"></span>
     </div>
     <div class="form-group mb-0">
         <label asp-for="Password"></label>
         <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger h-25 d-inline-block"></span>
+        <span asp-validation-for="Password" class="register-validation text-danger h-25 d-inline-block"></span>
     </div>
     <div class="form-group mb-0">
         <label asp-for="ConfirmPassword"></label>
         <input asp-for="ConfirmPassword" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger h-25 d-inline-block"></span>
+        <span asp-validation-for="ConfirmPassword" class="register-validation text-danger h-25 d-inline-block"></span>
     </div>
     <div class="form-group">
         <input type="submit" value="Register" class="btn btn-success" />

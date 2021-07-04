@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/Queries.css" rel="stylesheet" />
 </head>
 <body>
     <header>
         <vc:navbar is-signed-in="isUserSignedIn" />
     </header>
-    <div class="container mt-5 pt-5">
+    <div class="container p-0 pl-sm-3 pr-sm-3 mt-4 pt-4 mt-sm-5 pt-sm-5">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

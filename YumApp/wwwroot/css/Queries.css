@@ -1,0 +1,23 @@
+﻿@media only screen and (max-width: 1200px) {
+    .register-validation{
+        font-size: 90%;
+    }
+}
+/* small phones 0 to 576 */
+@media only screen and (max-width: 576px) {
+    .container{
+        overflow-x: hidden;
+    }
+
+    .verical-line {
+        display: none;
+    }
+
+    .register-form {
+        font-size: 90%;
+    }
+
+    .footer-text {
+        font-size: 80%;
+    }
+}    

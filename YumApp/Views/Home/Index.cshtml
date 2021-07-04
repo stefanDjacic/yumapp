@@ -3,18 +3,18 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="wrapper row  d-flex justify-content-around align-items-center">
-    <section class="registration w-100 col-5">
+<div class="wrapper row d-flex flex-sm-row flex-column-reverse justify-content-around align-items-center">
+    <section class="registration w-100 col-5 pl-0 pr-0 pl-sm-3 pr-sm-3">
         <partial name="_RegisterPartial" />
     </section>
-    <section class="welcome col-7 w-100 d-flex justify-content-center align-items-center flex-column">
-        <div>
-            <p class="">Welcome to YumApp!</p>
+    <section class="welcome col-7 w-100 d-flex justify-content-center align-items-center flex-column pl-0 pr-0 pl-sm-3 pr-sm-3">
+        <div class="text-justify">
+            <h5 class="text-left">Welcome to YumApp!</h5>
             <br />
             <p>Social network for chefs all over the world.</p>
             <p>Share your favourite/special meals with others on YumApp.</p>
         </div>
-        <div class="align-self-end">
+        <div class="align-self-end mb-5">
             <a class="btn btn-outline-success" asp-action="Login" asp-controller="Home">
                 Login
             </a>
