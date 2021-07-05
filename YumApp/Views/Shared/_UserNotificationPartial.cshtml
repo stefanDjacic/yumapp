@@ -4,7 +4,7 @@
 {
     @if (notification.NotificationText.Contains("followed"))
     {
-        <div class="dropdown-item dropdown-item-notification p-2">
+        <div class="dropdown-item dropdown-item-notification p-sm-2 p-0">
             <a asp-action="Profile" asp-controller="User" asp-route-id="@notification.IdForRedirecting" class="notification-link">
                 <figure class="d-flex mb-1">
                     <img src="@notification.InitiatorPhotoPath" alt="User photo" class="dropdown-item-notification-photo rounded-circle" />
@@ -20,7 +20,7 @@
     }
     else
     {
-        <div class="dropdown-item dropdown-item-notification p-2">
+        <div class="dropdown-item dropdown-item-notification p-sm-2 p-0">
             <a asp-action="SinglePost" asp-controller="User" asp-route-id="@notification.IdForRedirecting" class="notification-link">
                 <figure class="d-flex mb-1">
                     <img src="@notification.InitiatorPhotoPath" alt="User photo" class="dropdown-item-notification-photo rounded-circle" />

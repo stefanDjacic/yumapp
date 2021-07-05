@@ -4,30 +4,32 @@
     ViewData["Title"] = "Ingredient Info";
 }
 
-<div>
-    <h4>Ingredient</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Photo)
-        </dt>
-        <dd class="col-sm-10">
-            <img src="@Model.PhotoPath" alt="IngredientPhoto" />
-        </dd>
-    </dl>
-</div>
-<div>
-    <a class="btn btn-primary" asp-action="GetIngredients" asp-controller="Admin">Back</a>
+<div class="p-sm-0 p-2">
+    <div>
+        <h4>Ingredient</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Photo)
+            </dt>
+            <dd class="col-sm-10 col-12">
+                <img src="@Model.PhotoPath" alt="IngredientPhoto" class="img-fluid" />
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a class="btn btn-primary" asp-action="GetIngredients" asp-controller="Admin">Back</a>
+    </div>
 </div>

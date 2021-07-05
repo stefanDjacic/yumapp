@@ -28,10 +28,10 @@
                     <p>Yums</p>
                 </div>
             }
-            <div class="post d-inline-flex flex-column w-100 ml-4 mb-3 p-4">
+            <div class="post d-inline-flex flex-column w-100 ml-2 ml-sm-4 mb-3 p-sm-4 p-3">
                 <div class="user-time-options row d-flex justify-content-between mb-3">
                     <div class="media">
-                        <div class="d-flex flex-column flex-sm-row">
+                        <div class="d-flex">
                             <a asp-action="Profile" asp-controller="User" asp-route-id="@p.User.Id">
                                 <img src="@p.User.PhotoPath" class="post-profile-photo img-fluid rounded-circle" alt="User photo">
                             </a>
@@ -53,7 +53,7 @@
                             <button class="btn bg-transparent dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-sm-left" aria-labelledby="dropdownMenu2">
                                 <button data-postid="@p.Id" onclick="ReportAPost(this)" class="dropdown-item" type="button">Report</button>
                                 @if (await _appUserManager.IsInRoleAsync(currentUser, "admin"))
                                 {

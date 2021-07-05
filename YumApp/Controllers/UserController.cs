@@ -96,7 +96,7 @@ namespace YumApp.Controllers
             userModelProfile.IsBeingFollowed = _user_FollowsRepository.GetAll()
                                                                .Any(u => u.FollowerId == currentUser.Id && u.FollowsId == id);
 
-            //Gets all the posts which current user liked from user whose profile he is visiting
+            //Gets all the posts which current user has liked from user whose profile he is visiting
             List<Yummy_Post> currentUsersYummedPosts = await _yummy_PostRepository.GetAll()
                                                                                   .Where(yp => yp.AppUserId == currentUser.Id && yp.PostAppUserId == id)
                                                                                   .ToListAsync();
@@ -119,21 +119,33 @@ namespace YumApp.Controllers
             //Gets currently logged in user
             AppUser currentUser = await _appUserManager.GetUserAsync(User);
 
-            //Returns List<Post> of user whose profile is being viewed, as split query,
+            //Returns List<Post> of users who are being followed by current user, as split query,
             //because of cartesian explosion
             List<Post> posts = await _postRepository.GetAll()
-                                             .Where(p => p.AppUser.Follow.Any(uf => uf.FollowerId == currentUser.Id))
-                                             .Include(p => p.AppUser)
-                                             .Include(p => p.Post_Ingredients)
-                                             .ThenInclude(pi => pi.Ingredient)
-                                             .Include(p => p.Comments)
-                                             .ThenInclude(c => c.Commentator)
-                                             .OrderByDescending(p => p.TimeOfPosting)
-                                             .AsSplitQuery()
-                                             .AsNoTracking()
-                                             .ToListAsync();
+                                                    .Where(p => p.AppUser.Follow.Any(uf => uf.FollowerId == currentUser.Id))
+                                                    .Include(p => p.AppUser)
+                                                    .Include(p => p.Post_Ingredients)
+                                                    .ThenInclude(pi => pi.Ingredient)
+                                                    .Include(p => p.Comments)
+                                                    .ThenInclude(c => c.Commentator)
+                                                    .OrderByDescending(p => p.TimeOfPosting)
+                                                    .AsSplitQuery()
+                                                    .AsNoTracking()
+                                                    .ToListAsync();
             //Convers Posts to PostsModel type
             List<PostModel> postsModel = posts.ToPostModel().ToList();
+
+            //Gets all the posts which current user has liked and which belong to users who are being followed by current user
+            //You can like someones post without following him
+            List<Yummy_Post> currentUsersYummedPostsOfFollowedUsers = await _yummy_PostRepository.GetAll()
+                                                                                  .Where(yp => yp.AppUserId == currentUser.Id &&
+                                                                                               yp.Post.AppUser.Follow.Any(uf => uf.FollowerId == currentUser.Id))                                                                                  
+                                                                                  .ToListAsync();
+            //Sets IsPostYummed property if current user has already liked the post
+            foreach (var yummedPost in currentUsersYummedPostsOfFollowedUsers)
+            {
+                postsModel.SingleOrDefault(p => p.Id == yummedPost.PostId).IsPostYummed = true;
+            }
 
             //To pass necessary data for view
             ViewBag.CurrentUser = currentUser;            
@@ -411,7 +423,8 @@ namespace YumApp.Controllers
             if (string.IsNullOrWhiteSpace(postContent))
             {
                 ModelState.AddModelError("Content", "Content is required.");
-                return RedirectToAction("Profile", new { id = currentUser.Id });
+                //return RedirectToAction("Profile", new { id = currentUser.Id });
+                return Json(new { redirectToUrl = Url.Action("Profile", "User", new { id = currentUser.Id }) });
             }            
 
             //Creates new Post instance

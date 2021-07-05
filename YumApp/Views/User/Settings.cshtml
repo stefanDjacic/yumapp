@@ -4,11 +4,13 @@
     ViewData["Title"] = "Settings";
 }
 
-<h1>Settings</h1>
+<div class="p-2 p-sm-0">
+    <h1>Settings</h1>
 
-<h4>@Model.FirstName @Model.LastName</h4>
+    <h4>@Model.FirstName @Model.LastName</h4>
+</div>
 <hr />
-<div class="row">
+<div class="row p-2 p-sm-0">
     <div class="col-md-4">
         <form asp-action="Settings" asp-controller="User" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -67,7 +69,7 @@
         </form>
     </div>
     <div>
-        <img id="slika" src="@Model.PhotoPath" alt="User photo" class="img-fluid ml-5 user-settings-photo" />
+        <img id="slika" src="@Model.PhotoPath" alt="User photo" class="img-fluid ml-sm-5 ml-3 user-settings-photo" />
     </div>
 </div>
 @section Scripts {

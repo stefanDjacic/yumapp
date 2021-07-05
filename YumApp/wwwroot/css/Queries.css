@@ -5,8 +5,22 @@
 }
 /* small phones 0 to 576 */
 @media only screen and (max-width: 576px) {
-    .container{
+    .navbar-nav .dropdown-menu {
+        position: absolute!important;
+        right: 0!important;
+        width: 280px!important;
+    }
+
+    .ddm-notifications {
+        width: 280px!important;
+    }
+
+    .container {
         overflow-x: hidden;
+    }
+
+    .login-div {
+        width: 90%!important;
     }
 
     .verical-line {

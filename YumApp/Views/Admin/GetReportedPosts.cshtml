@@ -5,17 +5,19 @@
     AppUser currenUser = ViewBag.CurrentUser;
 }
 
-@if (!Model.Any())
-{
-    <div>
-        <p>
-            Yay! There are no more reported posts!
-        </p>
-    </div>
-}
+<div class="p-sm-0 p-2">
+    @if (!Model.Any())
+    {
+        <div>
+            <p>
+                Yay! There are no more reported posts!
+            </p>
+        </div>
+    }
 
-<div>
-    <partial name="_UserPostsPartial" />
+    <div>
+        <partial name="_UserPostsPartial" />
+    </div>
 </div>
 
 @section Scripts{ 
