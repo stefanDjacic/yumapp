@@ -422,7 +422,7 @@ namespace YumApp.Controllers
             //Checks if Comment.Content is null
             if (string.IsNullOrWhiteSpace(postContent))
             {
-                ModelState.AddModelError("Content", "Content is required.");                
+                ModelState.AddModelError("Content", "Content is required.");  
                 return Json(new { redirectToUrl = Url.Action("Profile", "User", new { id = currentUser.Id }) });
             }            
 

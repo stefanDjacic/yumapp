@@ -152,7 +152,6 @@ namespace YumApp.Controllers
             }
             catch
             {
-
                 return View(model);
             }
 

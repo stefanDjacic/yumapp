@@ -69,7 +69,7 @@ namespace YumApp.Models
         [MaxLength(500, ErrorMessage = "Maximum lengt is 50 characters.")]
         public string Description { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Photo is required.")]
         public string PhotoPath { get; set; }
         
         //Other
